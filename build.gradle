@@ -10,7 +10,7 @@ plugins {
   id 'org.sonarqube' version '3.3'
 }
 
-group = 'uk.gov.hmcts.ethos.ecm'
+group = 'uk.gov.hmcts.et'
 version = '0.0.1'
 
 checkstyle {
@@ -42,7 +42,7 @@ def sonarExclusions = ['**/uk/gov/hmcts/reform/ethos/ecm/consumer/config/**',
 sonarqube {
   properties {
     property "sonar.exclusions", sonarExclusions.join(', ')
-    property "sonar.projectKey", "ecm-consumer"
+    property "sonar.projectKey", "et-message-handler"
     property "sonar.dynamicAnalysis", "reuseReports"
     property "sonar.dependencyCheck.reportPath", "${project.buildDir}/reports/dependency-check-report.xml"
     property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
@@ -153,7 +153,7 @@ def versions = [
 ]
 
 dependencies {
-  implementation 'com.github.hmcts:ecm-common:0.1.140'
+  implementation 'com.github.hmcts:et-common:0.1.140'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -221,7 +221,7 @@ mainClassName = 'uk.gov.hmcts.reform.ethos.ecm.consumer.Application'
 
 bootJar {
   getArchiveFileName().set(provider {
-    'ecm-consumer.jar'
+    'et-message-handler.jar'
   })
 
   manifest {
