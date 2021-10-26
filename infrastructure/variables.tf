@@ -18,7 +18,7 @@ variable "common_tags" {
 }
 
 variable "micro_service" {
-  default = "ecm_consumer"
+  default = "et_message_handler"
 }
 
 variable "idam_api_url" {
@@ -56,12 +56,12 @@ variable "ilbIp" {}
 
 variable "team_name" {
   description = "Team name"
-  default     = "ECM Project"
+  default     = "Employment Tribunals"
 }
 
 variable "team_contact" {
   description = "Team contact"
-  default     = "#ethos-repl-service"
+  default     = "#et-tech"
 }
 
 variable "destroy_me" {
