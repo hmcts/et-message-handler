@@ -3,8 +3,8 @@
 @Library("Infrastructure")
 
 def type = "java"
-def product = "ethos"
-def component = "ecm-consumer"
+def product = "et"
+def component = "et-message-handler"
 
 withPipeline(type, product, component) {
   enableAksStagingDeployment()
@@ -20,7 +20,7 @@ withPipeline(type, product, component) {
   onPerftest {
     disableLegacyDeployment()
   }
-  enableSlackNotifications('#ethos-repl-service')
+  enableSlackNotifications('#et-builds')
 
   after('functional') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
