@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Data
-@Table(name = "multipleerrors")
+@Table(name = "multiple_errors")
 public class MultipleErrors {
 
     @Id

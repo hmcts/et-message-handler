@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "multiplecounter")
+@Table(name = "multiple_counter")
 public class MultipleCounter {
 
     @Id
