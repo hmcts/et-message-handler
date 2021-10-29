@@ -8,15 +8,16 @@ properties([
 @Library("Infrastructure")
 
 def type = "java"
-def product = "ethos"
-def component = "ecm-consumer"
+def product = "et"
+def component = "et-message-handler"
 
 withNightlyPipeline(type, product, component) {
-  enableSlackNotifications('#ethos-repl-service')
+  enableSlackNotifications('#et-builds')
 
-  enableFortifyScan()
+  // uncomment once Forify id acquired
+  //enableFortifyScan()
 
-  after('fortify-scan') {
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-  }
+  //after('fortify-scan') {
+  //  steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+  //}
 }
