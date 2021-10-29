@@ -8,6 +8,7 @@ import uk.gov.hmcts.ecm.common.helpers.UtilHelper;
 import uk.gov.hmcts.ecm.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
+import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class SingleTransferService {
         var creationSingleDataModel =
             ((CreationSingleDataModel) updateCaseMsg.getDataModelParent());
         String positionTypeCT = creationSingleDataModel.getPositionTypeCT();
-        String caseTypeIdCT = creationSingleDataModel.getOfficeCT();
+        String owningOfficeCT = creationSingleDataModel.getOfficeCT();
         String reasonForCT = creationSingleDataModel.getReasonForCT();
 
         String jurisdiction = updateCaseMsg.getJurisdiction();
@@ -36,19 +37,19 @@ public class SingleTransferService {
             ? UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())
             : updateCaseMsg.getCaseTypeId();
 
-        updateTransferredCase(submitEvent, caseTypeId, caseTypeIdCT, jurisdiction, accessToken, positionTypeCT,
+        updateTransferredCase(submitEvent, caseTypeId, owningOfficeCT, jurisdiction, accessToken, positionTypeCT,
                               reasonForCT);
 
     }
 
-    private void updateTransferredCase(SubmitEvent submitEvent, String caseTypeId, String caseTypeIdCT,
+    private void updateTransferredCase(SubmitEvent submitEvent, String caseTypeId, String owningOfficeCT,
                                        String jurisdiction, String accessToken, String positionTypeCT,
                                        String reasonForCT) throws IOException {
 
         CCDRequest returnedRequest = ccdClient.startCaseTransfer(accessToken, caseTypeId, jurisdiction,
                                                                  String.valueOf(submitEvent.getCaseId()));
 
-        generateCaseData(submitEvent.getCaseData(), caseTypeIdCT, positionTypeCT, reasonForCT);
+        generateCaseData(submitEvent.getCaseData(), owningOfficeCT, positionTypeCT, reasonForCT);
 
         ccdClient.submitEventForCase(accessToken,
                                      submitEvent.getCaseData(),
@@ -59,9 +60,9 @@ public class SingleTransferService {
 
     }
 
-    private void generateCaseData(CaseData caseData, String caseTypeIdCT, String positionTypeCT, String reasonForCT) {
+    private void generateCaseData(CaseData caseData, String owningOfficeCT, String positionTypeCT, String reasonForCT) {
 
-        caseData.setLinkedCaseCT("Transferred to " + caseTypeIdCT);
+        caseData.setLinkedCaseCT("Transferred to " + owningOfficeCT);
         log.info("Setting positionType to positionTypeCT: " + positionTypeCT
                      + " for case: " + caseData.getEthosCaseReference());
         caseData.setPositionType(positionTypeCT);
