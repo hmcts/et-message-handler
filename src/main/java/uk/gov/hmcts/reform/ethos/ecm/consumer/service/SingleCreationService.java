@@ -29,14 +29,14 @@ public class SingleCreationService {
     public void sendCreation(SubmitEvent oldSubmitEvent, String accessToken,
                              UpdateCaseMsg updateCaseMsg) throws IOException {
 
-        CreationSingleDataModel creationSingleDataModel =
+        var creationSingleDataModel =
             ((CreationSingleDataModel) updateCaseMsg.getDataModelParent());
         String owningOfficeCT = creationSingleDataModel.getOfficeCT();
         String caseTypeId = TribunalOffice.getCaseTypeId(owningOfficeCT);
         String positionTypeCT = creationSingleDataModel.getPositionTypeCT();
         String ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
         String jurisdiction = updateCaseMsg.getJurisdiction();
-        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
+        var caseId = String.valueOf(oldSubmitEvent.getCaseId());
 
         log.info("Retrieve single case and check if it exists");
 
@@ -66,7 +66,7 @@ public class SingleCreationService {
                                     String accessToken, String ccdGatewayBaseUrl,
                                     String positionTypeCT, String owningOfficeCT) throws IOException {
 
-        String destinationCaseId = String.valueOf(caseDestinationOffice.getCaseId());
+        var destinationCaseId = String.valueOf(caseDestinationOffice.getCaseId());
 
         CCDRequest returnedRequest = ccdClient.returnCaseCreationTransfer(accessToken,
                                                                           caseTypeId,
@@ -92,7 +92,7 @@ public class SingleCreationService {
                                  String positionTypeCT, String jurisdiction,
                                  String accessToken, String owningOfficeCT) throws IOException {
 
-        CaseDetails newCaseDetailsCT =
+        var newCaseDetailsCT =
             createCaseDetailsCaseTransfer(oldSubmitEvent.getCaseData(), caseId, caseTypeId,
                                           ccdGatewayBaseUrl, positionTypeCT, jurisdiction,
                                           oldSubmitEvent.getState(), owningOfficeCT);
@@ -127,7 +127,7 @@ public class SingleCreationService {
                                                       String ccdGatewayBaseUrl, String positionTypeCT,
                                                       String jurisdiction, String state, String owningOfficeCT) {
 
-        CaseDetails newCaseTransferCaseDetails = new CaseDetails();
+        var newCaseTransferCaseDetails = new CaseDetails();
         newCaseTransferCaseDetails.setCaseTypeId(caseTypeId);
         newCaseTransferCaseDetails.setJurisdiction(jurisdiction);
         newCaseTransferCaseDetails.setCaseData(
