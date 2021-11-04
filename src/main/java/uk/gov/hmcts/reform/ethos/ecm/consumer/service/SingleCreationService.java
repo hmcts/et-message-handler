@@ -201,7 +201,7 @@ public class SingleCreationService {
         if (state != null && !state.equals(CLOSED_STATE)) {
             newCaseData.setPositionType(positionTypeCT);
         }
-        newCaseData.setOwningOffice(owningOfficeCT);
+        newCaseData.setManagingOffice(owningOfficeCT);
         newCaseData.setMultipleReference(oldCaseData.getMultipleReference());
         log.info("setLeadClaimant is set to " + oldCaseData.getLeadClaimant());
         newCaseData.setLeadClaimant(oldCaseData.getLeadClaimant());
