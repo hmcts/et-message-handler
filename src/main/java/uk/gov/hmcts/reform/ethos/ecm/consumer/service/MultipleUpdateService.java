@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.helpers.UtilHelper;
 import uk.gov.hmcts.ecm.common.model.ccd.CCDRequest;
+import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.multiples.MultipleData;
 import uk.gov.hmcts.ecm.common.model.multiples.SubmitMultipleEvent;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
@@ -99,7 +100,7 @@ public class MultipleUpdateService {
                 String reasonForCT = (((CreationSingleDataModel) updateCaseMsg.getDataModelParent()).getReasonForCT());
                 multipleData.setLinkedMultipleCT("Transferred to " + officeCT);
                 multipleData.setReasonForCT(reasonForCT);
-
+                multipleData.setOwningOffice(officeCT);
             }
 
             multipleData.setState(multipleState);
@@ -120,7 +121,9 @@ public class MultipleUpdateService {
 
         if (multipleErrorsList == null || multipleErrorsList.isEmpty()) {
 
-            String caseTypeId = (((CreationSingleDataModel) updateCaseMsg.getDataModelParent()).getOfficeCT());
+            String caseTypeId = TribunalOffice.getCaseTypeId(((CreationSingleDataModel)
+                updateCaseMsg.getDataModelParent()).getOfficeCT());
+
             String jurisdiction = updateCaseMsg.getJurisdiction();
 
             var multipleData = new MultipleData();
@@ -130,7 +133,8 @@ public class MultipleUpdateService {
 
             multipleData.setMultipleSource(MIGRATION_CASE_SOURCE);
             multipleData.setMultipleReference(updateCaseMsg.getMultipleRef());
-
+            multipleData.setOwningOffice(((CreationSingleDataModel)
+                updateCaseMsg.getDataModelParent()).getOfficeCT());
             String multipleCaseTypeId = UtilHelper.getBulkCaseTypeId(caseTypeId);
 
             CCDRequest returnedRequest = ccdClient.startCaseMultipleCreation(accessToken,
