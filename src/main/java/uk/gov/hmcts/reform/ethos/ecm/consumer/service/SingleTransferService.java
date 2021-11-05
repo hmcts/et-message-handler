@@ -8,6 +8,7 @@ import uk.gov.hmcts.ecm.common.helpers.UtilHelper;
 import uk.gov.hmcts.ecm.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
+import uk.gov.hmcts.ecm.common.model.helper.Constants;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class SingleTransferService {
         String positionTypeCT = creationSingleDataModel.getPositionTypeCT();
         String owningOfficeCT = creationSingleDataModel.getOfficeCT();
         String reasonForCT = creationSingleDataModel.getReasonForCT();
+        String scopeOfTransfer = creationSingleDataModel.getScopeOfTransfer();
 
         String jurisdiction = updateCaseMsg.getJurisdiction();
 
@@ -37,17 +39,23 @@ public class SingleTransferService {
             : updateCaseMsg.getCaseTypeId();
 
         updateTransferredCase(submitEvent, caseTypeId, owningOfficeCT, jurisdiction, accessToken, positionTypeCT,
-                              reasonForCT);
+                              reasonForCT, scopeOfTransfer);
 
     }
 
     private void updateTransferredCase(SubmitEvent submitEvent, String caseTypeId, String owningOfficeCT,
                                        String jurisdiction, String accessToken, String positionTypeCT,
-                                       String reasonForCT) throws IOException {
+                                       String reasonForCT, String scopeOfTransfer) throws IOException {
 
-        CCDRequest returnedRequest = ccdClient.startCaseTransfer(accessToken, caseTypeId, jurisdiction,
-                                                                 String.valueOf(submitEvent.getCaseId()));
+        CCDRequest returnedRequest;
+        if (Constants.SCOPE_OF_TRANSFER_INTRA_COUNTRY.equals(scopeOfTransfer)) {
+            returnedRequest = ccdClient.startEventForCase(accessToken, caseTypeId,
+                                                          jurisdiction, String.valueOf(submitEvent.getCaseId()));
+        } else {
 
+            returnedRequest = ccdClient.startCaseTransfer(accessToken, caseTypeId, jurisdiction,
+                                                                     String.valueOf(submitEvent.getCaseId()));
+        }
         generateCaseData(submitEvent.getCaseData(), owningOfficeCT, positionTypeCT, reasonForCT);
 
         ccdClient.submitEventForCase(accessToken,

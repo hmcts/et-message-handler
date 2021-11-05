@@ -100,7 +100,7 @@ public class MultipleUpdateService {
                 String reasonForCT = (((CreationSingleDataModel) updateCaseMsg.getDataModelParent()).getReasonForCT());
                 multipleData.setLinkedMultipleCT("Transferred to " + officeCT);
                 multipleData.setReasonForCT(reasonForCT);
-                multipleData.setOwningOffice(officeCT);
+                multipleData.setManagingOffice(officeCT);
             }
 
             multipleData.setState(multipleState);
@@ -133,7 +133,7 @@ public class MultipleUpdateService {
 
             multipleData.setMultipleSource(MIGRATION_CASE_SOURCE);
             multipleData.setMultipleReference(updateCaseMsg.getMultipleRef());
-            multipleData.setOwningOffice(((CreationSingleDataModel)
+            multipleData.setManagingOffice(((CreationSingleDataModel)
                 updateCaseMsg.getDataModelParent()).getOfficeCT());
             String multipleCaseTypeId = UtilHelper.getBulkCaseTypeId(caseTypeId);
 
