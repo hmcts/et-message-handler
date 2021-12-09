@@ -10,7 +10,7 @@ java:
         - et-msg-handler-postgres-port
         - et-msg-handler-postgres-database
         - et-msg-handler-postgres-user
-        - et-msg-handler-postgres-password
+        - et-msg-handler-postgres-pass
 #        - caseworker-user-name
 #        - caseworker-password
 #        - gov-notify-api-key
