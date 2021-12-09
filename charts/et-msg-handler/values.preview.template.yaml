@@ -8,11 +8,11 @@ java:
     ET_MSG_HANDLER_POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
     ET_MSG_HANDLER_DB_CONN_OPTIONS: ""
   keyVaults:
-#    et-msg-handler:
-#      secrets:
-#        - caseworker-user-name
-#        - caseworker-password
-#        - gov-notify-api-key
+    et-msg-handler:
+      secrets:
+        - caseworker-user-name
+        - caseworker-password
+        - gov-notify-api-key
 #        - et-msg-handler-s2s-key
 #        - idam-client-secret
     et:
