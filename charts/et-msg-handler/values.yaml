@@ -11,11 +11,11 @@ java:
         - et-msg-handler-postgres-database
         - et-msg-handler-postgres-user
         - et-msg-handler-postgres-password
-        - caseworker-user-name
-        - caseworker-password
-        - gov-notify-api-key
-        - et-msg-handler-s2s-key
-        - idam-client-secret
+#        - caseworker-user-name
+#        - caseworker-password
+#        - gov-notify-api-key
+#        - et-msg-handler-s2s-key
+#        - idam-client-secret
     et:
       secrets:
         - create-updates-queue-send-connection-string

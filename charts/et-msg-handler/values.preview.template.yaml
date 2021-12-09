@@ -10,11 +10,11 @@ java:
   keyVaults:
     et-msg-handler:
       secrets:
-        - caseworker-user-name
-        - caseworker-password
-        - gov-notify-api-key
-        - et-msg-handler-s2s-key
-        - idam-client-secret
+#        - caseworker-user-name
+#        - caseworker-password
+#        - gov-notify-api-key
+#        - et-msg-handler-s2s-key
+#        - idam-client-secret
     et:
       secrets:
         - create-updates-queue-send-connection-string
