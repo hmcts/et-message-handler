@@ -1,6 +1,8 @@
-locals {
-  resource_group_name = "${var.product}-${var.component}-${var.env}"
+provider "azurerm" {
+  features {}
+}
 
+locals {
   tags = merge(var.common_tags,
     map(
       "environment", var.env,
@@ -22,18 +24,6 @@ data "azurerm_user_assigned_identity" "et-identity" {
   resource_group_name = "managed-identities-${var.env}-rg"
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name         = "${var.product}-${var.component}-POSTGRES-USER"
-  value        = module.db.user_name
-  key_vault_id = module.key-vault.key_vault_id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name         = "${var.product}-${var.component}-POSTGRES-PASS"
-  value        = module.db.postgresql_password
-  key_vault_id = module.key-vault.key_vault_id
-}
-
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name         = "${var.product}-${var.component}-POSTGRES-HOST"
   value        = module.db.host_name
@@ -49,5 +39,17 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name         = "${var.product}-${var.component}-POSTGRES-DATABASE"
   value        = module.db.postgresql_database
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+  name         = "${var.product}-${var.component}-POSTGRES-USER"
+  value        = module.db.user_name
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
+  name         = "${var.product}-${var.component}-POSTGRES-PASS"
+  value        = module.db.postgresql_password
   key_vault_id = module.key-vault.key_vault_id
 }
