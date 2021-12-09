@@ -221,7 +221,7 @@ mainClassName = 'uk.gov.hmcts.reform.ethos.ecm.consumer.Application'
 
 bootJar {
   getArchiveFileName().set(provider {
-    'et-message-handler.jar'
+    'et-msg-handler.jar'
   })
 
   manifest {
