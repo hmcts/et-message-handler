@@ -2,7 +2,7 @@ spring:
   cloud:
     propertiesvolume:
       prefixed: false
-      paths: /mnt/secrets/et
+      paths: /mnt/secrets/et-msg-handler,/mnt/secrets/et
       aliases:
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
         create-updates-queue-send-connection-string: CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING
