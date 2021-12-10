@@ -14,7 +14,7 @@ spring:
         et-msg-handler-POSTGRES-DATABASE: ET_MSG_HANDLER_POSTGRES_DATABASE
         et-msg-handler-POSTGRES-USER: ET_MSG_HANDLER_POSTGRES_USER
         et-msg-handler-POSTGRES-PASS: ET_MSG_HANDLER_POSTGRES_PASSWORD
-#        et-msg-handler-s2s-key: ET_MSG_HANDLER_S2S_KEY
+        et-msg-handler-s2s-secret: ET_MSG_HANDLER_S2S_SECRET
         caseworker-user-name: CASEWORKER_USER_NAME
         caseworker-password: CASEWORKER_PASSWORD
         gov-notify-api-key: GOV_NOTIFY_API_KEY
