@@ -65,7 +65,7 @@ data "azurerm_key_vault" "s2s_vault" {
 }
 
 data "azurerm_key_vault_secret" "et_msg_handler_s2s_key" {
-  name         = "microservicekey-et-msg_handler"
+  name         = "microservicekey-et-msg-handler"
   key_vault_id = "${data.azurerm_key_vault.s2s_vault.id}"
 }
 
