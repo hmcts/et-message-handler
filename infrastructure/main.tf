@@ -54,11 +54,6 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   key_vault_id = module.key-vault.key_vault_id
 }
 
-data "azurerm_key_vault" "et_shared_key_vault" {
-  name                = "${var.product}-${var.env}"
-  resource_group_name = "${var.product}-${var.env}"
-}
-
 data "azurerm_key_vault" "s2s_vault" {
   name                = "s2s-${var.env}"
   resource_group_name = "rpe-service-auth-provider-${var.env}"
@@ -66,7 +61,7 @@ data "azurerm_key_vault" "s2s_vault" {
 
 data "azurerm_key_vault_secret" "et_msg_handler_s2s_key" {
   name         = "microservicekey-et-msg-handler"
-  key_vault_id = "${data.azurerm_key_vault.s2s_vault.id}"
+  key_vault_id = data.azurerm_key_vault.s2s_vault.id
 }
 
 resource "azurerm_key_vault_secret" "et_msg_handler_s2s_secret" {
