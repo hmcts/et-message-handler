@@ -4,7 +4,7 @@
 
 def type = "java"
 def product = "et"
-def component = "et-message-handler"
+def component = "msg-handler"
 
 withPipeline(type, product, component) {
   enableAksStagingDeployment()
