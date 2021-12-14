@@ -1,9 +1,6 @@
-/* CREATE FUNCTION */
-
-DROP FUNCTION IF EXISTS fn_persistentQ_logMultipleError  (p_multipleRef varchar(25), p_ethosCaseRef varchar(25), p_description varchar(250));
-
-CREATE OR REPLACE FUNCTION fn_persistentQ_logMultipleError  (p_multipleRef varchar(25), p_ethosCaseRef varchar(25), p_description varchar(250)) RETURNS varchar(5) AS $$
-
+CREATE OR REPLACE FUNCTION fn_persistentQ_logMultipleError (
+    p_multipleRef varchar(25), p_ethosCaseRef varchar(25), p_description varchar(250))
+RETURNS varchar(5) AS $$
 -- =============================================
 -- Author:		Mohammed Hafejee
 
@@ -19,13 +16,10 @@ CREATE OR REPLACE FUNCTION fn_persistentQ_logMultipleError  (p_multipleRef varch
 --            :	19-APR-2021		1.3  - Added explicit column identifiers in INSERT to cater for identity column now added
 --            : 29-OCT-2021     2.0  - CCD Consolidation
 -- =============================================
-
-
 BEGIN
-    INSERT INTO multiple_errors (multipleRef,ethosCaseRef,description) VALUES (p_multipleRef, p_ethosCaseRef, p_description);
+    INSERT INTO multiple_errors (multipleRef,ethosCaseRef,description)
+    VALUES (p_multipleRef, p_ethosCaseRef, p_description);
 
     RETURN 'ok';
 END;
 $$ LANGUAGE plpgsql;
-
-
