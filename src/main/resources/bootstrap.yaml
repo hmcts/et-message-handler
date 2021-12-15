@@ -9,11 +9,11 @@ spring:
         create-updates-queue-listen-connection-string: CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING
         update-case-queue-send-connection-string: UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING
         update-case-queue-listen-connection-string: UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING
-        et-msg-handler-POSTGRES-HOST: ET_MSG_HANDLER_POSTGRES_HOST
-        et-msg-handler-POSTGRES-PORT: ET_MSG_HANDLER_POSTGRES_PORT
-        et-msg-handler-POSTGRES-DATABASE: ET_MSG_HANDLER_POSTGRES_DATABASE
-        et-msg-handler-POSTGRES-USER: ET_MSG_HANDLER_POSTGRES_USER
-        et-msg-handler-POSTGRES-PASS: ET_MSG_HANDLER_POSTGRES_PASSWORD
+        msg-handler-POSTGRES-HOST: ET_MSG_HANDLER_POSTGRES_HOST
+        msg-handler-POSTGRES-PORT: ET_MSG_HANDLER_POSTGRES_PORT
+        msg-handler-POSTGRES-DATABASE: ET_MSG_HANDLER_POSTGRES_DATABASE
+        msg-handler-POSTGRES-USER: ET_MSG_HANDLER_POSTGRES_USER
+        msg-handler-POSTGRES-PASS: ET_MSG_HANDLER_POSTGRES_PASSWORD
         et-msg-handler-s2s-secret: ET_MSG_HANDLER_S2S_SECRET
         caseworker-user-name: CASEWORKER_USER_NAME
         caseworker-password: CASEWORKER_PASSWORD

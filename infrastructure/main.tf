@@ -25,31 +25,31 @@ data "azurerm_user_assigned_identity" "et-identity" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name         = "${var.product}-${var.component}-POSTGRES-HOST"
+  name         = "${var.component}-POSTGRES-HOST"
   value        = module.db.host_name
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name         = "${var.product}-${var.component}-POSTGRES-PORT"
+  name         = "${var.component}-POSTGRES-PORT"
   value        = "5432"
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name         = "${var.product}-${var.component}-POSTGRES-DATABASE"
+  name         = "${var.component}-POSTGRES-DATABASE"
   value        = module.db.postgresql_database
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name         = "${var.product}-${var.component}-POSTGRES-USER"
+  name         = "${var.component}-POSTGRES-USER"
   value        = module.db.user_name
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name         = "${var.product}-${var.component}-POSTGRES-PASS"
+  name         = "${var.component}-POSTGRES-PASS"
   value        = module.db.postgresql_password
   key_vault_id = module.key-vault.key_vault_id
 }
