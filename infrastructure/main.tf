@@ -7,8 +7,7 @@ locals {
     map(
       "environment", var.env,
       "managedBy", var.team_name,
-      "Team Contact", var.team_contact,
-      "lastUpdated", timestamp()
+      "Team Contact", var.team_contact
     )
   )
 }
