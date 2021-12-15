@@ -150,11 +150,11 @@ ext {
   reformLogging = '5.1.7'
   hmctsNotify = '3.15.1-RELEASE'
   serenity = '2.3.31'
-  log4JVersion = '2.15.0'
+  log4JVersion = '2.16.0'
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.3'
+  implementation 'com.github.hmcts:et-common:0.0.4'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
