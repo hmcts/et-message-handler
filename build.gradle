@@ -173,7 +173,7 @@ dependencies {
 
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: springfoxSwagger
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: springfoxSwagger
-  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.11.3'
+  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.16-preview.1'
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.21'
