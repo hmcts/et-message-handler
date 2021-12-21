@@ -161,7 +161,7 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.4'
+  implementation 'com.github.hmcts:et-common:0.0.5'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
