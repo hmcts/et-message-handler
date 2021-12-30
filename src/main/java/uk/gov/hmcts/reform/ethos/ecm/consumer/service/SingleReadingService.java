@@ -24,41 +24,25 @@ public class SingleReadingService {
     private final CcdClient ccdClient;
     private final UserService userService;
     private final SingleUpdateService singleUpdateService;
-    private final SingleCreationService singleCreationService;
     private final SingleTransferService singleTransferService;
 
     public void sendUpdateToSingleLogic(UpdateCaseMsg updateCaseMsg) throws IOException {
-
         String accessToken = userService.getAccessToken();
-
         List<SubmitEvent> submitEvents = retrieveSingleCase(accessToken, updateCaseMsg);
 
         if (submitEvents != null && !submitEvents.isEmpty()) {
-
             if (updateCaseMsg.getDataModelParent() instanceof CreationSingleDataModel) {
-
-                log.info("Send updates to the old case");
-
                 singleTransferService.sendTransferred(submitEvents.get(0), accessToken, updateCaseMsg);
-
-                singleCreationService.sendCreation(submitEvents.get(0), accessToken, updateCaseMsg);
-
             } else {
-
                 singleUpdateService.sendUpdate(submitEvents.get(0), accessToken, updateCaseMsg);
-
             }
-
         } else {
-
-            log.info("No submit events found");
-
+            log.warn("No submit events found for msg id {} with case reference {}", updateCaseMsg.getMsgId(),
+                     updateCaseMsg.getEthosCaseReference());
         }
-
     }
 
-    public List<SubmitEvent> retrieveSingleCase(String accessToken, UpdateCaseMsg updateCaseMsg) throws IOException {
-
+    private List<SubmitEvent> retrieveSingleCase(String accessToken, UpdateCaseMsg updateCaseMsg) throws IOException {
         String caseType = !updateCaseMsg.getMultipleRef().equals(SINGLE_CASE_TYPE)
             ? UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())
             : updateCaseMsg.getCaseTypeId();
@@ -67,7 +51,5 @@ public class SingleReadingService {
             accessToken,
             caseType,
             new ArrayList<>(Collections.singletonList(updateCaseMsg.getEthosCaseReference())));
-
     }
-
 }
