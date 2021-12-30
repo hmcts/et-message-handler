@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
@@ -17,17 +18,13 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SingleTransferService {
 
     public static final String SAME_COUNTRY_EVENT_SUMMARY_TEMPLATE = "Case transferred to %s with %s";
 
     private final CcdClient ccdClient;
     private final SingleCreationService singleCreationService;
-
-    public SingleTransferService(CcdClient ccdClient, SingleCreationService singleCreationService) {
-        this.ccdClient = ccdClient;
-        this.singleCreationService = singleCreationService;
-    }
 
     public void sendTransferred(SubmitEvent submitEvent, String accessToken, UpdateCaseMsg updateCaseMsg)
         throws IOException {

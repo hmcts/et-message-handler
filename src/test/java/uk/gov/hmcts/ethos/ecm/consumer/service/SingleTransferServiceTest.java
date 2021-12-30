@@ -33,13 +33,13 @@ import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleTransferServi
 public class SingleTransferServiceTest {
 
     @InjectMocks
-    private SingleTransferService singleTransferService;
+    private transient SingleTransferService singleTransferService;
     @Mock
-    private CcdClient ccdClient;
+    private transient CcdClient ccdClient;
     @Mock
-    private SingleCreationService singleCreationService;
+    private transient SingleCreationService singleCreationService;
     @Captor
-    private ArgumentCaptor<CcdSubmitEventParams> ccdSubmitEventParamsArgumentCaptor;
+    private transient ArgumentCaptor<CcdSubmitEventParams> ccdSubmitEventParamsArgumentCaptor;
 
     @Test
     public void testTransferSameCountry() throws IOException {

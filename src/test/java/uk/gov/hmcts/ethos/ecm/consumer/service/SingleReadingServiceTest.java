@@ -30,18 +30,18 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.ACCEPTED_STATE;
 public class SingleReadingServiceTest {
 
     @InjectMocks
-    private SingleReadingService singleReadingService;
+    private transient SingleReadingService singleReadingService;
     @Mock
-    private CcdClient ccdClient;
+    private transient CcdClient ccdClient;
     @Mock
-    private UserService userService;
+    private transient UserService userService;
     @Mock
-    private SingleUpdateService singleUpdateService;
+    private transient SingleUpdateService singleUpdateService;
     @Mock
-    private SingleTransferService singleTransferService;
+    private transient SingleTransferService singleTransferService;
 
-    private List<SubmitEvent> submitEvents;
-    private final String userToken = "my-test-token";
+    private transient List<SubmitEvent> submitEvents;
+    private final transient String userToken = "my-test-token";
 
     @Before
     public void setUp() {
