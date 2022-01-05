@@ -48,7 +48,8 @@ public class SingleTransferServiceTest {
         var officeCT = TribunalOffice.NEWCASTLE.getOfficeName();
         var reasonCT = "A test transfer";
         var sourceEthosCaseReference = "12345/2021";
-        var updateCaseMsg = createUpdateCaseMsg(caseTypeId, jurisdiction, officeCT, reasonCT, sourceEthosCaseReference);
+        var updateCaseMsg = createUpdateCaseMsg(caseTypeId, jurisdiction, officeCT, reasonCT, sourceEthosCaseReference,
+                                                true);
         var caseId = "12345";
         var submitEvent = createSubmitEvent(caseId);
 
@@ -76,10 +77,27 @@ public class SingleTransferServiceTest {
         verifyNoInteractions(singleCreationService);
     }
 
+    @Test
+    public void testTransferDifferentCountry() throws IOException {
+        var submitEvent = new SubmitEvent();
+        var userToken = "my-test-token";
+        var jurisdiction = "EMPLOYMENT";
+        var officeCT = TribunalOffice.GLASGOW.getOfficeName();
+        var reasonCT = "A test transfer";
+        var sourceEthosCaseReference = "12345/2021";
+        var updateCaseMsg = createUpdateCaseMsg(ENGLANDWALES_CASE_TYPE_ID, jurisdiction, officeCT, reasonCT,
+                                                sourceEthosCaseReference, false);
+
+        singleTransferService.sendTransferred(submitEvent, userToken, updateCaseMsg);
+
+        verify(singleCreationService, times(1)).sendCreation(submitEvent, userToken, updateCaseMsg);
+        verifyNoInteractions(ccdClient);
+    }
+
     private UpdateCaseMsg createUpdateCaseMsg(String caseTypeId, String jurisdiction, String officeCT, String reasonCT,
-                                              String sourceEthosCaseReference) {
+                                              String sourceEthosCaseReference, boolean transferSameCountry) {
         var creationDataModel = CreationSingleDataModel.builder()
-            .transferSameCountry(true)
+            .transferSameCountry(transferSameCountry)
             .officeCT(officeCT)
             .reasonForCT(reasonCT)
             .sourceEthosCaseReference(sourceEthosCaseReference)

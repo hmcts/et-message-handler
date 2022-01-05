@@ -32,7 +32,6 @@ public class SingleTransferService {
         if (caseTransfer.isTransferSameCountry()) {
             transferSameCountry(caseTransfer, accessToken);
         } else {
-            transferDifferentCountry(caseTransfer, accessToken);
             singleCreationService.sendCreation(submitEvent, accessToken, updateCaseMsg);
         }
     }
@@ -59,8 +58,8 @@ public class SingleTransferService {
 
     private void transferSameCountry(CaseTransfer caseTransfer, String accessToken) throws IOException {
         var office = caseTransfer.getOfficeCT();
-        log.info("Creating same country transfer event for case {} and office {}",
-                 caseTransfer.getCaseData().getEthosCaseReference(), office);
+        var ethosCaseReference = caseTransfer.getCaseData().getEthosCaseReference();
+        log.info("Creating same country transfer event for case {} and office {}", ethosCaseReference, office);
         var caseId = String.valueOf(caseTransfer.getCaseId());
         var returnedRequest = ccdClient.startCaseTransferSameCountryEccLinkedCase(accessToken,
                                                                                   caseTransfer.getCaseTypeId(),
@@ -83,22 +82,5 @@ public class SingleTransferService {
             .eventDescription(caseTransfer.getReasonCT())
             .build();
         ccdClient.submitEventForCase(params);
-    }
-
-    private void transferDifferentCountry(CaseTransfer caseTransfer, String accessToken) throws IOException {
-        var caseData = caseTransfer.getCaseData();
-        caseData.setLinkedCaseCT("Transferred to " + caseTransfer.getOfficeCT());
-
-        log.info("Setting positionType to {} for case {} ", caseTransfer.getPositionTypeCT(),
-                 caseData.getEthosCaseReference());
-        caseData.setPositionType(caseTransfer.getPositionTypeCT());
-        caseData.setPositionTypeCT(caseTransfer.getPositionTypeCT());
-        caseData.setReasonForCT(caseTransfer.getReasonCT());
-
-        var caseId = String.valueOf(caseTransfer.getCaseId());
-        var returnedRequest = ccdClient.startCaseTransfer(accessToken, caseTransfer.getCaseTypeId(),
-                                                          caseTransfer.getJurisdiction(), caseId);
-        ccdClient.submitEventForCase(accessToken, caseData, caseTransfer.getCaseTypeId(),
-                                     caseTransfer.getJurisdiction(), returnedRequest, caseId);
     }
 }
