@@ -35,6 +35,7 @@ public class SingleCreationService {
         String owningOfficeCT = creationSingleDataModel.getOfficeCT();
         String caseTypeId = TribunalOffice.getCaseTypeId(owningOfficeCT);
         String positionTypeCT = creationSingleDataModel.getPositionTypeCT();
+        String reasonForCT = creationSingleDataModel.getReasonForCT();
         String ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
         String jurisdiction = updateCaseMsg.getJurisdiction();
         var caseId = String.valueOf(oldSubmitEvent.getCaseId());
@@ -45,19 +46,20 @@ public class SingleCreationService {
         if (caseDestinationOffice != null) {
             log.info("Case exists for transfer to {} {}", caseTypeId, ethosCaseReference);
             updateExistingCase(caseDestinationOffice, oldSubmitEvent, caseId, caseTypeId, jurisdiction, accessToken,
-                               ccdGatewayBaseUrl, positionTypeCT, owningOfficeCT
+                               ccdGatewayBaseUrl, positionTypeCT, owningOfficeCT, reasonForCT
             );
         } else {
             log.info("Creating new case for transfer to {} {}", caseTypeId, ethosCaseReference);
             transferNewCase(oldSubmitEvent, caseId, caseTypeId, ccdGatewayBaseUrl, positionTypeCT,
-                            jurisdiction, accessToken, owningOfficeCT);
+                            jurisdiction, accessToken, owningOfficeCT, reasonForCT);
         }
     }
 
     private void updateExistingCase(SubmitEvent caseDestinationOffice, SubmitEvent oldSubmitEvent,
                                     String caseId, String caseTypeId, String jurisdiction,
                                     String accessToken, String ccdGatewayBaseUrl,
-                                    String positionTypeCT, String owningOfficeCT) throws IOException {
+                                    String positionTypeCT, String owningOfficeCT, String reasonForCT)
+        throws IOException {
 
         var destinationCaseId = String.valueOf(caseDestinationOffice.getCaseId());
 
@@ -75,7 +77,7 @@ public class SingleCreationService {
                                          caseId,
                                          ccdGatewayBaseUrl,
                                          positionTypeCT,
-                                         oldSubmitEvent.getState(), owningOfficeCT
+                                         oldSubmitEvent.getState(), owningOfficeCT, reasonForCT
             ),
             caseTypeId,
             jurisdiction,
@@ -87,11 +89,11 @@ public class SingleCreationService {
     private void transferNewCase(SubmitEvent oldSubmitEvent, String caseId,
                                  String caseTypeId, String ccdGatewayBaseUrl,
                                  String positionTypeCT, String jurisdiction,
-                                 String accessToken, String owningOfficeCT) throws IOException {
+                                 String accessToken, String owningOfficeCT, String reasonForCT) throws IOException {
 
         var newCaseDetailsCT = createCaseDetailsCaseTransfer(oldSubmitEvent.getCaseData(), caseId, caseTypeId,
                                                              ccdGatewayBaseUrl, positionTypeCT, jurisdiction,
-                                                             oldSubmitEvent.getState(), owningOfficeCT);
+                                                             oldSubmitEvent.getState(), owningOfficeCT, reasonForCT);
 
         CCDRequest returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, newCaseDetailsCT);
 
@@ -116,33 +118,36 @@ public class SingleCreationService {
 
     private CaseDetails createCaseDetailsCaseTransfer(CaseData oldCaseData, String caseId, String caseTypeId,
                                                       String ccdGatewayBaseUrl, String positionTypeCT,
-                                                      String jurisdiction, String state, String owningOfficeCT) {
+                                                      String jurisdiction, String state, String owningOfficeCT,
+                                                      String reasonForCT) {
         var newCaseTransferCaseDetails = new CaseDetails();
         newCaseTransferCaseDetails.setCaseTypeId(caseTypeId);
         newCaseTransferCaseDetails.setJurisdiction(jurisdiction);
 
         var newCaseData = generateNewCaseDataCaseTransfer(oldCaseData, caseId, ccdGatewayBaseUrl, positionTypeCT, state,
-                                                          owningOfficeCT);
+                                                          owningOfficeCT, reasonForCT);
+        newCaseData.setReasonForCT(reasonForCT);
         newCaseTransferCaseDetails.setCaseData(newCaseData);
         return newCaseTransferCaseDetails;
     }
 
     private CaseData generateNewCaseDataCaseTransfer(CaseData oldCaseData, String caseId,
                                                      String ccdGatewayBaseUrl, String positionTypeCT,
-                                                     String state, String owningOfficeCT) {
+                                                     String state, String owningOfficeCT, String reasonForCT) {
         return copyCaseData(oldCaseData, new CaseData(), caseId, ccdGatewayBaseUrl, positionTypeCT, state,
-                            owningOfficeCT);
+                            owningOfficeCT, reasonForCT);
     }
 
     private CaseData generateCaseDataCaseTransfer(CaseData newCaseData, CaseData oldCaseData, String caseId,
                                                   String ccdGatewayBaseUrl, String positionTypeCT,
-                                                  String state, String owningOfficeCT) {
+                                                  String state, String owningOfficeCT, String reasonForCT) {
 
-        return copyCaseData(oldCaseData, newCaseData, caseId, ccdGatewayBaseUrl, positionTypeCT, state, owningOfficeCT);
+        return copyCaseData(oldCaseData, newCaseData, caseId, ccdGatewayBaseUrl, positionTypeCT, state, owningOfficeCT,
+                            reasonForCT);
     }
 
     private CaseData copyCaseData(CaseData oldCaseData, CaseData newCaseData, String caseId, String ccdGatewayBaseUrl,
-                                  String positionTypeCT, String state, String owningOfficeCT) {
+                                  String positionTypeCT, String state, String owningOfficeCT, String reasonForCT) {
         newCaseData.setEthosCaseReference(oldCaseData.getEthosCaseReference());
         newCaseData.setCaseType(oldCaseData.getCaseType());
         newCaseData.setClaimantTypeOfClaimant(oldCaseData.getClaimantTypeOfClaimant());
@@ -190,8 +195,7 @@ public class SingleCreationService {
         log.info("setLeadClaimant is set to " + oldCaseData.getLeadClaimant());
         newCaseData.setLeadClaimant(oldCaseData.getLeadClaimant());
 
-        newCaseData.setReasonForCT(oldCaseData.getReasonForCT());
-        log.info("ReasonForCT is set to " + oldCaseData.getReasonForCT());
+        newCaseData.setReasonForCT(reasonForCT);
         newCaseData.setLinkedCaseCT(generateMarkUp(ccdGatewayBaseUrl, caseId, oldCaseData.getEthosCaseReference()));
         return newCaseData;
     }

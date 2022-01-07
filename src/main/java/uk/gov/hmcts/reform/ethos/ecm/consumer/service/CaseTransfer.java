@@ -8,7 +8,6 @@ import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 @Getter
 public class CaseTransfer {
     private long caseId;
-    private String accessToken;
     private boolean transferSameCountry;
     private String caseTypeId;
     private String jurisdiction;

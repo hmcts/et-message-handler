@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 
@@ -43,6 +44,7 @@ public class SingleReadingService {
     }
 
     private List<SubmitEvent> retrieveSingleCase(String accessToken, UpdateCaseMsg updateCaseMsg) throws IOException {
+        Objects.requireNonNull(updateCaseMsg.getEthosCaseReference(), "No ethosCaseReference found");
         String caseType = !updateCaseMsg.getMultipleRef().equals(SINGLE_CASE_TYPE)
             ? UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())
             : updateCaseMsg.getCaseTypeId();
