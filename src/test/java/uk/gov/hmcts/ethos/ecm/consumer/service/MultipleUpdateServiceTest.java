@@ -56,11 +56,10 @@ public class MultipleUpdateServiceTest {
     @Captor
     private transient ArgumentCaptor<MultipleData> creationMultipleDataArgumentCaptor;
 
-
     private transient List<SubmitMultipleEvent> submitMultipleEvents;
     private transient SubmitMultipleEvent submitMultipleEvent;
     private transient UpdateCaseMsg updateCaseMsg;
-    private transient final String userToken = "Token";
+    private final transient String userToken = "Token";
 
     @Before
     public void setUp() {
@@ -87,7 +86,6 @@ public class MultipleUpdateServiceTest {
         var ccdRequest = new CCDRequest();
         when(ccdClient.startBulkAmendEventForCase(userToken, updateCaseMsg.getCaseTypeId(),
                                                   updateCaseMsg.getJurisdiction(), caseId)).thenReturn(ccdRequest);
-
 
         var multipleErrorsList = new ArrayList<MultipleErrors>();
 

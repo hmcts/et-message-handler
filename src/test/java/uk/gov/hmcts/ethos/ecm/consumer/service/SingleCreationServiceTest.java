@@ -87,12 +87,12 @@ public class SingleCreationServiceTest {
     public void caseTransferToScotlandUpdateExisting() throws IOException {
         var ethosCaseReference = "4150002/2020";
         var managingOffice = TribunalOffice.MANCHESTER.getOfficeName();
-        var caseId = 100;
         var caseData = new CaseData();
         caseData.setEthosCaseReference(ethosCaseReference);
         caseData.setManagingOffice(managingOffice);
         var submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
+        var caseId = 100;
         submitEvent.setCaseId(caseId);
 
         var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
