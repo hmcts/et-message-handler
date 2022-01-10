@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.ResetStateDataModel;
@@ -90,18 +91,17 @@ public class UpdateManagementService {
     }
 
     private void sendEmailToUser(UpdateCaseMsg updateCaseMsg, List<MultipleErrors> multipleErrorsList) {
-
-        if (multipleErrorsList != null && !multipleErrorsList.isEmpty()) {
-
-            emailService.sendConfirmationErrorEmail(updateCaseMsg.getUsername(),
-                                                    multipleErrorsList, updateCaseMsg.getMultipleRef());
-
-        } else {
-
-            emailService.sendConfirmationEmail(updateCaseMsg.getUsername(), updateCaseMsg.getMultipleRef());
-
+        try {
+            if (CollectionUtils.isNotEmpty(multipleErrorsList)) {
+                emailService.sendConfirmationErrorEmail(updateCaseMsg.getUsername(), multipleErrorsList,
+                                                        updateCaseMsg.getMultipleRef());
+            } else {
+                emailService.sendConfirmationEmail(updateCaseMsg.getUsername(), updateCaseMsg.getMultipleRef());
+            }
+        } catch (Exception e) {
+            log.error("Unable to send confirmation email to user {} for multiple {} ", updateCaseMsg.getUsername(),
+                      updateCaseMsg.getMultipleRef(), e);
         }
-
     }
 
     private void deleteMultipleRefDatabase(String multipleRef) {

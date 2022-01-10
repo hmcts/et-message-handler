@@ -9,24 +9,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
-import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ethos.ecm.consumer.helpers.Helper;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleCreationService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleReadingService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleTransferService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleUpdateService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.UserService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.ACCEPTED_STATE;
 
@@ -42,13 +38,10 @@ public class SingleReadingServiceTest {
     @Mock
     private transient SingleUpdateService singleUpdateService;
     @Mock
-    private transient SingleCreationService singleCreationService;
-    @Mock
     private transient SingleTransferService singleTransferService;
 
     private transient List<SubmitEvent> submitEvents;
-    private transient UpdateCaseMsg updateCaseMsg;
-    private transient String userToken;
+    private final transient String userToken = "my-test-token";
 
     @Before
     public void setUp() {
@@ -57,48 +50,42 @@ public class SingleReadingServiceTest {
         caseData.setEthosCaseReference("4150002/2020");
         submitEvent.setCaseData(caseData);
         submitEvent.setState(ACCEPTED_STATE);
-        submitEvents = new ArrayList<>(Collections.singletonList(submitEvent));
-        updateCaseMsg = Helper.generateUpdateCaseMsg();
-        userToken = "Token";
+        submitEvents = List.of(submitEvent);
     }
 
     @Test
     public void sendUpdateToSingleLogic() throws IOException {
+        var updateCaseMsg = Helper.generateUpdateCaseMsg();
         when(userService.getAccessToken()).thenReturn(userToken);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEvents);
 
         singleReadingService.sendUpdateToSingleLogic(updateCaseMsg);
-        verify(singleUpdateService).sendUpdate(eq(submitEvents.get(0)),
-                                               eq(userToken),
-                                               eq(updateCaseMsg));
-        verifyNoMoreInteractions(singleUpdateService);
+
+        verify(singleUpdateService, times(1)).sendUpdate(submitEvents.get(0), userToken, updateCaseMsg);
+        verifyNoInteractions(singleTransferService);
     }
 
     @Test
-    public void sendCreationToSingleLogic() throws IOException {
-        updateCaseMsg = Helper.generateCreationSingleCaseMsg();
+    public void sendTransferredToSingleLogic() throws IOException {
+        var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         when(userService.getAccessToken()).thenReturn(userToken);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEvents);
 
         singleReadingService.sendUpdateToSingleLogic(updateCaseMsg);
-        verify(singleCreationService).sendCreation(eq(submitEvents.get(0)),
-                                               eq(userToken),
-                                               eq(updateCaseMsg));
-        verifyNoMoreInteractions(singleCreationService);
-        verify(singleTransferService).sendTransferred(eq(submitEvents.get(0)),
-                                                   eq(userToken),
-                                                   eq(updateCaseMsg));
-        verifyNoMoreInteractions(singleTransferService);
+
+        verify(singleTransferService).sendTransferred(submitEvents.get(0), userToken, updateCaseMsg);
+        verifyNoInteractions(singleUpdateService);
     }
 
     @Test
-    public void sendUpdateToSingleLogicEmptyCases() throws IOException {
+    public void sendUpdateToSingleLogicNoCasesFound() throws IOException {
+        var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         when(userService.getAccessToken()).thenReturn(userToken);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(null);
 
         singleReadingService.sendUpdateToSingleLogic(updateCaseMsg);
-        verifyNoMoreInteractions(singleCreationService);
-        verifyNoMoreInteractions(singleUpdateService);
-    }
 
+        verifyNoInteractions(singleTransferService);
+        verifyNoInteractions(singleUpdateService);
+    }
 }
