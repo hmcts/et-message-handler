@@ -18,4 +18,4 @@ spring:
         caseworker-user-name: CASEWORKER_USER_NAME
         caseworker-password: CASEWORKER_PASSWORD
         gov-notify-api-key: GOV_NOTIFY_API_KEY
-#        idam-client-secret: IDAM_CLIENT_SECRET
+        idam-secret: IDAM_CLIENT_SECRET
