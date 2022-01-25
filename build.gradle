@@ -84,7 +84,7 @@ task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verificatio
   classpath = sourceSets.functional.runtimeClasspath
 
   useJUnit {
-    includeCategories 'uk.gov.hmcts.ethos.ecm.consumer.functional.SmokeTest'
+    includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.SmokeTest'
   }
 }
 
@@ -93,8 +93,8 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
   classpath = sourceSets.functional.runtimeClasspath
 
   useJUnit {
-    includeCategories 'uk.gov.hmcts.ethos.ecm.consumer.functional.SmokeTest'
-    includeCategories 'uk.gov.hmcts.ethos.ecm.consumer.functional.HealthCheckTest'
+    includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.SmokeTest'
+    includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.HealthCheckTest'
   }
 
   maxHeapSize = '1G'
@@ -158,7 +158,7 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.12'
+  implementation 'com.github.hmcts:et-common:0.0.13a'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
