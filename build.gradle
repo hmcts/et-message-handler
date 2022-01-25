@@ -243,7 +243,7 @@ wrapper {
 flyway {
   url = 'jdbc:' + System.getenv('DB_URL') + '/et_msg_handler'
   user = 'et_msg_handler'
-  password = System.getenv('ET_MSG_HANDLER_DB_PASSWORD')
+  password = System.getenv('ET_MSG_HANDLER_POSTGRES_PASSWORD')
 }
 
 task installLocalDb(type: Exec) {
