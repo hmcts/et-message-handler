@@ -149,7 +149,7 @@ public class SingleCreationService {
     private CaseData copyCaseData(CaseData oldCaseData, CaseData newCaseData, String caseId, String ccdGatewayBaseUrl,
                                   String positionTypeCT, String state, String owningOfficeCT, String reasonForCT) {
         newCaseData.setEthosCaseReference(oldCaseData.getEthosCaseReference());
-        newCaseData.setCaseType(oldCaseData.getCaseType());
+        newCaseData.setEcmCaseType(oldCaseData.getEcmCaseType());
         newCaseData.setClaimantTypeOfClaimant(oldCaseData.getClaimantTypeOfClaimant());
         newCaseData.setClaimantCompany(oldCaseData.getClaimantCompany());
         newCaseData.setClaimantIndType(oldCaseData.getClaimantIndType());
