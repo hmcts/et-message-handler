@@ -158,7 +158,7 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.13'
+  implementation 'com.github.hmcts:et-common:0.0.14'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -201,7 +201,7 @@ dependencies {
   implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
   implementation('org.elasticsearch:elasticsearch') {
     version {
-      strictly '7.13.4'
+      strictly '7.16.3'
     }
   }
 
