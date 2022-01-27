@@ -21,4 +21,18 @@
     <packageUrl regex="true">^pkg:maven/org\.apache\.santuario/xmlsec@.*$</packageUrl>
     <cve>CVE-2021-40690</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-core-5.2.15.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-core@.*$</packageUrl>
+    <cve>CVE-2021-22096</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: netty-tcnative-classes-2.0.46.Final.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.netty/netty\-tcnative\-classes@.*$</packageUrl>
+    <cpe>cpe:/a:netty:netty</cpe>
+  </suppress>
 </suppressions>
