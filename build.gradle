@@ -178,7 +178,7 @@ dependencyManagement {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.17'
+  implementation 'com.github.hmcts:et-common:0.0.18'
   implementation 'com.github.hmcts:et-data-model:0.0.2'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
