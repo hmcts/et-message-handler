@@ -160,7 +160,7 @@ ext {
 
 dependencyManagement {
   dependencies {
-    dependencySet(group: 'io.netty', version: '4.1.73.Final') {
+    dependencySet(group: 'io.netty', version: '4.1.74.Final') {
       entry 'netty-buffer'
       entry 'netty-codec'
       entry 'netty-codec-http'
