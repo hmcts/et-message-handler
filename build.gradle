@@ -154,7 +154,7 @@ ext {
   reformLoggingVersion = '5.1.9'
   hmctsNotify = '3.15.1-RELEASE'
   serenity = '2.3.31'
-  log4JVersion = '2.17.0'
+  log4JVersion = '2.17.1'
   tomcatEmbedVersion = '9.0.58'
 }
 
@@ -222,9 +222,19 @@ dependencies {
   implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
   implementation('org.elasticsearch:elasticsearch') {
     version {
-      strictly '7.16.3'
+      strictly '7.17.0'
     }
   }
+
+  //CVE-2021-22060
+  implementation group: 'org.springframework', name: 'spring-core', version: '5.3.15'
+
+  //CVE-2021-42550
+  implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
+  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
+
+  // CVE-2021-40690
+  implementation group: 'org.apache.santuario', name: 'xmlsec', version: '2.3.0'
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 

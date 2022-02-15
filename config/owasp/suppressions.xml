@@ -35,4 +35,11 @@
     <packageUrl regex="true">^pkg:maven/io\.netty/netty\-tcnative\-classes@.*$</packageUrl>
     <cpe>cpe:/a:netty:netty</cpe>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: adal4j-1.6.7.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/adal4j@.*$</packageUrl>
+    <cve>CVE-2021-42306</cve>
+  </suppress>
 </suppressions>
