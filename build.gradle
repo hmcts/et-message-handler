@@ -278,10 +278,11 @@ task installLocalDb(type: Exec) {
 
   commandLine 'sh', 'bin/init-db.sh'
 }
-installLocalDb.finalizedBy flywayMigrate
+installLocalDb.finalizedBy flywayMigrate, flywayInfo
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
   if (project.hasProperty("dburl")) { // set by jenkins
     url = "jdbc:postgresql://${dburl}"
   }
+  locations = ['filesystem:src/main/resources/db/migration']
 }
