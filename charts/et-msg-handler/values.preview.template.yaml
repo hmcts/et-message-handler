@@ -8,14 +8,14 @@ java:
     resourceGroup: ethos-servicebus-devs
     setup:
       queues:
-        - name: create-updates-{{ .Release.Name }}
-        - name: update-case-{{ .Release.Name }}
+        - name: create-updates
+        - name: update-case
   secrets:
     CREATE_UPDATES_CONN_STRING:
-      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-create-updates-{{ .Release.Name }}
+      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-create-updates
       key: connectionString
     UPDATE_CASE_CONN_STRING:
-      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-update-case-{{ .Release.Name }}
+      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-update-case
       key: connectionString
   keyVaults:
     et-msg-handler:
@@ -31,9 +31,7 @@ java:
     ET_MSG_HANDLER_POSTGRES_USER: "{{ .Values.postgresql.postgresqlUsername}}"
     ET_MSG_HANDLER_POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
     ET_MSG_HANDLER_DB_CONN_OPTIONS: ""
-    CREATE_UPDATES_QUEUE_NAME: "create-updates-{{ .Release.Name }}"
     CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING: "${CREATE_UPDATES_CONN_STRING}"
     CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "${CREATE_UPDATES_CONN_STRING}"
-    UPDATE_CASE_QUEUE_NAME: "update-case-{{ .Release.Name }}"
     UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "${UPDATE_CASE_CONN_STRING}"
     UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "${UPDATE_CASE_CONN_STRING}"
