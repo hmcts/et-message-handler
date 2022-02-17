@@ -4,6 +4,7 @@ java:
   postgresql:
     enabled: true
   servicebus:
+    enabled: true
     resourceGroup: ethos-servicebus-devs
     setup:
       queues:
