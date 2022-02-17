@@ -1,12 +1,21 @@
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
-  environment:
-    ET_MSG_HANDLER_POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
-    ET_MSG_HANDLER_POSTGRES_DATABASE: "{{ .Values.postgresql.postgresqlDatabase}}"
-    ET_MSG_HANDLER_POSTGRES_USER: "{{ .Values.postgresql.postgresqlUsername}}"
-    ET_MSG_HANDLER_POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
-    ET_MSG_HANDLER_DB_CONN_OPTIONS: ""
+  postgresql:
+    enabled: true
+  servicebus:
+    resourceGroup: ethos-servicebus-devs
+    setup:
+      queues:
+        - name: create-updates-{{ .Release.Name }}
+        - name: update-case-{{ .Release.Name }}
+  secrets:
+    CREATE_UPDATES_CONN_STRING:
+      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-create-updates-{{ .Release.Name }}
+      key: connectionString
+    UPDATE_CASE_CONN_STRING:
+      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-update-case-{{ .Release.Name }}
+      key: connectionString
   keyVaults:
     et-msg-handler:
       secrets:
@@ -15,11 +24,15 @@ java:
         - gov-notify-api-key
         - et-msg-handler-s2s-secret
         - idam-client-secret
-    et:
-      secrets:
-        - create-updates-queue-send-connection-string
-        - create-updates-queue-listen-connection-string
-        - update-case-queue-send-connection-string
-        - update-case-queue-listen-connection-string
-  postgresql:
-    enabled: true
+  environment:
+    ET_MSG_HANDLER_POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
+    ET_MSG_HANDLER_POSTGRES_DATABASE: "{{ .Values.postgresql.postgresqlDatabase}}"
+    ET_MSG_HANDLER_POSTGRES_USER: "{{ .Values.postgresql.postgresqlUsername}}"
+    ET_MSG_HANDLER_POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
+    ET_MSG_HANDLER_DB_CONN_OPTIONS: ""
+    CREATE_UPDATES_QUEUE_NAME: "create-updates-{{ .Release.Name }}"
+    CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING: "${CREATE_UPDATES_CONN_STRING}"
+    CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "${CREATE_UPDATES_CONN_STRING}"
+    UPDATE_CASES_QUEUE_NAME: "update-case-{{ .Release.Name }}"
+    UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "${UPDATE_CASE_CONN_STRING}"
+    UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "${UPDATE_CASE_CONN_STRING}"
