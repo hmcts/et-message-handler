@@ -5,7 +5,8 @@ java:
     enabled: true
   servicebus:
     enabled: true
-    resourceGroup: ethos-servicebus-devs
+    resourceGroup: et-aat
+    teamName: et
     setup:
       queues:
         - name: create-updates
