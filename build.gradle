@@ -62,6 +62,7 @@ sourceSets {
   test {
     java.srcDir 'src/test/java'
   }
+
   functional {
     java.srcDir 'src/test/functional/java'
     resources.srcDir 'src/test/functional/resources'
@@ -178,8 +179,8 @@ dependencyManagement {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.20'
-  implementation 'com.github.hmcts:et-data-model:0.0.2'
+  implementation 'com.github.hmcts:et-common:0.0.21'
+  implementation 'com.github.hmcts:et-data-model:0.0.3'
 
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
