@@ -21,11 +21,16 @@ java:
   keyVaults:
     et-msg-handler:
       secrets:
-        - caseworker-user-name
-        - caseworker-password
-        - gov-notify-api-key
-        - et-msg-handler-s2s-secret
-        - idam-client-secret
+        - name: caseworker-user-name
+          alias: CASEWORKER_USER_NAME
+        - name: caseworker-password
+          alias: CASEWORKER_PASSWORD
+        - name: gov-notify-api-key
+          alias: GOV_NOTIFY_API_KEY
+        - name: et-msg-handler-s2s-secret
+          alias: ET_MSG_HANDLER_S2S_SECRET
+        - name: idam-client-secret
+          alias: IDAM_CLIENT_SECRET
   environment:
     ET_MSG_HANDLER_POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
     ET_MSG_HANDLER_POSTGRES_DATABASE: "{{ .Values.postgresql.postgresqlDatabase}}"
