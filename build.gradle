@@ -7,7 +7,6 @@ buildscript {
 plugins {
   id 'application'
   id 'jacoco'
-  id 'pmd'
   id 'checkstyle'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'org.springframework.boot' version '2.6.4'
@@ -97,7 +96,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.SmokeTest'
     includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.HealthCheckTest'
   }
-
   maxHeapSize = '1G'
 }
 
@@ -174,8 +172,8 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.22'
-  implementation 'com.github.hmcts:et-data-model:0.0.3'
+  implementation 'com.github.hmcts:et-common:0.0.23'
+  implementation 'com.github.hmcts:et-data-model:0.0.4'
 
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
