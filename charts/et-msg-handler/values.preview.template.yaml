@@ -5,7 +5,7 @@ java:
     enabled: true
   servicebus:
     enabled: true
-    resourceGroup: et-aat
+    resourceGroup: et-aks
     teamName: et
     setup:
       queues:
