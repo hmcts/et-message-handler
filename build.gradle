@@ -7,7 +7,6 @@ buildscript {
 plugins {
   id 'application'
   id 'jacoco'
-  id 'pmd'
   id 'checkstyle'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'org.springframework.boot' version '2.6.4'
@@ -97,7 +96,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.SmokeTest'
     includeCategories 'uk.gov.hmcts.reform.ethos.ecm.consumer.functional.HealthCheckTest'
   }
-
   maxHeapSize = '1G'
 }
 
@@ -174,8 +172,8 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.22'
-  implementation 'com.github.hmcts:et-data-model:0.0.3'
+  implementation 'com.github.hmcts:et-common:0.0.23'
+  implementation 'com.github.hmcts:et-data-model:0.0.4'
 
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
@@ -193,7 +191,7 @@ dependencies {
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
-  implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
+  implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
   implementation group: 'org.apache.santuario', name: 'xmlsec', version: '2.3.0'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: tomcatEmbedVersion
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: tomcatEmbedVersion
