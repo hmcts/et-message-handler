@@ -3,8 +3,6 @@ java:
   applicationPort: 8085
   ingressHost: et-msg-handler-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: et
-  servicebus:
-    enabled: false
   keyVaults:
     et-msg-handler:
       secrets:
@@ -56,3 +54,6 @@ java:
     CCD_DATA_STORE_API_URL: "http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     MICRO_SERVICE: "et_msg_handler"
     ET_MSG_HANDLER_DB_CONN_OPTIONS: ?sslmode=require
+
+servicebus:
+  enabled: false
