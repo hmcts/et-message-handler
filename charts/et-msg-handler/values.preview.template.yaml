@@ -3,14 +3,6 @@ java:
   ingressHost: ${SERVICE_FQDN}
   postgresql:
     enabled: true
-  servicebus:
-    enabled: true
-    resourceGroup: et-aks
-    teamName: et
-    setup:
-      queues:
-        - name: create-updates
-        - name: update-case
   secrets:
     CREATE_UPDATES_CONN_STRING:
       secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-create-updates
@@ -41,3 +33,12 @@ java:
     CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "${CREATE_UPDATES_CONN_STRING}"
     UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "${UPDATE_CASE_CONN_STRING}"
     UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "${UPDATE_CASE_CONN_STRING}"
+
+servicebus:
+  enabled: true
+  resourceGroup: et-aks
+  teamName: et
+  setup:
+    queues:
+      - name: create-updates
+      - name: update-case
