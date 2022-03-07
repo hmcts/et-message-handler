@@ -90,6 +90,14 @@ To run all checks (including unit tests) please execute following command:
     ./gradlew check
 ```
 
+### OWASP Dependency Vulnerability Checks
+
+To run the OWASP checks for vulnerabilities in dependencies:
+
+```bash
+    ./gradlew dependencyCheckAggregate
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
