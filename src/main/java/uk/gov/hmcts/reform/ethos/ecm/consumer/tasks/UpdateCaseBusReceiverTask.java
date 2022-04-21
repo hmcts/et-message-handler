@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.model.servicebus.MessageProcessing
 import uk.gov.hmcts.reform.ethos.ecm.consumer.model.servicebus.MessageProcessingResultType;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.UpdateManagementService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
+
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
