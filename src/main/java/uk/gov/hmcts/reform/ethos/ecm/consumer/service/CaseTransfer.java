@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import lombok.Builder;
 import lombok.Getter;
-import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
+import uk.gov.hmcts.et.common.model.ccd.CaseData;
 
 @Builder
 @Getter
