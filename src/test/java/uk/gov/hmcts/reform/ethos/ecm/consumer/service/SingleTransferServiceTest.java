@@ -1,4 +1,4 @@
-package uk.gov.hmcts.ethos.ecm.consumer.service;
+package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,14 +9,12 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.client.CcdSubmitEventParams;
-import uk.gov.hmcts.ecm.common.model.ccd.CCDRequest;
-import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
-import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleCreationService;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleTransferService;
+import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
+import uk.gov.hmcts.et.common.model.ccd.CaseData;
+import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 
 import java.io.IOException;
 

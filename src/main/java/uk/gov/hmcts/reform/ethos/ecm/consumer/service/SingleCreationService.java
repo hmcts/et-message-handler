@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
-import uk.gov.hmcts.ecm.common.model.ccd.CCDRequest;
-import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
-import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
-import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
+import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
+import uk.gov.hmcts.et.common.model.ccd.CaseData;
+import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
+import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -149,7 +149,7 @@ public class SingleCreationService {
     private CaseData copyCaseData(CaseData oldCaseData, CaseData newCaseData, String caseId, String ccdGatewayBaseUrl,
                                   String positionTypeCT, String state, String owningOfficeCT, String reasonForCT) {
         newCaseData.setEthosCaseReference(oldCaseData.getEthosCaseReference());
-        newCaseData.setCaseType(oldCaseData.getCaseType());
+        newCaseData.setEcmCaseType(oldCaseData.getEcmCaseType());
         newCaseData.setClaimantTypeOfClaimant(oldCaseData.getClaimantTypeOfClaimant());
         newCaseData.setClaimantCompany(oldCaseData.getClaimantCompany());
         newCaseData.setClaimantIndType(oldCaseData.getClaimantIndType());

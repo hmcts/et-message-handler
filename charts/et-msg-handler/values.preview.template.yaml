@@ -1,25 +1,44 @@
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  postgresql:
+    enabled: true
+  secrets:
+    CREATE_UPDATES_CONN_STRING:
+      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-create-updates
+      key: connectionString
+    UPDATE_CASE_CONN_STRING:
+      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-update-case
+      key: connectionString
+  keyVaults:
+    et-msg-handler:
+      secrets:
+        - name: caseworker-user-name
+          alias: CASEWORKER_USER_NAME
+        - name: caseworker-password
+          alias: CASEWORKER_PASSWORD
+        - name: gov-notify-api-key
+          alias: GOV_NOTIFY_API_KEY
+        - name: et-msg-handler-s2s-secret
+          alias: ET_MSG_HANDLER_S2S_SECRET
+        - name: idam-client-secret
+          alias: IDAM_CLIENT_SECRET
   environment:
     ET_MSG_HANDLER_POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
     ET_MSG_HANDLER_POSTGRES_DATABASE: "{{ .Values.postgresql.postgresqlDatabase}}"
     ET_MSG_HANDLER_POSTGRES_USER: "{{ .Values.postgresql.postgresqlUsername}}"
     ET_MSG_HANDLER_POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
     ET_MSG_HANDLER_DB_CONN_OPTIONS: ""
-  keyVaults:
-    et-msg-handler:
-      secrets:
-        - caseworker-user-name
-        - caseworker-password
-        - gov-notify-api-key
-        - et-msg-handler-s2s-secret
-    et:
-      secrets:
-        - create-updates-queue-send-connection-string
-        - create-updates-queue-listen-connection-string
-        - update-case-queue-send-connection-string
-        - update-case-queue-listen-connection-string
-        - idam-secret
-  postgresql:
-    enabled: true
+    CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING: "$(CREATE_UPDATES_CONN_STRING)"
+    CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "$(CREATE_UPDATES_CONN_STRING)"
+    UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
+    UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
+
+servicebus:
+  enabled: true
+  resourceGroup: et-aks
+  teamName: et
+  setup:
+    queues:
+      - name: create-updates
+      - name: update-case

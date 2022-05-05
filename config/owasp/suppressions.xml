@@ -2,42 +2,93 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
   <suppress>
     <notes><![CDATA[
-   file name: jakarta.el-3.0.3.jar
+   file name: adal4j-1.6.7.jar
    ]]></notes>
-    <cve>CVE-2021-28170</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[file name: lang-tag-1.4.4.jar]]>
-    </notes>
-    <packageUrl regex="true">^pkg:maven/com\.nimbusds/lang-tag@.*$</packageUrl>
-    <vulnerabilityName>CVE-2020-23171</vulnerabilityName>
-  </suppress>
-
-  <suppress>
-    <notes>
-      <![CDATA[file name: elasticsearch-7.13.4.jar]]>
-    </notes>
-    <packageUrl regex="true">^pkg:maven/org.elasticsearch/elasticsearch@.*$</packageUrl>
-    <vulnerabilityName>CVE-2021-22147</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <vulnerabilityName>CVE-2021-40690</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <vulnerabilityName>CVE-2021-37136</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <vulnerabilityName>CVE-2021-37137</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <vulnerabilityName>CVE-2021-42340</vulnerabilityName>
+    <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/adal4j@.*$</packageUrl>
+    <cve>CVE-2021-42306</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
-   file name: spring-core-5.2.15.RELEASE.jar
+     file name: poi-5.0.0.jar
+     ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.poi/poi@.*$</packageUrl>
+    <cve>CVE-2022-26336</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: poi-ooxml-5.0.0.jar
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-core@.*$</packageUrl>
-    <cve>CVE-2021-22096</cve>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.poi/poi\-ooxml@.*$</packageUrl>
+    <cve>CVE-2022-26336</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: poi-ooxml-lite-5.0.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.poi/poi\-ooxml\-lite@.*$</packageUrl>
+    <cve>CVE-2022-26336</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: async-http-client-2.12.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.asynchttpclient/async\-http\-client@.*$</packageUrl>
+    <cve>CVE-2021-43138</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: async-http-client-netty-utils-2.12.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.asynchttpclient/async\-http\-client\-netty\-utils@.*$</packageUrl>
+    <cve>CVE-2021-43138</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: async-http-client-2.12.3.jar
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.asynchttpclient/async\-http\-client@.*$</packageUrl>
+    <cve>CVE-2021-43138</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: async-http-client-netty-utils-2.12.3.jar
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.asynchttpclient/async\-http\-client\-netty\-utils@.*$</packageUrl>
+    <cve>CVE-2021-43138</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-retry-1.3.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.retry/spring\-retry@.*$</packageUrl>
+    <cve>CVE-2013-4152</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-retry-1.3.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.retry/spring\-retry@.*$</packageUrl>
+    <cve>CVE-2013-7315</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-retry-1.3.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.retry/spring\-retry@.*$</packageUrl>
+    <cve>CVE-2014-0054</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-retry-1.3.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.retry/spring\-retry@.*$</packageUrl>
+    <cve>CVE-2016-1000027</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-retry-1.3.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.retry/spring\-retry@.*$</packageUrl>
+    <cve>CVE-2022-22965</cve>
   </suppress>
 </suppressions>

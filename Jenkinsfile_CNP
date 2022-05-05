@@ -5,6 +5,7 @@
 def type = "java"
 def product = "et"
 def component = "msg-handler"
+def branchesToSync = ['demo', 'perftest']
 
 withPipeline(type, product, component) {
   enableAksStagingDeployment()
@@ -21,6 +22,7 @@ withPipeline(type, product, component) {
   onPerftest {
     disableLegacyDeployment()
   }
+  syncBranchesWithMaster(branchesToSync)
   enableSlackNotifications('#et-builds')
 
   after('functional') {
