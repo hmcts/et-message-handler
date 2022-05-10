@@ -1,5 +1,5 @@
 {
-  "enabledManagers": ["helm-requirements","gradle-wrapper"],
+  "enabledManagers": ["helm-requirements","gradle-wrapper", "gradle"],
   "labels": ["dependencies"],
   "helm-requirements":
   {
@@ -7,5 +7,20 @@
     "aliases": {
       "hmctspublic": "https://hmctspublic.azurecr.io/helm/v1/repo/"
     }
-  }
+  },
+  "groupName": "all dependencies",
+  "separateMajorMinor": false,
+  "groupSlug": "all",
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "groupName": "all dependencies",
+      "groupSlug": "all"
+    },
+    {
+      "matchPackageNames": ["elasticsearch"],
+      "allowedVersions": "<=7"
+    }
+  ],
+  "schedule": ["before 6am on Monday"]
 }
