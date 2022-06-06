@@ -165,7 +165,7 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.34'
+  implementation 'com.github.hmcts:et-common:0.0.35'
   implementation 'com.github.hmcts:et-data-model:1.0.5'
 
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
