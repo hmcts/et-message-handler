@@ -47,7 +47,7 @@ There is a dependency on a postgres database to be running locally.
 
 To install the database schema required for et-ccd-callbacks execute the following command:
 ```bash
-    ./gradlew installlocaldb
+    ./bin/init-db.sh
 ```
 
 There is also a dependency on Azure Service Bus.
