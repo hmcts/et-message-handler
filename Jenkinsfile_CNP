@@ -9,7 +9,6 @@ def branchesToSync = ['demo', 'perftest']
 
 withPipeline(type, product, component) {
   enableAksStagingDeployment()
-  enableDbMigration('et-msg-handler')
   onMaster {
     disableLegacyDeployment()
   }
