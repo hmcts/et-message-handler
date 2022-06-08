@@ -55,6 +55,5 @@ public class TransferCaseDataHelperTest {
 
         return caseData;
     }
-
-
+    
 }

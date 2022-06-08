@@ -28,7 +28,7 @@ public class CreateEcmSingleServiceTest {
     @InjectMocks
     private CreateEcmSingleService createEcmSingleService;
 
-    private String AUTH_TOKEN = "Bearer some-random-token";
+    private String authToken = "Bearer some-random-token";
 
     @Test
     public void transferToEcm() throws IOException {
@@ -41,9 +41,9 @@ public class CreateEcmSingleServiceTest {
         submitEvent.setCaseData(caseData);
 
         var createUpdateMsg = Helper.transferToEcmMessage();
-        createEcmSingleService.sendCreation(submitEvent, AUTH_TOKEN, createUpdateMsg);
-        verify(ccdClient).startCaseCreationTransfer(eq(AUTH_TOKEN), any());
-        verify(ccdClient).submitCaseCreation(eq(AUTH_TOKEN), any(), any());
+        createEcmSingleService.sendCreation(submitEvent, authToken, createUpdateMsg);
+        verify(ccdClient).startCaseCreationTransfer(eq(authToken), any());
+        verify(ccdClient).submitCaseCreation(eq(authToken), any(), any());
     }
 
 }
