@@ -9,7 +9,7 @@ import uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem;
 import uk.gov.hmcts.et.common.model.ccd.types.DocumentType;
 import uk.gov.hmcts.et.common.model.ccd.types.JurCodesType;
 import uk.gov.hmcts.et.common.model.ccd.types.RespondentSumType;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoccm.TransferCaseDataHelper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferCaseDataHelper;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class TransferCaseDataHelperTest {
         var ecmCaseData = new CaseData();
         var etCaseData = createEtCaseData();
         ecmCaseData = TransferCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
-                                            "postionTypeCT", "Accepted", "Test");
+                                                          "postionTypeCT", "Accepted", "Test");
         assertEquals(1, ecmCaseData.getJurCodesCollection().size());
         assertEquals("Test", ecmCaseData.getJurCodesCollection().get(0).getValue().getJuridictionCodesList());
         assertEquals(1, ecmCaseData.getRespondentCollection().size());
