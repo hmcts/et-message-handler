@@ -18,6 +18,7 @@ import uk.gov.hmcts.ecm.common.servicebus.MessageBodyRetriever;
 import uk.gov.hmcts.ecm.common.servicebus.ServiceBusSender;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleCounterRepository;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.TransferToEcmService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
 
 import java.io.IOException;
@@ -40,6 +41,8 @@ public class CreateUpdatesBusReceiverTaskTest {
     @Mock
     private transient ServiceBusSender serviceBusSender;
     @Mock
+    private TransferToEcmService transferToEcmService;
+    @Mock
     private transient MultipleCounterRepository multipleCounterRepository;
 
     private transient Message message;
@@ -47,10 +50,8 @@ public class CreateUpdatesBusReceiverTaskTest {
 
     @Before
     public void setUp() {
-        createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(objectMapper,
-                                                                        messageCompletor,
-                                                                        serviceBusSender,
-                                                                        multipleCounterRepository);
+        createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(
+            objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository);
         msg = Helper.generateCreateUpdatesMsg();
         message = createMessage(msg);
     }
