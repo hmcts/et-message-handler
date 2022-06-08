@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
