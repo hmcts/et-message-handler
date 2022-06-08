@@ -10,7 +10,7 @@ import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.TransferToEcmDataModel;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transferToEcm.TransferCaseDataHelper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferCaseDataHelper;
 
 import java.io.IOException;
 

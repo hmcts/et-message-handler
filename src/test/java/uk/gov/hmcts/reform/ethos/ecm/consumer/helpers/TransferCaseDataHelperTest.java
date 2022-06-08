@@ -9,7 +9,7 @@ import uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem;
 import uk.gov.hmcts.et.common.model.ccd.types.DocumentType;
 import uk.gov.hmcts.et.common.model.ccd.types.JurCodesType;
 import uk.gov.hmcts.et.common.model.ccd.types.RespondentSumType;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transferToEcm.TransferCaseDataHelper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoccm.TransferCaseDataHelper;
 
 import java.util.List;
 

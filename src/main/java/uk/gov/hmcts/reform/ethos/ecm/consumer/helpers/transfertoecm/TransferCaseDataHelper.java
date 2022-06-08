@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transferToEcm;
+package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -157,7 +157,8 @@ public class TransferCaseDataHelper {
         List<RespondentSumTypeItem> respondentSumTypeItems = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(respondentCollection)) {
             for (var respondent : respondentCollection) {
-                var respondentSumType = (RespondentSumType) objectMapper(respondent.getValue(), RespondentSumType.class);
+                var respondentSumType = (RespondentSumType) objectMapper(
+                    respondent.getValue(), RespondentSumType.class);
                 var respondentSumTypeItem = new RespondentSumTypeItem();
                 respondentSumTypeItem.setId(UUID.randomUUID().toString());
                 respondentSumTypeItem.setValue(respondentSumType);
