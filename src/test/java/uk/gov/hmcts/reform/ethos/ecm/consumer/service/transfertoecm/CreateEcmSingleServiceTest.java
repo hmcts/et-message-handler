@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
+package uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.CreateEcmSingleService;
 
 import java.io.IOException;
 
