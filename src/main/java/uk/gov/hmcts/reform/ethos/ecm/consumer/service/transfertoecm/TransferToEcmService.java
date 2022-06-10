@@ -32,9 +32,7 @@ public class TransferToEcmService {
 
         if (!submitEvents.isEmpty()) {
             log.info("Transferring cases {} to ECM", createUpdatesMsg.getEthosCaseRefCollection());
-            for (var submitEvent : submitEvents) {
-                createEcmSingleService.sendCreation(submitEvent, accessToken, createUpdatesMsg);
-            }
+            createEcmSingleService.sendCreation(submitEvents.get(0), accessToken, createUpdatesMsg);
         } else {
             log.warn("No cases found for messageID {} and case references {}", createUpdatesMsg.getMsgId(),
                      createUpdatesMsg.getEthosCaseRefCollection());
