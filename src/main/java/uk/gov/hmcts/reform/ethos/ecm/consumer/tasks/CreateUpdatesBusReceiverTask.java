@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.exceptions.InvalidMessageException;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
+import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.TransferToEcmDataModel;
 import uk.gov.hmcts.ecm.common.servicebus.MessageBodyRetriever;
 import uk.gov.hmcts.ecm.common.servicebus.ServiceBusSender;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleCounterRepository;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.model.servicebus.MessageProcessingResult;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.model.servicebus.MessageProcessingResultType;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.TransferToEcmService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
 
 import java.io.IOException;
@@ -39,16 +41,18 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
     private final transient ObjectMapper objectMapper;
     private final transient MessageAutoCompletor messageCompletor;
     private final transient ServiceBusSender serviceBusSender;
+    private final TransferToEcmService transferToEcmService;
     private final MultipleCounterRepository multipleCounterRepository;
 
     public CreateUpdatesBusReceiverTask(
         ObjectMapper objectMapper,
         @Qualifier("create-updates-completor") MessageAutoCompletor messageCompletor,
         @Qualifier("update-case-send-helper") ServiceBusSender serviceBusSender,
-        MultipleCounterRepository multipleCounterRepository) {
+        TransferToEcmService transferToEcmService, MultipleCounterRepository multipleCounterRepository) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;
         this.serviceBusSender = serviceBusSender;
+        this.transferToEcmService = transferToEcmService;
         this.multipleCounterRepository = multipleCounterRepository;
     }
 
@@ -116,9 +120,12 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
 
             CreateUpdatesMsg createUpdatesMsg = readMessage(message);
             log.info("RECEIVED 'Create Updates' ------>  message with ID {}", createUpdatesMsg);
-            multipleCounterRepository.persistentQInsertFirstMultipleCountVal(
-                createUpdatesMsg.getMultipleRef());
-            sendUpdateCaseMessages(createUpdatesMsg);
+
+            if (createUpdatesMsg.getDataModelParent() instanceof TransferToEcmDataModel) {
+                transferToEcmService.transferToEcm(createUpdatesMsg);
+            } else {
+                sendUpdateCaseMessages(createUpdatesMsg);
+            }
 
             return new MessageProcessingResult(MessageProcessingResultType.SUCCESS);
 
