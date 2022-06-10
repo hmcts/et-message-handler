@@ -21,19 +21,23 @@ public class TransferToEcmService {
     public void transferToEcm(CreateUpdatesMsg createUpdatesMsg) throws IOException {
         var accessToken = userService.getAccessToken();
         if (!(createUpdatesMsg.getDataModelParent() instanceof TransferToEcmDataModel)) {
-            log.info("Invalid model state");
+            log.warn("Invalid model state for messageID {}", createUpdatesMsg.getMsgId());
             return;
         } else {
-            log.info("Transferring case to ECM");
+            log.info("Searching for cases {} to transfer to ECM", createUpdatesMsg.getEthosCaseRefCollection());
         }
 
         var submitEvents = ccdClient.retrieveCasesElasticSearch(
             accessToken, createUpdatesMsg.getCaseTypeId(), createUpdatesMsg.getEthosCaseRefCollection());
 
         if (!submitEvents.isEmpty()) {
-            createEcmSingleService.sendCreation(submitEvents.get(0), accessToken, createUpdatesMsg);
+            log.info("Transferring cases {} to ECM", createUpdatesMsg.getEthosCaseRefCollection());
+            for (var submitEvent : submitEvents) {
+                createEcmSingleService.sendCreation(submitEvent, accessToken, createUpdatesMsg);
+            }
         } else {
-            log.warn("No cases found");
+            log.warn("No cases found for messageID {} and case references {}", createUpdatesMsg.getMsgId(),
+                     createUpdatesMsg.getEthosCaseRefCollection());
         }
 
     }

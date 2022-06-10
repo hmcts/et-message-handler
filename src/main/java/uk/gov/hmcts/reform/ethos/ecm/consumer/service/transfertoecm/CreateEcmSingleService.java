@@ -10,7 +10,7 @@ import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.TransferToEcmDataModel;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferCaseDataHelper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEcmCaseDataHelper;
 
 import java.io.IOException;
 
@@ -43,11 +43,12 @@ public class CreateEcmSingleService {
                                                              ccdGatewayBaseUrl, positionTypeCT, jurisdiction,
                                                              oldSubmitEvent.getState(), reasonForCT);
 
-        var etCCD = (uk.gov.hmcts.et.common.model.ccd.CaseDetails) TransferCaseDataHelper.objectMapper(
+        var etCCD = (uk.gov.hmcts.et.common.model.ccd.CaseDetails) TransferToEcmCaseDataHelper.objectMapper(
             newCaseDetailsCt, uk.gov.hmcts.et.common.model.ccd.CaseDetails.class
         );
 
         var returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, etCCD);
+        log.info("Creating case in {} for ET case {}", caseTypeId, caseId);
         ccdClient.submitCaseCreation(accessToken, etCCD, returnedRequest);
     }
 
@@ -70,7 +71,8 @@ public class CreateEcmSingleService {
     private CaseData generateNewCaseDataForCaseTransfer(uk.gov.hmcts.et.common.model.ccd.CaseData caseData,
                                                         String caseId, String ccdGatewayBaseUrl, String positionTypeCT,
                                                         String state, String reasonForCT) {
-        return TransferCaseDataHelper.copyCaseData(caseData, new CaseData(),
-                                                   caseId, ccdGatewayBaseUrl, positionTypeCT, state, reasonForCT);
+        log.info("Copying case data for case {}", caseId);
+        return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(),
+                                                        caseId, ccdGatewayBaseUrl, positionTypeCT, state, reasonForCT);
     }
 }

@@ -37,9 +37,9 @@ import java.util.UUID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 
-public class TransferCaseDataHelper {
+public class TransferToEcmCaseDataHelper {
 
-    private TransferCaseDataHelper() {
+    private TransferToEcmCaseDataHelper() {
     }
 
     public static CaseData copyCaseData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData,

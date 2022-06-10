@@ -11,20 +11,20 @@ import uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem;
 import uk.gov.hmcts.et.common.model.ccd.types.DocumentType;
 import uk.gov.hmcts.et.common.model.ccd.types.JurCodesType;
 import uk.gov.hmcts.et.common.model.ccd.types.RespondentSumType;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferCaseDataHelper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEcmCaseDataHelper;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class TransferCaseDataHelperTest {
+public class TransferToEcmCaseDataHelperTest {
 
     @Test
     public void testCopyCaseData() {
         var ecmCaseData = new CaseData();
         var etCaseData = createEtCaseData();
-        ecmCaseData = TransferCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
-                                                          "postionTypeCT", "Accepted", "Test");
+        ecmCaseData = TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+                                                               "postionTypeCT", "Accepted", "Test");
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
         assertEquals("Test", ecmCaseData.getFileLocationGlasgow());
