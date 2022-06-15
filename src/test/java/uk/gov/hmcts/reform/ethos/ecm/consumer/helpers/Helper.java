@@ -1,18 +1,22 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers;
 
+import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CloseDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.PreAcceptDataModel;
+import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.TransferToEcmDataModel;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import static uk.gov.hmcts.ecm.common.model.helper.Constants.ENGLANDWALES_CASE_TYPE_ID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.NO;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_BULK_CASE_TYPE_ID;
+import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.YES;
 
 public class Helper {
@@ -38,6 +42,13 @@ public class Helper {
         .positionTypeCT("PositionTypeCT")
         .officeCT("Manchester")
         .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
+        .build();
+
+    private static final TransferToEcmDataModel transferToEcmDataModel = TransferToEcmDataModel.builder()
+        .positionTypeCT("PositionTypeCT")
+        .officeCT(TribunalOffice.LEEDS.getOfficeName())
+        .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
+        .sourceEthosCaseReference("4150001/2020")
         .build();
 
     public static UpdateCaseMsg generateUpdateCaseMsg() {
@@ -118,5 +129,19 @@ public class Helper {
                 throw new IllegalStateException(e);
             }
         });
+    }
+
+    public static CreateUpdatesMsg transferToEcmMessage() {
+        return CreateUpdatesMsg.builder()
+            .msgId("1")
+            .jurisdiction(JURISDICTION)
+            .caseTypeId(ENGLANDWALES_CASE_TYPE_ID)
+            .multipleRef(SINGLE_CASE_TYPE)
+            .ethosCaseRefCollection(Arrays.asList("4150001/2020"))
+            .totalCases("1")
+            .username(USERNAME)
+            .confirmation(YES)
+            .dataModelParent(transferToEcmDataModel)
+            .build();
     }
 }
