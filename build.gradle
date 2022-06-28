@@ -158,7 +158,7 @@ ext {
   junitPlatform = '1.6.2'
   log4JVersion = '2.17.2'
   logbackVersion = '1.2.11'
-  reformLoggingVersion = '6.0.1'
+  reformLoggingVersion = '5.1.9'
   serenity = '2.6.0'
   springBoot = springBoot.class.package.implementationVersion
   tomcatEmbedVersion = '10.0.22'
