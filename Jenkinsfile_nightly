@@ -13,11 +13,9 @@ def component = "msg-handler"
 
 withNightlyPipeline(type, product, component) {
   enableSlackNotifications('#et-builds')
+  enableFortifyScan()
 
-  
-  //enableFortifyScan()
-
-  //after('fortify-scan') {
-  // steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-  //}
+  after('fortify-scan') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+  }
 }
