@@ -100,7 +100,7 @@ public class TransferToEcmCaseDataHelper {
         caseData.setTargetHearingDate(oldCaseData.getTargetHearingDate());
         caseData.setClaimant(oldCaseData.getClaimant());
         caseData.setRespondent(oldCaseData.getRespondent());
-        caseData.setEQP(oldCaseData.getEQP());
+        caseData.setEQP(oldCaseData.getEqp());
         caseData.setFlag1(oldCaseData.getFlag1());
         caseData.setFlag2(oldCaseData.getFlag2());
         caseData.setDocMarkUp(oldCaseData.getDocMarkUp());
