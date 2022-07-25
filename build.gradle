@@ -156,7 +156,7 @@ repositories {
 ext {
   feignVersion = '11.8'
   junitPlatform = '1.6.2'
-  log4JVersion = '2.17.2'
+  log4JVersion = '2.18.0'
   logbackVersion = '1.2.11'
   reformLoggingVersion = '5.1.9'
   serenity = '2.6.0'
@@ -165,8 +165,8 @@ ext {
 }
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:0.0.38'
-  implementation 'com.github.hmcts:et-data-model:1.0.22'
+  implementation 'com.github.hmcts:et-common:1.0.2'
+  implementation 'com.github.hmcts:et-data-model:1.0.42'
   implementation 'com.github.hmcts:ecm-data-model:0.0.6'
 
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
