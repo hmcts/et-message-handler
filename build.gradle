@@ -156,7 +156,7 @@ repositories {
 ext {
   feignVersion = '11.8'
   junitPlatform = '1.6.2'
-  log4JVersion = '2.17.2'
+  log4JVersion = '2.18.0'
   logbackVersion = '1.2.11'
   reformLoggingVersion = '5.1.9'
   serenity = '2.6.0'
