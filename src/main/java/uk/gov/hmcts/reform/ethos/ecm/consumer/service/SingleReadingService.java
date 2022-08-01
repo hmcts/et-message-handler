@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.helpers.UtilHelper;
@@ -31,7 +32,7 @@ public class SingleReadingService {
         String accessToken = userService.getAccessToken();
         List<SubmitEvent> submitEvents = retrieveSingleCase(accessToken, updateCaseMsg);
 
-        if (submitEvents != null && !submitEvents.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(submitEvents)) {
             if (updateCaseMsg.getDataModelParent() instanceof CreationSingleDataModel) {
                 singleTransferService.sendTransferred(submitEvents.get(0), accessToken, updateCaseMsg);
             } else {
@@ -45,9 +46,9 @@ public class SingleReadingService {
 
     private List<SubmitEvent> retrieveSingleCase(String accessToken, UpdateCaseMsg updateCaseMsg) throws IOException {
         Objects.requireNonNull(updateCaseMsg.getEthosCaseReference(), "No ethosCaseReference found");
-        String caseType = !updateCaseMsg.getMultipleRef().equals(SINGLE_CASE_TYPE)
-            ? UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())
-            : updateCaseMsg.getCaseTypeId();
+        String caseType = updateCaseMsg.getMultipleRef().equals(SINGLE_CASE_TYPE)
+            ? updateCaseMsg.getCaseTypeId()
+            : UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId());
 
         return ccdClient.retrieveCasesElasticSearch(
             accessToken,

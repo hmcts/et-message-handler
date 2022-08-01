@@ -27,14 +27,15 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleCreationService.CREATE_CASE_EVENT_SUMMARY_TEMPLATE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SuppressWarnings("PMD")
 public class SingleCreationServiceTest {
 
     @InjectMocks
-    private transient SingleCreationService singleCreationService;
+    private SingleCreationService singleCreationService;
     @Mock
-    private transient CcdClient ccdClient;
+    private CcdClient ccdClient;
 
-    private final transient String userToken = "accessToken";
+    private static final String userToken = "accessToken";
 
     @Test
     public void caseTransferToScotlandCreateCase() throws IOException {

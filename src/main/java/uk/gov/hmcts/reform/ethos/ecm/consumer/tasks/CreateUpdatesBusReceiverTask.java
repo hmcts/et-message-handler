@@ -43,7 +43,7 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
     private final MessageAutoCompletor messageCompletor;
     private final ServiceBusSender serviceBusSender;
     private final TransferToEcmService transferToEcmService;
-    @SuppressWarnings("PMD.SingularField, PMD.UnusedPrivateField")
+    @SuppressWarnings({"PMD.SingularField", "PMD.UnusedPrivateField"})
     private final MultipleCounterRepository multipleCounterRepository;
 
     public CreateUpdatesBusReceiverTask(

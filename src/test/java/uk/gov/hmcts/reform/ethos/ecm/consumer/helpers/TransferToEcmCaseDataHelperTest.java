@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("PMD")
 public class TransferToEcmCaseDataHelperTest {
 
     @Test
@@ -24,7 +25,7 @@ public class TransferToEcmCaseDataHelperTest {
         var ecmCaseData = new CaseData();
         var etCaseData = createEtCaseData();
         ecmCaseData = TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
-                                                               "postionTypeCT", "Accepted", "Test");
+                                                                "Accepted");
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
         assertEquals("Test", ecmCaseData.getFileLocationGlasgow());

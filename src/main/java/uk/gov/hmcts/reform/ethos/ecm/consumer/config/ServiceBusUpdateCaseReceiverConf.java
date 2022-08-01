@@ -15,7 +15,12 @@ import javax.annotation.PostConstruct;
 
 @AutoConfigureAfter(ServiceBusCreateUpdatesReceiverConf.class)
 @Configuration
+@SuppressWarnings("PMD")
 public class ServiceBusUpdateCaseReceiverConf {
+
+    private final IQueueClient updateCaseListenClient;
+
+    private final UpdateCaseBusReceiverTask updateCaseBusReceiverTask;
 
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
@@ -33,10 +38,6 @@ public class ServiceBusUpdateCaseReceiverConf {
 
     private static final MessageHandlerOptions messageHandlerOptions =
         new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
-
-    private final transient IQueueClient updateCaseListenClient;
-
-    private final transient UpdateCaseBusReceiverTask updateCaseBusReceiverTask;
 
     public ServiceBusUpdateCaseReceiverConf(
         @Qualifier("update-case-listen-client") IQueueClient updateCaseListenClient,
