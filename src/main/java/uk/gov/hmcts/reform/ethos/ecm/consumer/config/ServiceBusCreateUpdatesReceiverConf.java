@@ -15,7 +15,20 @@ import javax.annotation.PostConstruct;
 
 @AutoConfigureAfter(ServiceBusSenderConfiguration.class)
 @Configuration
+@SuppressWarnings("PMD")
 public class ServiceBusCreateUpdatesReceiverConf {
+
+    private final IQueueClient createUpdatesListenClient;
+
+    private final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
+
+    private static final ExecutorService createUpdatesListenExecutor =
+        Executors.newSingleThreadExecutor(r ->
+                                              new Thread(r, "create-updates-queue-listen")
+        );
+
+    private static final MessageHandlerOptions messageHandlerOptions =
+        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
 
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
@@ -25,18 +38,6 @@ public class ServiceBusCreateUpdatesReceiverConf {
             createUpdatesListenExecutor
         );
     }
-
-    private static final ExecutorService createUpdatesListenExecutor =
-        Executors.newSingleThreadExecutor(r ->
-            new Thread(r, "create-updates-queue-listen")
-        );
-
-    private static final MessageHandlerOptions messageHandlerOptions =
-        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
-
-    private final transient IQueueClient createUpdatesListenClient;
-
-    private final transient CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
 
     public ServiceBusCreateUpdatesReceiverConf(
         @Qualifier("create-updates-listen-client") IQueueClient createUpdatesListenClient,

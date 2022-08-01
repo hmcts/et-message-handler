@@ -19,23 +19,23 @@ public class TransferToEcmService {
     private final CreateEcmSingleService createEcmSingleService;
 
     public void transferToEcm(CreateUpdatesMsg createUpdatesMsg) throws IOException {
-        var accessToken = userService.getAccessToken();
-        if (!(createUpdatesMsg.getDataModelParent() instanceof TransferToEcmDataModel)) {
+        String accessToken = userService.getAccessToken();
+        if ((createUpdatesMsg.getDataModelParent() instanceof TransferToEcmDataModel)) {
+            log.info("Searching for cases {} to transfer to ECM", createUpdatesMsg.getEthosCaseRefCollection());
+        } else {
             log.warn("Invalid model state for messageID {}", createUpdatesMsg.getMsgId());
             return;
-        } else {
-            log.info("Searching for cases {} to transfer to ECM", createUpdatesMsg.getEthosCaseRefCollection());
         }
 
         var submitEvents = ccdClient.retrieveCasesElasticSearch(
             accessToken, createUpdatesMsg.getCaseTypeId(), createUpdatesMsg.getEthosCaseRefCollection());
 
-        if (!submitEvents.isEmpty()) {
-            log.info("Transferring cases {} to ECM", createUpdatesMsg.getEthosCaseRefCollection());
-            createEcmSingleService.sendCreation(submitEvents.get(0), accessToken, createUpdatesMsg);
-        } else {
+        if (submitEvents.isEmpty()) {
             log.warn("No cases found for messageID {} and case references {}", createUpdatesMsg.getMsgId(),
                      createUpdatesMsg.getEthosCaseRefCollection());
+        } else {
+            log.info("Transferring cases {} to ECM", createUpdatesMsg.getEthosCaseRefCollection());
+            createEcmSingleService.sendCreation(submitEvents.get(0), accessToken, createUpdatesMsg);
         }
 
     }

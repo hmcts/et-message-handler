@@ -36,12 +36,14 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class CreateUpdatesBusReceiverTask implements IMessageHandler {
 
+    @SuppressWarnings("PMD.DoNotUseThreads")
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
-    private final transient ObjectMapper objectMapper;
-    private final transient MessageAutoCompletor messageCompletor;
-    private final transient ServiceBusSender serviceBusSender;
+    private final ObjectMapper objectMapper;
+    private final MessageAutoCompletor messageCompletor;
+    private final ServiceBusSender serviceBusSender;
     private final TransferToEcmService transferToEcmService;
+    @SuppressWarnings("PMD.SingularField, PMD.UnusedPrivateField")
     private final MultipleCounterRepository multipleCounterRepository;
 
     public CreateUpdatesBusReceiverTask(
