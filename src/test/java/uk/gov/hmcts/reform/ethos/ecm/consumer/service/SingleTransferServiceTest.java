@@ -28,6 +28,7 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleTransferService.SAME_COUNTRY_EVENT_SUMMARY_TEMPLATE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
 public class SingleTransferServiceTest {
 
     @InjectMocks
@@ -41,18 +42,22 @@ public class SingleTransferServiceTest {
 
     @Test
     public void testTransferSameCountry() throws IOException {
-        var caseTypeId = ENGLANDWALES_CASE_TYPE_ID;
-        var jurisdiction = "EMPLOYMENT";
-        var officeCT = TribunalOffice.NEWCASTLE.getOfficeName();
-        var reasonCT = "A test transfer";
-        var sourceEthosCaseReference = "12345/2021";
-        var updateCaseMsg = createUpdateCaseMsg(caseTypeId, jurisdiction, officeCT, reasonCT, sourceEthosCaseReference,
-                                                true);
-        var caseId = "12345";
-        var submitEvent = createSubmitEvent(caseId);
+        String caseTypeId = ENGLANDWALES_CASE_TYPE_ID;
+        String jurisdiction = "EMPLOYMENT";
+        String officeCT = TribunalOffice.NEWCASTLE.getOfficeName();
+        String reasonCT = "A test transfer";
+        String sourceEthosCaseReference = "12345/2021";
+        UpdateCaseMsg updateCaseMsg = createUpdateCaseMsg(caseTypeId,
+                                                          jurisdiction,
+                                                          officeCT,
+                                                          reasonCT,
+                                                          sourceEthosCaseReference,
+                                                          true);
+        String caseId = "12345";
+        SubmitEvent submitEvent = createSubmitEvent(caseId);
 
-        var userToken = "my-test-token";
-        var ccdRequest = new CCDRequest();
+        String userToken = "my-test-token";
+        CCDRequest ccdRequest = new CCDRequest();
         when(ccdClient.startCaseTransferSameCountryEccLinkedCase(userToken, caseTypeId, jurisdiction, caseId))
             .thenReturn(ccdRequest);
 

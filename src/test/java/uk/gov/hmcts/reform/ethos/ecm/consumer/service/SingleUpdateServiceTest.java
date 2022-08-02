@@ -57,7 +57,7 @@ public class SingleUpdateServiceTest {
         MultipleData multipleData = new MultipleData();
         multipleData.setMultipleReference("4150002");
         submitMultipleEvent.setCaseData(multipleData);
-        submitMultipleEvent.setCaseId(1649258182799287L);
+        submitMultipleEvent.setCaseId(1_649_258_182_799_287L);
         submitMultipleEvents = new ArrayList<>(Collections.singletonList(submitMultipleEvent));
 
         updateCaseMsg = Helper.generateUpdateCaseMsg();

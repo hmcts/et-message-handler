@@ -37,14 +37,14 @@ import java.util.UUID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 
-public class TransferToEcmCaseDataHelper {
+@SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops"})
+public final class TransferToEcmCaseDataHelper {
 
     private TransferToEcmCaseDataHelper() {
     }
 
     public static CaseData copyCaseData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData,
-                                        String caseId, String ccdGatewayBaseUrl, String positionTypeCT, String state,
-                                        String reasonForCT) {
+                                        String caseId, String ccdGatewayBaseUrl, String state) {
         caseData.setEcmCaseType(oldCaseData.getEcmCaseType());
         caseData.setTribunalCorrespondenceAddress(
             (Address) objectMapper(oldCaseData.getTribunalCorrespondenceAddress(), Address.class));
@@ -153,13 +153,12 @@ public class TransferToEcmCaseDataHelper {
 
     private static List<RespondentSumTypeItem> createRespondentCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem> respondentCollection) {
-
         List<RespondentSumTypeItem> respondentSumTypeItems = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(respondentCollection)) {
-            for (var respondent : respondentCollection) {
-                var respondentSumType = (RespondentSumType) objectMapper(
+            for (uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem respondent : respondentCollection) {
+                RespondentSumType respondentSumType = (RespondentSumType) objectMapper(
                     respondent.getValue(), RespondentSumType.class);
-                var respondentSumTypeItem = new RespondentSumTypeItem();
+                RespondentSumTypeItem respondentSumTypeItem = new RespondentSumTypeItem();
                 respondentSumTypeItem.setId(UUID.randomUUID().toString());
                 respondentSumTypeItem.setValue(respondentSumType);
                 respondentSumTypeItems.add(respondentSumTypeItem);
@@ -171,12 +170,13 @@ public class TransferToEcmCaseDataHelper {
 
     private static List<AddressLabelTypeItem> createAddressLabelCollecton(
         List<uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem> addressLabelCollection) {
-
         List<AddressLabelTypeItem> addressLabelTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(addressLabelCollection)) {
-            for (var addressLabel : addressLabelCollection) {
-                var addressLabelType = (AddressLabelType) objectMapper(addressLabel.getValue(), AddressLabelType.class);
-                var addressLabelTypeItem = new AddressLabelTypeItem();
+            for (uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem addressLabel : addressLabelCollection) {
+                AddressLabelType addressLabelType = (AddressLabelType) objectMapper(
+                    addressLabel.getValue(),
+                    AddressLabelType.class);
+                AddressLabelTypeItem addressLabelTypeItem = new AddressLabelTypeItem();
                 addressLabelTypeItem.setId(UUID.randomUUID().toString());
                 addressLabelTypeItem.setValue(addressLabelType);
                 addressLabelTypeItemList.add(addressLabelTypeItem);
@@ -188,12 +188,11 @@ public class TransferToEcmCaseDataHelper {
 
     private static List<JurCodesTypeItem> createJurCodesCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem> jurCodesCollection) {
-
         List<JurCodesTypeItem> jurCodesTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(jurCodesCollection)) {
-            for (var jurCodes : jurCodesCollection) {
-                var jurCodesType = (JurCodesType) objectMapper(jurCodes.getValue(), JurCodesType.class);
-                var jurCodesTypeItem = new JurCodesTypeItem();
+            for (uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem jurCodes : jurCodesCollection) {
+                JurCodesType jurCodesType = (JurCodesType) objectMapper(jurCodes.getValue(), JurCodesType.class);
+                JurCodesTypeItem  jurCodesTypeItem = new JurCodesTypeItem();
                 jurCodesTypeItem.setId(UUID.randomUUID().toString());
                 jurCodesTypeItem.setValue(jurCodesType);
                 jurCodesTypeItemList.add(jurCodesTypeItem);
@@ -205,19 +204,17 @@ public class TransferToEcmCaseDataHelper {
 
     private static List<DocumentTypeItem> createDocumentCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem> documentCollection) {
-
         List<DocumentTypeItem> documentTypeItemsList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(documentCollection)) {
-            for (var document : documentCollection) {
-                var documentType = new DocumentType();
+            for (uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem document : documentCollection) {
+                DocumentType documentType = new DocumentType();
                 documentType.setOwnerDocument(document.getValue().getOwnerDocument());
                 documentType.setTypeOfDocument(document.getValue().getTypeOfDocument());
                 documentType.setUploadedDocument((UploadedDocumentType) objectMapper(
                     document.getValue().getUploadedDocument(), UploadedDocumentType.class));
                 documentType.setCreationDate(document.getValue().getCreationDate());
                 documentType.setShortDescription(document.getValue().getShortDescription());
-
-                var documentTypeItem = new DocumentTypeItem();
+                DocumentTypeItem documentTypeItem = new DocumentTypeItem();
                 documentTypeItem.setId(UUID.randomUUID().toString());
                 documentTypeItem.setValue(documentType);
                 documentTypeItemsList.add(documentTypeItem);
