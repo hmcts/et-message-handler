@@ -153,13 +153,12 @@ public final class TransferToEcmCaseDataHelper {
 
     private static List<RespondentSumTypeItem> createRespondentCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem> respondentCollection) {
-        RespondentSumTypeItem respondentSumTypeItem;
         List<RespondentSumTypeItem> respondentSumTypeItems = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(respondentCollection)) {
-            for (var respondent : respondentCollection) {
-                var respondentSumType = (RespondentSumType) objectMapper(
+            for (uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem respondent : respondentCollection) {
+                RespondentSumType respondentSumType = (RespondentSumType) objectMapper(
                     respondent.getValue(), RespondentSumType.class);
-                respondentSumTypeItem = new RespondentSumTypeItem();
+                RespondentSumTypeItem respondentSumTypeItem = new RespondentSumTypeItem();
                 respondentSumTypeItem.setId(UUID.randomUUID().toString());
                 respondentSumTypeItem.setValue(respondentSumType);
                 respondentSumTypeItems.add(respondentSumTypeItem);
@@ -173,7 +172,7 @@ public final class TransferToEcmCaseDataHelper {
         List<uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem> addressLabelCollection) {
         List<AddressLabelTypeItem> addressLabelTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(addressLabelCollection)) {
-            for (var addressLabel : addressLabelCollection) {
+            for (uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem addressLabel : addressLabelCollection) {
                 AddressLabelType addressLabelType = (AddressLabelType) objectMapper(
                     addressLabel.getValue(),
                     AddressLabelType.class);
@@ -189,13 +188,11 @@ public final class TransferToEcmCaseDataHelper {
 
     private static List<JurCodesTypeItem> createJurCodesCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem> jurCodesCollection) {
-        JurCodesType jurCodesType;
-        JurCodesTypeItem jurCodesTypeItem;
         List<JurCodesTypeItem> jurCodesTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(jurCodesCollection)) {
             for (uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem jurCodes : jurCodesCollection) {
-                jurCodesType = (JurCodesType) objectMapper(jurCodes.getValue(), JurCodesType.class);
-                jurCodesTypeItem = new JurCodesTypeItem();
+                JurCodesType jurCodesType = (JurCodesType) objectMapper(jurCodes.getValue(), JurCodesType.class);
+                JurCodesTypeItem  jurCodesTypeItem = new JurCodesTypeItem();
                 jurCodesTypeItem.setId(UUID.randomUUID().toString());
                 jurCodesTypeItem.setValue(jurCodesType);
                 jurCodesTypeItemList.add(jurCodesTypeItem);
@@ -207,19 +204,17 @@ public final class TransferToEcmCaseDataHelper {
 
     private static List<DocumentTypeItem> createDocumentCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem> documentCollection) {
-        DocumentTypeItem documentTypeItem;
-        DocumentType documentType;
         List<DocumentTypeItem> documentTypeItemsList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(documentCollection)) {
-            for (var document : documentCollection) {
-                documentType = new DocumentType();
+            for (uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem document : documentCollection) {
+                DocumentType documentType = new DocumentType();
                 documentType.setOwnerDocument(document.getValue().getOwnerDocument());
                 documentType.setTypeOfDocument(document.getValue().getTypeOfDocument());
                 documentType.setUploadedDocument((UploadedDocumentType) objectMapper(
                     document.getValue().getUploadedDocument(), UploadedDocumentType.class));
                 documentType.setCreationDate(document.getValue().getCreationDate());
                 documentType.setShortDescription(document.getValue().getShortDescription());
-                documentTypeItem = new DocumentTypeItem();
+                DocumentTypeItem documentTypeItem = new DocumentTypeItem();
                 documentTypeItem.setId(UUID.randomUUID().toString());
                 documentTypeItem.setValue(documentType);
                 documentTypeItemsList.add(documentTypeItem);
