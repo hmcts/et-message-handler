@@ -15,29 +15,27 @@ import javax.annotation.PostConstruct;
 
 @AutoConfigureAfter(ServiceBusCreateUpdatesReceiverConf.class)
 @Configuration
-@SuppressWarnings("PMD")
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class ServiceBusUpdateCaseReceiverConf {
 
     private final IQueueClient updateCaseListenClient;
 
     private final UpdateCaseBusReceiverTask updateCaseBusReceiverTask;
 
+    private static final ExecutorService UPDATE_CASE_LISTEN_EXECUTOR =
+        Executors.newSingleThreadExecutor(r -> new Thread(r, "update-case-queue-listen"));
+
+    private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
+        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
+
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
         updateCaseListenClient.registerMessageHandler(
             updateCaseBusReceiverTask,
-            messageHandlerOptions,
-            updateCaseListenExecutor
+            MESSAGE_HANDLER_OPTIONS,
+            UPDATE_CASE_LISTEN_EXECUTOR
         );
     }
-
-    private static final ExecutorService updateCaseListenExecutor =
-        Executors.newSingleThreadExecutor(r ->
-            new Thread(r, "update-case-queue-listen")
-        );
-
-    private static final MessageHandlerOptions messageHandlerOptions =
-        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
 
     public ServiceBusUpdateCaseReceiverConf(
         @Qualifier("update-case-listen-client") IQueueClient updateCaseListenClient,
