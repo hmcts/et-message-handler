@@ -19,7 +19,6 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_BULK_CASE_
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.YES;
 
-@SuppressWarnings("PMD")
 public final class Helper {
 
     private static final String CASE_NUMBER1 = "4150002/2020";
@@ -28,9 +27,6 @@ public final class Helper {
     private static final String USERNAME = "eric.ccdcooper@gmail.com";
     private static final PreAcceptDataModel PRE_ACCEPT_DATA_MODEL = PreAcceptDataModel.builder().build();
     private static final CloseDataModel CLOSE_DATA_MODEL = CloseDataModel.builder().build();
-
-    private Helper() {
-    }
 
     private static final CreationDataModel CREATION_DATA_MODEL = CreationDataModel.builder()
         .lead(CASE_NUMBER1)
@@ -49,6 +45,9 @@ public final class Helper {
         .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
         .sourceEthosCaseReference("4150001/2020")
         .build();
+
+    private Helper() {
+    }
 
     public static UpdateCaseMsg generateUpdateCaseMsg() {
         return UpdateCaseMsg.builder()

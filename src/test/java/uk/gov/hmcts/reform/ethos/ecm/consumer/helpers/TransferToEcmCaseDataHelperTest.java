@@ -17,34 +17,35 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings("PMD.LawOfDemeter")
 public class TransferToEcmCaseDataHelperTest {
+    private static final String TEST = "Test";
 
     @Test
     public void testCopyCaseData() {
-        var ecmCaseData = new CaseData();
-        var etCaseData = createEtCaseData();
+        CaseData ecmCaseData = new CaseData();
+        uk.gov.hmcts.et.common.model.ccd.CaseData etCaseData = createEtCaseData();
         ecmCaseData = TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
                                                                 "Accepted");
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
-        assertEquals("Test", ecmCaseData.getFileLocationGlasgow());
+        assertEquals(TEST, ecmCaseData.getFileLocationGlasgow());
         assertEquals(1, ecmCaseData.getJurCodesCollection().size());
-        assertEquals("Test", ecmCaseData.getJurCodesCollection().get(0).getValue().getJuridictionCodesList());
+        assertEquals(TEST, ecmCaseData.getJurCodesCollection().get(0).getValue().getJuridictionCodesList());
         assertEquals(1, ecmCaseData.getRespondentCollection().size());
         assertEquals(1, ecmCaseData.getDocumentCollection().size());
-        assertEquals("Test", ecmCaseData.getClerkResponsible());
+        assertEquals(TEST, ecmCaseData.getClerkResponsible());
     }
 
     private uk.gov.hmcts.et.common.model.ccd.CaseData createEtCaseData() {
-        var caseData = new uk.gov.hmcts.et.common.model.ccd.CaseData();
+        uk.gov.hmcts.et.common.model.ccd.CaseData caseData = new uk.gov.hmcts.et.common.model.ccd.CaseData();
         caseData.setManagingOffice(TribunalOffice.GLASGOW.getOfficeName());
         caseData.setAllocatedOffice(TribunalOffice.GLASGOW.getOfficeName());
-        caseData.setFileLocationGlasgow(DynamicFixedListType.of(DynamicValueType.create("Test", "Test")));
-        var jurCodesType = new JurCodesType();
-        jurCodesType.setJuridictionCodesList("Test");
-        jurCodesType.setJudgmentOutcome("Test");
-        var jurCodeTypeItem = new JurCodesTypeItem();
+        caseData.setFileLocationGlasgow(DynamicFixedListType.of(DynamicValueType.create(TEST, TEST)));
+        JurCodesType jurCodesType = new JurCodesType();
+        jurCodesType.setJuridictionCodesList(TEST);
+        jurCodesType.setJudgmentOutcome(TEST);
+        JurCodesTypeItem jurCodeTypeItem = new JurCodesTypeItem();
         jurCodeTypeItem.setValue(jurCodesType);
         caseData.setJurCodesCollection(List.of(jurCodeTypeItem));
 
@@ -54,14 +55,14 @@ public class TransferToEcmCaseDataHelperTest {
         respondentSumTypeItem.setValue(respondentSumType);
         caseData.setRespondentCollection(List.of(respondentSumTypeItem));
 
-        var documentType = new DocumentType();
+        DocumentType documentType = new DocumentType();
         documentType.setTypeOfDocument("Test Doc");
         documentType.setOwnerDocument("Test Owner");
-        var documentTypeItem = new DocumentTypeItem();
+        DocumentTypeItem documentTypeItem = new DocumentTypeItem();
         documentTypeItem.setValue(documentType);
         caseData.setDocumentCollection(List.of(documentTypeItem));
 
-        caseData.setClerkResponsible(DynamicFixedListType.of(DynamicValueType.create("Test", "Test")));
+        caseData.setClerkResponsible(DynamicFixedListType.of(DynamicValueType.create(TEST, TEST)));
 
         return caseData;
     }

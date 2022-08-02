@@ -37,7 +37,7 @@ import java.util.UUID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops"})
 public final class TransferToEcmCaseDataHelper {
 
     private TransferToEcmCaseDataHelper() {
@@ -171,14 +171,13 @@ public final class TransferToEcmCaseDataHelper {
 
     private static List<AddressLabelTypeItem> createAddressLabelCollecton(
         List<uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem> addressLabelCollection) {
-        AddressLabelTypeItem addressLabelTypeItem;
         List<AddressLabelTypeItem> addressLabelTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(addressLabelCollection)) {
             for (var addressLabel : addressLabelCollection) {
                 AddressLabelType addressLabelType = (AddressLabelType) objectMapper(
                     addressLabel.getValue(),
                     AddressLabelType.class);
-                addressLabelTypeItem = new AddressLabelTypeItem();
+                AddressLabelTypeItem addressLabelTypeItem = new AddressLabelTypeItem();
                 addressLabelTypeItem.setId(UUID.randomUUID().toString());
                 addressLabelTypeItem.setValue(addressLabelType);
                 addressLabelTypeItemList.add(addressLabelTypeItem);

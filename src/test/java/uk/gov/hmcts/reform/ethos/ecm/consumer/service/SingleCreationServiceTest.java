@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
+import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
@@ -26,8 +27,8 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.ENGLANDWALES_CASE_T
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleCreationService.CREATE_CASE_EVENT_SUMMARY_TEMPLATE;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SuppressWarnings("PMD")
 public class SingleCreationServiceTest {
 
     @InjectMocks
@@ -35,7 +36,7 @@ public class SingleCreationServiceTest {
     @Mock
     private CcdClient ccdClient;
 
-    private static final String userToken = "accessToken";
+    private static final String USER_TOKEN = "accessToken";
 
     @Test
     public void caseTransferToScotlandCreateCase() throws IOException {
@@ -51,35 +52,36 @@ public class SingleCreationServiceTest {
         ((CreationSingleDataModel)updateCaseMsg.getDataModelParent()).setOfficeCT(
             TribunalOffice.GLASGOW.getOfficeName());
 
-        singleCreationService.sendCreation(submitEvent, userToken, updateCaseMsg);
+        singleCreationService.sendCreation(submitEvent, USER_TOKEN, updateCaseMsg);
 
-        verify(ccdClient).retrieveCasesElasticSearch(userToken, SCOTLAND_CASE_TYPE_ID, List.of(ethosCaseReference));
-        verify(ccdClient).startCaseCreationTransfer(eq(userToken), any());
+        verify(ccdClient).retrieveCasesElasticSearch(USER_TOKEN, SCOTLAND_CASE_TYPE_ID, List.of(ethosCaseReference));
+        verify(ccdClient).startCaseCreationTransfer(eq(USER_TOKEN), any());
         var expectedEventSummary = String.format(CREATE_CASE_EVENT_SUMMARY_TEMPLATE, managingOffice);
-        verify(ccdClient).submitCaseCreation(eq(userToken), any(), any(), eq(expectedEventSummary));
+        verify(ccdClient).submitCaseCreation(eq(USER_TOKEN), any(), any(), eq(expectedEventSummary));
         verifyNoMoreInteractions(ccdClient);
     }
 
     @Test
     public void caseTransferToEnglandCreateCase() throws IOException {
-        var ethosCaseReference = "4150002/2020";
-        var managingOffice = TribunalOffice.DUNDEE.getOfficeName();
-        var caseData = new CaseData();
+        String ethosCaseReference = "4150002/2020";
+        String managingOffice = TribunalOffice.DUNDEE.getOfficeName();
+        CaseData caseData = new CaseData();
         caseData.setEthosCaseReference(ethosCaseReference);
         caseData.setManagingOffice(managingOffice);
-        var submitEvent = new SubmitEvent();
+        SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
 
-        var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
+        UpdateCaseMsg updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         ((CreationSingleDataModel)updateCaseMsg.getDataModelParent()).setOfficeCT(
             TribunalOffice.NEWCASTLE.getOfficeName());
 
-        singleCreationService.sendCreation(submitEvent, userToken, updateCaseMsg);
+        singleCreationService.sendCreation(submitEvent, USER_TOKEN, updateCaseMsg);
 
-        verify(ccdClient).retrieveCasesElasticSearch(userToken, ENGLANDWALES_CASE_TYPE_ID, List.of(ethosCaseReference));
-        verify(ccdClient).startCaseCreationTransfer(eq(userToken), any());
+        verify(ccdClient).retrieveCasesElasticSearch(USER_TOKEN, ENGLANDWALES_CASE_TYPE_ID,
+                                                     List.of(ethosCaseReference));
+        verify(ccdClient).startCaseCreationTransfer(eq(USER_TOKEN), any());
         var expectedEventSummary = String.format(CREATE_CASE_EVENT_SUMMARY_TEMPLATE, managingOffice);
-        verify(ccdClient).submitCaseCreation(eq(userToken), any(), any(), eq(expectedEventSummary));
+        verify(ccdClient).submitCaseCreation(eq(USER_TOKEN), any(), any(), eq(expectedEventSummary));
         verifyNoMoreInteractions(ccdClient);
     }
 
@@ -99,15 +101,15 @@ public class SingleCreationServiceTest {
         ((CreationSingleDataModel)updateCaseMsg.getDataModelParent()).setOfficeCT(
             TribunalOffice.GLASGOW.getOfficeName());
 
-        when(ccdClient.retrieveCasesElasticSearch(userToken, SCOTLAND_CASE_TYPE_ID, List.of(ethosCaseReference)))
+        when(ccdClient.retrieveCasesElasticSearch(USER_TOKEN, SCOTLAND_CASE_TYPE_ID, List.of(ethosCaseReference)))
             .thenReturn(new ArrayList<>(Collections.singletonList(submitEvent)));
 
-        singleCreationService.sendCreation(submitEvent, userToken, updateCaseMsg);
+        singleCreationService.sendCreation(submitEvent, USER_TOKEN, updateCaseMsg);
 
-        verify(ccdClient).retrieveCasesElasticSearch(userToken, SCOTLAND_CASE_TYPE_ID, List.of(ethosCaseReference));
-        verify(ccdClient).returnCaseCreationTransfer(userToken, SCOTLAND_CASE_TYPE_ID, "EMPLOYMENT",
+        verify(ccdClient).retrieveCasesElasticSearch(USER_TOKEN, SCOTLAND_CASE_TYPE_ID, List.of(ethosCaseReference));
+        verify(ccdClient).returnCaseCreationTransfer(USER_TOKEN, SCOTLAND_CASE_TYPE_ID, "EMPLOYMENT",
                                                      String.valueOf(caseId));
-        verify(ccdClient).submitEventForCase(eq(userToken), any(), eq(SCOTLAND_CASE_TYPE_ID), eq("EMPLOYMENT"), any(),
+        verify(ccdClient).submitEventForCase(eq(USER_TOKEN), any(), eq(SCOTLAND_CASE_TYPE_ID), eq("EMPLOYMENT"), any(),
                                              eq(String.valueOf(caseId)));
         verifyNoMoreInteractions(ccdClient);
     }
