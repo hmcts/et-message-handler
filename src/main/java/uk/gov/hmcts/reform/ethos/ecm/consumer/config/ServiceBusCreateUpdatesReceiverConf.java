@@ -13,29 +13,27 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
 
+@SuppressWarnings("PMD.DoNotUseThreads")
 @AutoConfigureAfter(ServiceBusSenderConfiguration.class)
 @Configuration
-@SuppressWarnings("PMD")
 public class ServiceBusCreateUpdatesReceiverConf {
 
     private final IQueueClient createUpdatesListenClient;
 
     private final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
-
-    private static final ExecutorService createUpdatesListenExecutor =
-        Executors.newSingleThreadExecutor(r ->
-                                              new Thread(r, "create-updates-queue-listen")
-        );
-
-    private static final MessageHandlerOptions messageHandlerOptions =
+    private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
         new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
+
+    private static final ExecutorService CREATE_UPDATES_LISTEN_EXECUTOR =
+        Executors.newSingleThreadExecutor(r -> new Thread(r, "create-updates-queue-listen")
+        );
 
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
         createUpdatesListenClient.registerMessageHandler(
             createUpdatesBusReceiverTask,
-            messageHandlerOptions,
-            createUpdatesListenExecutor
+            MESSAGE_HANDLER_OPTIONS,
+            CREATE_UPDATES_LISTEN_EXECUTOR
         );
     }
 
