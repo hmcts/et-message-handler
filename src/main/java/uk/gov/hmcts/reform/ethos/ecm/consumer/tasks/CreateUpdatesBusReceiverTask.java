@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.exceptions.InvalidMessageException;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
+import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.BulkPdfDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.TransferToEcmDataModel;
 import uk.gov.hmcts.ecm.common.servicebus.MessageBodyRetriever;
 import uk.gov.hmcts.ecm.common.servicebus.ServiceBusSender;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleCounterRepository;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.model.servicebus.MessageProcessingResult;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.model.servicebus.MessageProcessingResultType;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.service.CasePdfGenerationService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.TransferToEcmService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
 
@@ -43,17 +45,21 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
     private final transient ServiceBusSender serviceBusSender;
     private final TransferToEcmService transferToEcmService;
     private final MultipleCounterRepository multipleCounterRepository;
+    private final CasePdfGenerationService casePdfGenerationService;
 
     public CreateUpdatesBusReceiverTask(
         ObjectMapper objectMapper,
         @Qualifier("create-updates-completor") MessageAutoCompletor messageCompletor,
         @Qualifier("update-case-send-helper") ServiceBusSender serviceBusSender,
-        TransferToEcmService transferToEcmService, MultipleCounterRepository multipleCounterRepository) {
+        TransferToEcmService transferToEcmService, MultipleCounterRepository multipleCounterRepository,
+        CasePdfGenerationService casePdfGenerationService) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;
         this.serviceBusSender = serviceBusSender;
         this.transferToEcmService = transferToEcmService;
         this.multipleCounterRepository = multipleCounterRepository;
+        this.casePdfGenerationService = casePdfGenerationService;
+
     }
 
     @Override
@@ -123,6 +129,8 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
 
             if (createUpdatesMsg.getDataModelParent() instanceof TransferToEcmDataModel) {
                 transferToEcmService.transferToEcm(createUpdatesMsg);
+            } else if (createUpdatesMsg.getDataModelParent() instanceof BulkPdfDataModel) {
+                casePdfGenerationService.generatePdfs(createUpdatesMsg);
             } else {
                 sendUpdateCaseMessages(createUpdatesMsg);
             }

@@ -18,6 +18,7 @@ import uk.gov.hmcts.ecm.common.servicebus.MessageBodyRetriever;
 import uk.gov.hmcts.ecm.common.servicebus.ServiceBusSender;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleCounterRepository;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.service.CasePdfGenerationService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.TransferToEcmService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
 
@@ -44,6 +45,8 @@ public class CreateUpdatesBusReceiverTaskTest {
     private TransferToEcmService transferToEcmService;
     @Mock
     private transient MultipleCounterRepository multipleCounterRepository;
+    @Mock
+    private CasePdfGenerationService casePdfGenerationService;
 
     private transient Message message;
     private transient CreateUpdatesMsg msg;
@@ -51,7 +54,8 @@ public class CreateUpdatesBusReceiverTaskTest {
     @Before
     public void setUp() {
         createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(
-            objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository);
+            objectMapper, messageCompletor, serviceBusSender, transferToEcmService,
+            multipleCounterRepository, casePdfGenerationService);
         msg = Helper.generateCreateUpdatesMsg();
         message = createMessage(msg);
     }
