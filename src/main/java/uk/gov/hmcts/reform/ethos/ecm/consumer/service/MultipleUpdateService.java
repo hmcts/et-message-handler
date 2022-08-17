@@ -40,7 +40,7 @@ public class MultipleUpdateService {
         String accessToken = userService.getAccessToken();
 
         List<SubmitMultipleEvent> submitMultipleEvents = retrieveMultipleCase(accessToken, updateCaseMsg);
-        if (submitMultipleEvents != null && !submitMultipleEvents.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(submitMultipleEvents)) {
             if (updateCaseMsg.getDataModelParent() instanceof CreationSingleDataModel) {
                 handleMultipleTransfer(submitMultipleEvents.get(0), updateCaseMsg, accessToken, multipleErrorsList);
             } else {

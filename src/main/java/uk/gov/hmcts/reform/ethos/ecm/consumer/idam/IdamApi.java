@@ -8,6 +8,6 @@ import uk.gov.hmcts.ecm.common.idam.models.UserDetails;
 
 @FeignClient(name = "idam-api", url = "${idam.api.url}")
 public interface IdamApi {
-    @GetMapping(value = "/o/userinfo")
+    @GetMapping("/o/userinfo")
     UserDetails retrieveUserDetails(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation);
 }

@@ -57,7 +57,7 @@ public class MultipleUpdateServiceTest {
     private transient List<SubmitMultipleEvent> submitMultipleEvents;
     private transient SubmitMultipleEvent submitMultipleEvent;
     private transient UpdateCaseMsg updateCaseMsg;
-    private final transient String userToken = "Token";
+    private static final String USER_TOKEN = "Token";
 
     @Before
     public void setUp() {
@@ -68,7 +68,7 @@ public class MultipleUpdateServiceTest {
         submitMultipleEvents = new ArrayList<>(Collections.singletonList(submitMultipleEvent));
         updateCaseMsg = Helper.generateUpdateCaseMsg();
 
-        when(userService.getAccessToken()).thenReturn(userToken);
+        when(userService.getAccessToken()).thenReturn(USER_TOKEN);
     }
 
     @Test
@@ -78,11 +78,11 @@ public class MultipleUpdateServiceTest {
         var caseId = "12345";
         submitMultipleEvent.setCaseId(Long.parseLong(caseId));
 
-        when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(userToken, updateCaseMsg.getCaseTypeId(),
+        when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                      updateCaseMsg.getMultipleRef()))
             .thenReturn(submitMultipleEvents);
         var ccdRequest = new CCDRequest();
-        when(ccdClient.startBulkAmendEventForCase(userToken, updateCaseMsg.getCaseTypeId(),
+        when(ccdClient.startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                   updateCaseMsg.getJurisdiction(), caseId)).thenReturn(ccdRequest);
 
         var multipleErrorsList = new ArrayList<MultipleErrors>();
@@ -90,9 +90,9 @@ public class MultipleUpdateServiceTest {
         multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, multipleErrorsList);
 
         assertTrue(multipleErrorsList.isEmpty());
-        verify(ccdClient).startBulkAmendEventForCase(userToken, updateCaseMsg.getCaseTypeId(),
+        verify(ccdClient).startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                      updateCaseMsg.getJurisdiction(), caseId);
-        verify(ccdClient).submitMultipleEventForCase(eq(userToken),
+        verify(ccdClient).submitMultipleEventForCase(eq(USER_TOKEN),
                                                      multipleDataArgumentCaptor.capture(),
                                                      eq(updateCaseMsg.getCaseTypeId()),
                                                      eq(updateCaseMsg.getJurisdiction()), eq(ccdRequest), eq(caseId));
@@ -104,24 +104,25 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
+    @SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
     public void testMultipleTransferDifferentCountry() throws IOException {
         updateCaseMsg = Helper.generateCreationSingleCaseMsg();
-        var newManagingOffice = TribunalOffice.MANCHESTER.getOfficeName();
-        var dataModel = (CreationSingleDataModel)updateCaseMsg.getDataModelParent();
+        String newManagingOffice = TribunalOffice.MANCHESTER.getOfficeName();
+        CreationSingleDataModel dataModel = (CreationSingleDataModel)updateCaseMsg.getDataModelParent();
         dataModel.setOfficeCT(newManagingOffice);
         dataModel.setTransferSameCountry(false);
-        var caseId = "12345";
+        String caseId = "12345";
         submitMultipleEvent.setCaseId(Long.parseLong(caseId));
 
-        when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(userToken, updateCaseMsg.getCaseTypeId(),
+        when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                      updateCaseMsg.getMultipleRef()))
             .thenReturn(submitMultipleEvents);
         var ccdRequest = new CCDRequest();
-        when(ccdClient.startBulkAmendEventForCase(userToken, updateCaseMsg.getCaseTypeId(),
+        when(ccdClient.startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                   updateCaseMsg.getJurisdiction(), caseId)).thenReturn(ccdRequest);
 
         var creationCCDRequest = new CCDRequest();
-        when(ccdClient.startCaseMultipleCreation(userToken, ENGLANDWALES_BULK_CASE_TYPE_ID,
+        when(ccdClient.startCaseMultipleCreation(USER_TOKEN, ENGLANDWALES_BULK_CASE_TYPE_ID,
                                                  updateCaseMsg.getJurisdiction())).thenReturn(creationCCDRequest);
 
         var multipleErrorsList = new ArrayList<MultipleErrors>();
@@ -129,9 +130,9 @@ public class MultipleUpdateServiceTest {
         multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, multipleErrorsList);
 
         assertTrue(multipleErrorsList.isEmpty());
-        verify(ccdClient).startBulkAmendEventForCase(userToken, updateCaseMsg.getCaseTypeId(),
+        verify(ccdClient).startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                      updateCaseMsg.getJurisdiction(), caseId);
-        verify(ccdClient).submitMultipleEventForCase(eq(userToken),
+        verify(ccdClient).submitMultipleEventForCase(eq(USER_TOKEN),
                                                      multipleDataArgumentCaptor.capture(),
                                                      eq(updateCaseMsg.getCaseTypeId()),
                                                      eq(updateCaseMsg.getJurisdiction()), eq(ccdRequest), eq(caseId));
@@ -141,7 +142,7 @@ public class MultipleUpdateServiceTest {
         assertEquals(dataModel.getReasonForCT(), actualMultipleData.getReasonForCT());
         assertEquals(dataModel.getPositionTypeCT(), actualMultipleData.getPositionType());
 
-        verify(ccdClient, times(1)).submitMultipleCreation(eq(userToken), creationMultipleDataArgumentCaptor.capture(),
+        verify(ccdClient, times(1)).submitMultipleCreation(eq(USER_TOKEN), creationMultipleDataArgumentCaptor.capture(),
                                                            eq(ENGLANDWALES_BULK_CASE_TYPE_ID),
                                                            eq(updateCaseMsg.getJurisdiction()),
                                                            eq(creationCCDRequest));
@@ -173,7 +174,7 @@ public class MultipleUpdateServiceTest {
 
         multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
 
-        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(userToken, updateCaseMsg.getCaseTypeId(),
+        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
         verifyNoMoreInteractions(ccdClient);
     }
@@ -185,7 +186,7 @@ public class MultipleUpdateServiceTest {
 
         multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
 
-        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(userToken, updateCaseMsg.getCaseTypeId(),
+        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
         verifyNoMoreInteractions(ccdClient);
     }
@@ -217,13 +218,13 @@ public class MultipleUpdateServiceTest {
 
         multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
 
-        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(userToken, updateCaseMsg.getCaseTypeId(),
+        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
-        verify(ccdClient).startBulkAmendEventForCase(eq(userToken),
+        verify(ccdClient).startBulkAmendEventForCase(eq(USER_TOKEN),
                                                      eq(updateCaseMsg.getCaseTypeId()),
                                                      eq(updateCaseMsg.getJurisdiction()),
                                                      any());
-        verify(ccdClient).submitMultipleEventForCase(eq(userToken),
+        verify(ccdClient).submitMultipleEventForCase(eq(USER_TOKEN),
                                                      any(),
                                                      eq(updateCaseMsg.getCaseTypeId()),
                                                      eq(updateCaseMsg.getJurisdiction()),
@@ -241,13 +242,13 @@ public class MultipleUpdateServiceTest {
     }
 
     private void verifyMocks() throws IOException {
-        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(userToken, updateCaseMsg.getCaseTypeId(),
+        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
-        verify(ccdClient).startBulkAmendEventForCase(eq(userToken),
+        verify(ccdClient).startBulkAmendEventForCase(eq(USER_TOKEN),
                                                      eq(updateCaseMsg.getCaseTypeId()),
                                                      eq(updateCaseMsg.getJurisdiction()),
                                                      any());
-        verify(ccdClient).submitMultipleEventForCase(eq(userToken),
+        verify(ccdClient).submitMultipleEventForCase(eq(USER_TOKEN),
                                                      any(),
                                                      eq(updateCaseMsg.getCaseTypeId()),
                                                      eq(updateCaseMsg.getJurisdiction()),

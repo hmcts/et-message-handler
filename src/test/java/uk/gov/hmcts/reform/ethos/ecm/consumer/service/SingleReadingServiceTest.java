@@ -37,7 +37,7 @@ public class SingleReadingServiceTest {
     private transient SingleTransferService singleTransferService;
 
     private transient List<SubmitEvent> submitEvents;
-    private final transient String userToken = "my-test-token";
+    private static final String USER_TOKEN = "my-test-token";
 
     @Before
     public void setUp() {
@@ -52,31 +52,31 @@ public class SingleReadingServiceTest {
     @Test
     public void sendUpdateToSingleLogic() throws IOException {
         var updateCaseMsg = Helper.generateUpdateCaseMsg();
-        when(userService.getAccessToken()).thenReturn(userToken);
+        when(userService.getAccessToken()).thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEvents);
 
         singleReadingService.sendUpdateToSingleLogic(updateCaseMsg);
 
-        verify(singleUpdateService, times(1)).sendUpdate(submitEvents.get(0), userToken, updateCaseMsg);
+        verify(singleUpdateService, times(1)).sendUpdate(submitEvents.get(0), USER_TOKEN, updateCaseMsg);
         verifyNoInteractions(singleTransferService);
     }
 
     @Test
     public void sendTransferredToSingleLogic() throws IOException {
         var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
-        when(userService.getAccessToken()).thenReturn(userToken);
+        when(userService.getAccessToken()).thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEvents);
 
         singleReadingService.sendUpdateToSingleLogic(updateCaseMsg);
 
-        verify(singleTransferService).sendTransferred(submitEvents.get(0), userToken, updateCaseMsg);
+        verify(singleTransferService).sendTransferred(submitEvents.get(0), USER_TOKEN, updateCaseMsg);
         verifyNoInteractions(singleUpdateService);
     }
 
     @Test
     public void sendUpdateToSingleLogicNoCasesFound() throws IOException {
         var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
-        when(userService.getAccessToken()).thenReturn(userToken);
+        when(userService.getAccessToken()).thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(null);
 
         singleReadingService.sendUpdateToSingleLogic(updateCaseMsg);

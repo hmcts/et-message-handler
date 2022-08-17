@@ -7,6 +7,7 @@ plugins {
   id 'org.owasp.dependencycheck' version '7.1.1'
   id 'com.github.ben-manes.versions' version '0.42.0'
   id 'org.sonarqube' version '3.4.0.2513'
+  id 'pmd'
 }
 
 group = 'uk.gov.hmcts.et'
@@ -15,6 +16,15 @@ version = '0.0.1'
 checkstyle {
   maxWarnings = 0
   toolVersion = '8.29'
+}
+
+pmd {
+  toolVersion = "6.41.0"
+  sourceSets = [sourceSets.main, sourceSets.test]
+  reportsDir = file("$project.buildDir/reports/pmd")
+  // https://github.com/pmd/pmd/issues/876
+  ruleSets = []
+  ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
 allprojects {
@@ -196,7 +206,7 @@ dependencies {
     }
   }
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.13'
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.4.0'
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.4.1'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
