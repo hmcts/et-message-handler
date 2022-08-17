@@ -37,11 +37,12 @@ public class SingleTransferService {
     }
 
     private CaseTransfer getCaseTransfer(SubmitEvent submitEvent, UpdateCaseMsg updateCaseMsg) {
-        var creationSingleDataModel = ((CreationSingleDataModel) updateCaseMsg.getDataModelParent());
+        CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg
+            .getDataModelParent();
 
-        String caseTypeId = !updateCaseMsg.getMultipleRef().equals(SINGLE_CASE_TYPE)
-            ? UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())
-            : updateCaseMsg.getCaseTypeId();
+        String caseTypeId = updateCaseMsg.getMultipleRef().equals(SINGLE_CASE_TYPE)
+            ? updateCaseMsg.getCaseTypeId()
+            : UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId());
 
         return CaseTransfer.builder()
             .caseId(submitEvent.getCaseId())

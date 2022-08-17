@@ -12,9 +12,8 @@ import uk.gov.service.notify.NotificationClientException;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -50,7 +49,7 @@ public class EmailServiceTest {
     @Test
     public void sendConfirmationEmail() throws NotificationClientException {
         emailService.sendConfirmationEmail(emailAddress, multipleRef);
-        Map<String, String> personalisation = getPersonalisation(new ArrayList<>(), multipleRef);
+        ConcurrentHashMap<String, String> personalisation = getPersonalisation(new ArrayList<>(), multipleRef);
         verify(emailClient).sendEmail(eq(CONFIRMATION_OK_EMAIL), eq(emailAddress),
                                       eq(personalisation), isA(String.class));
         verifyNoMoreInteractions(emailClient);
@@ -58,7 +57,7 @@ public class EmailServiceTest {
 
     @Test
     public void sendConfirmationEmailException() throws NotificationClientException {
-        Map<String, String> personalisation = getPersonalisation(new ArrayList<>(), multipleRef);
+        ConcurrentHashMap<String, String> personalisation = getPersonalisation(new ArrayList<>(), multipleRef);
         when(emailClient.sendEmail(eq(CONFIRMATION_OK_EMAIL), eq(emailAddress),
                                    eq(personalisation), isA(String.class)))
             .thenThrow(new NotificationClientException("Exception"));
@@ -87,8 +86,10 @@ public class EmailServiceTest {
         return new ArrayList<>(Collections.singletonList(multipleErrors));
     }
 
-    private Map<String, String> getPersonalisation(List<MultipleErrors> multipleErrorsList, String multipleRef) {
-        Map<String, String> personalisation = new HashMap<>();
+    private ConcurrentHashMap<String, String> getPersonalisation(
+        List<MultipleErrors> multipleErrorsList,
+        String multipleRef) {
+        ConcurrentHashMap<String, String> personalisation = new ConcurrentHashMap<>();
         String errors = multipleErrorsList.stream()
             .map(MultipleErrors::toString)
             .collect(Collectors.joining(", "));

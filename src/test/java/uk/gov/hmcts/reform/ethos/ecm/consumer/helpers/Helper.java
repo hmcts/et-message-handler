@@ -19,37 +19,35 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_BULK_CASE_
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.YES;
 
-public class Helper {
+public final class Helper {
 
     private static final String CASE_NUMBER1 = "4150002/2020";
     private static final String MULTIPLE_CASE = "4150001";
     private static final String JURISDICTION = "EMPLOYMENT";
     private static final String USERNAME = "eric.ccdcooper@gmail.com";
+    private static final PreAcceptDataModel PRE_ACCEPT_DATA_MODEL = PreAcceptDataModel.builder().build();
+    private static final CloseDataModel CLOSE_DATA_MODEL = CloseDataModel.builder().build();
 
-    private Helper() {
-    }
-
-    private static final CreationDataModel creationDataModel = CreationDataModel.builder()
+    private static final CreationDataModel CREATION_DATA_MODEL = CreationDataModel.builder()
         .lead(CASE_NUMBER1)
         .multipleRef(MULTIPLE_CASE)
         .build();
 
-    private static final PreAcceptDataModel preAcceptDataModel = PreAcceptDataModel.builder().build();
-
-    private static final CloseDataModel closeDataModel = CloseDataModel.builder().build();
-
-    private static final CreationSingleDataModel creationSingleDataModel = CreationSingleDataModel.builder()
+    private static final CreationSingleDataModel CREATION_SINGLE_DATA_MODEL = CreationSingleDataModel.builder()
         .positionTypeCT("PositionTypeCT")
         .officeCT("Manchester")
         .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
         .build();
 
-    private static final TransferToEcmDataModel transferToEcmDataModel = TransferToEcmDataModel.builder()
+    private static final TransferToEcmDataModel TRANSFER_TO_ECM_DATA_MODEL = TransferToEcmDataModel.builder()
         .positionTypeCT("PositionTypeCT")
         .officeCT(TribunalOffice.LEEDS.getOfficeName())
         .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
         .sourceEthosCaseReference("4150001/2020")
         .build();
+
+    private Helper() {
+    }
 
     public static UpdateCaseMsg generateUpdateCaseMsg() {
         return UpdateCaseMsg.builder()
@@ -61,7 +59,7 @@ public class Helper {
             .totalCases("1")
             .username(USERNAME)
             .confirmation(YES)
-            .dataModelParent(creationDataModel)
+            .dataModelParent(CREATION_DATA_MODEL)
             .build();
     }
 
@@ -75,7 +73,7 @@ public class Helper {
             .totalCases("1")
             .username(USERNAME)
             .confirmation(YES)
-            .dataModelParent(preAcceptDataModel)
+            .dataModelParent(PRE_ACCEPT_DATA_MODEL)
             .build();
     }
 
@@ -89,7 +87,7 @@ public class Helper {
             .totalCases("1")
             .username(USERNAME)
             .confirmation(NO)
-            .dataModelParent(closeDataModel)
+            .dataModelParent(CLOSE_DATA_MODEL)
             .build();
     }
 
@@ -103,7 +101,7 @@ public class Helper {
             .totalCases("3")
             .username(USERNAME)
             .confirmation(YES)
-            .dataModelParent(creationDataModel)
+            .dataModelParent(CREATION_DATA_MODEL)
             .build();
     }
 
@@ -117,7 +115,7 @@ public class Helper {
             .totalCases("1")
             .username(USERNAME)
             .confirmation(NO)
-            .dataModelParent(creationSingleDataModel)
+            .dataModelParent(CREATION_SINGLE_DATA_MODEL)
             .build();
     }
 
@@ -141,7 +139,7 @@ public class Helper {
             .totalCases("1")
             .username(USERNAME)
             .confirmation(YES)
-            .dataModelParent(transferToEcmDataModel)
+            .dataModelParent(TRANSFER_TO_ECM_DATA_MODEL)
             .build();
     }
 }
