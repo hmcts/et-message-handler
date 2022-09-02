@@ -197,6 +197,8 @@ dependencies {
   }
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.13'
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.4.1'
+  // CVE-2022-25857
+  implementation group: 'org.yaml', name: 'snakeyaml', version: '1.31'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
