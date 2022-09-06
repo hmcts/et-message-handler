@@ -2,7 +2,7 @@ plugins {
   id 'application'
   id 'jacoco'
   id 'checkstyle'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.12.RELEASE'
   id 'org.springframework.boot' version '2.7.1'
   id 'org.owasp.dependencycheck' version '7.1.1'
   id 'com.github.ben-manes.versions' version '0.42.0'
@@ -159,10 +159,12 @@ ext {
   log4JVersion = '2.18.0'
   logbackVersion = '1.2.11'
   reformLoggingVersion = '5.1.9'
-  serenity = '2.6.0'
+  serenity = '3.2.5'
   springBoot = springBoot.class.package.implementationVersion
   tomcatEmbedVersion = '9.0.64'
 }
+
+ext["rest-assured.version"] = '5.1.0'
 
 dependencies {
   implementation 'com.github.hmcts:et-common:0.0.38'
@@ -180,7 +182,7 @@ dependencies {
   implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: feignVersion
   implementation group: 'io.github.openfeign', name: 'feign-core', version: feignVersion
   implementation group: 'junit', name: 'junit', version: '4.13.2'
-  implementation group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: '4.37.0'
+  implementation group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: '4.38.0'
   implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.21'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
