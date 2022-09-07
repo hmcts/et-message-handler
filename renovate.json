@@ -28,12 +28,6 @@
     },
     {
       "matchPackageNames": [
-        "elasticsearch"
-      ],
-      "allowedVersions": "<=7"
-    },
-    {
-      "matchPackageNames": [
         "org.apache.tomcat.embed:tomcat-embed-core",
         "org.apache.tomcat.embed:tomcat-embed-websocket"
       ],
