@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
@@ -26,8 +27,9 @@ public class CreateEcmSingleService {
     public void sendCreation(SubmitEvent oldSubmitEvent, String accessToken, CreateUpdatesMsg createUpdatesMsg)
         throws IOException {
         TransferToEcmDataModel transferToEcmDataModel = (TransferToEcmDataModel) createUpdatesMsg.getDataModelParent();
-        String caseTypeId = TribunalOffice.isScotlandOffice(transferToEcmDataModel.getOfficeCT())
-            ? officeName : transferToEcmDataModel.getOfficeCT();
+        String caseTypeId =  TribunalOffice.isScotlandOffice(transferToEcmDataModel.getOfficeCT())
+            ? officeName : getCorrectedOfficeName(transferToEcmDataModel.getOfficeCT());
+
         String reasonForCT = transferToEcmDataModel.getReasonForCT();
         String ccdGatewayBaseUrl = transferToEcmDataModel.getCcdGatewayBaseUrl();
         String jurisdiction = createUpdatesMsg.getJurisdiction();
@@ -63,7 +65,6 @@ public class CreateEcmSingleService {
 
         CaseData newCaseData = generateNewCaseDataForCaseTransfer(caseData, caseId, ccdGatewayBaseUrl,
                                                                   state);
-
         newCaseData.setReasonForCT(reasonForCT);
         newCaseDetails.setCaseData(newCaseData);
         return newCaseDetails;
@@ -76,4 +77,12 @@ public class CreateEcmSingleService {
         return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(),
                                                         caseId, ccdGatewayBaseUrl, state);
     }
+
+    private static String getCorrectedOfficeName(String oldCaseOfficeName) {
+        if (StringUtils.hasLength(oldCaseOfficeName) && oldCaseOfficeName.contains(" ")) {
+            return oldCaseOfficeName.replace(" ", "");
+        }
+        return oldCaseOfficeName;
+    }
+
 }
