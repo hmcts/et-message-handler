@@ -5,15 +5,15 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
+import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
-import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
-import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEcmCaseDataHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
@@ -22,14 +22,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CreateEcmSingleServiceTest {
 
     @Mock
     private CcdClient ccdClient;
 
     @Mock
-    private CCDRequest ccdRequest;
+    private TransferToEcmCaseDataHelper transferToEcmCaseDataHelper;
 
     @InjectMocks
     private CreateEcmSingleService createEcmSingleService;
@@ -63,29 +63,16 @@ public class CreateEcmSingleServiceTest {
         caseData.setAddressLabelCollection(new ArrayList<>());
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
-
-        // Construct CaseDetails object provided as an argument in internal method call.
-        // The object has CaseTypeId field that is being tested in this unit test
-        CaseDetails etCaseDetails = new CaseDetails();
-        etCaseDetails.setCaseData(caseData);
-        etCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
-
-        String transferredCaseLink = "<a target=\"_blank\" "
-            + "href=\"ccdGatewayBaseUrl/cases/case-details/0\">"
-            + ethosCaseReference + "</a>";
-        caseData.setLinkedCaseCT(transferredCaseLink);
-        etCaseDetails.setCaseData(caseData);
-        ccdRequest.setCaseDetails(etCaseDetails);
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
 
-        // Resetting EthosCaseReference is needed as this is RET to ECM case transfer
-        etCaseDetails.getCaseData().setEthosCaseReference(null);
+        CaseDetails ecmCaseDetails = new CaseDetails();
+        ecmCaseDetails.setCaseData(new uk.gov.hmcts.ecm.common.model.ccd.CaseData());
+        ecmCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
 
-        ArgumentCaptor<CaseDetails> captor =
-            ArgumentCaptor.forClass(CaseDetails.class);
-        verify(ccdClient).startCaseCreationTransfer(any(), captor.capture());
-        assertEquals(etCaseDetails.getCaseTypeId(), captor.getValue().getCaseTypeId());
+        ArgumentCaptor<CaseDetails> ecmCcdDetailsCaptor = ArgumentCaptor.forClass(CaseDetails.class);
+        verify(transferToEcmCaseDataHelper).objectMapper(ecmCcdDetailsCaptor.capture(), any());
+        assertEquals(ecmCaseDetails.getCaseTypeId(), ecmCcdDetailsCaptor.getValue().getCaseTypeId());
     }
 
 }
