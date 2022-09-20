@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class CreateEcmSingleServiceTest {
 
@@ -28,14 +29,14 @@ public class CreateEcmSingleServiceTest {
     private CcdClient ccdClient;
 
     @Mock
-    private
-    CCDRequest cCDRequest;
+    private CCDRequest ccdRequest;
 
     @InjectMocks
     private CreateEcmSingleService createEcmSingleService;
 
+    private static final String TEST_AUTH_TOKEN = "test auth token";
+
     @Test
-    @SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
     public void transferToEcm() throws IOException {
         String ethosCaseReference = "4150001/2020";
         String managingOffice = TribunalOffice.MANCHESTER.getOfficeName();
@@ -46,10 +47,9 @@ public class CreateEcmSingleServiceTest {
         submitEvent.setCaseData(caseData);
 
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessage();
-        String authToken = "Bearer some-random-token";
-        createEcmSingleService.sendCreation(submitEvent, authToken, createUpdateMsg);
-        verify(ccdClient).startCaseCreationTransfer(eq(authToken), any());
-        verify(ccdClient).submitCaseCreation(eq(authToken), any(), any());
+        createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
+        verify(ccdClient).startCaseCreationTransfer(eq(TEST_AUTH_TOKEN), any());
+        verify(ccdClient).submitCaseCreation(eq(TEST_AUTH_TOKEN), any(), any());
     }
 
     @Test
@@ -59,31 +59,31 @@ public class CreateEcmSingleServiceTest {
         CaseData caseData = new CaseData();
         caseData.setEthosCaseReference(ethosCaseReference);
         caseData.setManagingOffice(managingOffice);
-        caseData.setDocumentCollection( new ArrayList<>());
+        caseData.setDocumentCollection(new ArrayList<>());
         caseData.setAddressLabelCollection(new ArrayList<>());
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
-        String authToken = "Test authToken Bearer";
-        CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
 
         // Construct CaseDetails object provided as an argument in internal method call.
         // The object has CaseTypeId field that is being tested in this unit test
-        uk.gov.hmcts.et.common.model.ccd.CaseDetails etCaseDetails = new CaseDetails();
+        CaseDetails etCaseDetails = new CaseDetails();
         etCaseDetails.setCaseData(caseData);
         etCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
-       String transferredCaseLink = "<a target=\"_blank\" " +
-           "href=\"ccdGatewayBaseUrl/cases/case-details/0\">" + ethosCaseReference + "</a>";
+
+        String transferredCaseLink = "<a target=\"_blank\" "
+            + "href=\"ccdGatewayBaseUrl/cases/case-details/0\">"
+            + ethosCaseReference + "</a>";
         caseData.setLinkedCaseCT(transferredCaseLink);
         etCaseDetails.setCaseData(caseData);
-        cCDRequest.setCaseDetails(etCaseDetails);
-
-        createEcmSingleService.sendCreation(submitEvent, authToken, createUpdateMsg);
+        ccdRequest.setCaseDetails(etCaseDetails);
+        CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
+        createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
 
         // Resetting EthosCaseReference is needed as this is RET to ECM case transfer
         etCaseDetails.getCaseData().setEthosCaseReference(null);
 
-        ArgumentCaptor<uk.gov.hmcts.et.common.model.ccd.CaseDetails> captor =
-            ArgumentCaptor.forClass(uk.gov.hmcts.et.common.model.ccd.CaseDetails.class);
+        ArgumentCaptor<CaseDetails> captor =
+            ArgumentCaptor.forClass(CaseDetails.class);
         verify(ccdClient).startCaseCreationTransfer(any(), captor.capture());
         assertEquals(etCaseDetails.getCaseTypeId(), captor.getValue().getCaseTypeId());
     }

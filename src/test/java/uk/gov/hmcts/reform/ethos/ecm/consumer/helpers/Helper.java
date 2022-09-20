@@ -46,7 +46,8 @@ public final class Helper {
         .sourceEthosCaseReference("4150001/2020")
         .build();
 
-    private static final TransferToEcmDataModel TRANSFER_TO_ECM_DATA_MODEL_LONDON_EAST = TransferToEcmDataModel.builder()
+    private static final TransferToEcmDataModel TRANSFER_TO_ECM_DATA_MODEL_LONDON_EAST =
+        TransferToEcmDataModel.builder()
         .positionTypeCT("Transferred")
         .officeCT(TribunalOffice.LONDON_EAST.getOfficeName())
         .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
