@@ -35,8 +35,7 @@ public class CreateEcmSingleService {
         String jurisdiction = createUpdatesMsg.getJurisdiction();
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
 
-        transferNewCase(oldSubmitEvent, caseId, caseTypeId, ccdGatewayBaseUrl,
-                        jurisdiction, accessToken, reasonForCT);
+        transferNewCase(oldSubmitEvent, caseId, caseTypeId, ccdGatewayBaseUrl, jurisdiction, accessToken, reasonForCT);
     }
 
     private void transferNewCase(SubmitEvent oldSubmitEvent, String caseId, String caseTypeId, String ccdGatewayBaseUrl,
