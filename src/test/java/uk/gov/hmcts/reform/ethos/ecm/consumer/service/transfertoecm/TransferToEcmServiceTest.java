@@ -56,13 +56,17 @@ public class TransferToEcmServiceTest {
 
     @Test
     public void transferToEcm() throws IOException {
-        when(userService.getAccessToken()).thenReturn(USER_TOKEN);
-        when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEventList);
+        when(userService.getAccessToken())
+            .thenReturn(USER_TOKEN);
+        when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList()))
+            .thenReturn(submitEventList);
 
         transferToEcmService.transferToEcm(createUpdatesMsg);
-        verify(ccdClient, times(1)).retrieveCasesElasticSearch(USER_TOKEN, createUpdatesMsg.getCaseTypeId(),
-                                                               createUpdatesMsg.getEthosCaseRefCollection());
-        verify(createEcmSingleService, times(1)).sendCreation(submitEventList.get(0), USER_TOKEN, createUpdatesMsg);
+        verify(ccdClient, times(1))
+            .retrieveCasesElasticSearch(USER_TOKEN, createUpdatesMsg.getCaseTypeId(),
+                                        createUpdatesMsg.getEthosCaseRefCollection());
+        verify(createEcmSingleService, times(1))
+            .sendCreation(submitEventList.get(0), USER_TOKEN, createUpdatesMsg);
     }
 
 }

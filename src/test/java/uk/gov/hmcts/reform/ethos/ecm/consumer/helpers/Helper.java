@@ -46,6 +46,13 @@ public final class Helper {
         .sourceEthosCaseReference("4150001/2020")
         .build();
 
+    private static final TransferToEcmDataModel TRANSFER_TO_ECM_DATA_MODEL_LONDON_EAST = TransferToEcmDataModel.builder()
+        .positionTypeCT("Transferred")
+        .officeCT(TribunalOffice.LONDON_EAST.getOfficeName())
+        .ccdGatewayBaseUrl("ccdGatewayBaseUrl")
+        .sourceEthosCaseReference("3600001/2021")
+        .build();
+
     private Helper() {
     }
 
@@ -140,6 +147,20 @@ public final class Helper {
             .username(USERNAME)
             .confirmation(YES)
             .dataModelParent(TRANSFER_TO_ECM_DATA_MODEL)
+            .build();
+    }
+
+    public static CreateUpdatesMsg transferToEcmMessageForLondonEast() {
+        return CreateUpdatesMsg.builder()
+            .msgId("1")
+            .jurisdiction(JURISDICTION)
+            .caseTypeId(ENGLANDWALES_CASE_TYPE_ID)
+            .multipleRef(SINGLE_CASE_TYPE)
+            .ethosCaseRefCollection(Arrays.asList("3600001/2021"))
+            .totalCases("1")
+            .username(USERNAME)
+            .confirmation(YES)
+            .dataModelParent(TRANSFER_TO_ECM_DATA_MODEL_LONDON_EAST)
             .build();
     }
 }
