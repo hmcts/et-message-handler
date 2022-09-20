@@ -5,7 +5,7 @@
 def type = "java"
 def product = "et"
 def component = "msg-handler"
-def branchesToSync = ['demo', 'perftest']
+def branchesToSync = ['demo', 'perftest', 'ithc']
 
 withPipeline(type, product, component) {
   enableAksStagingDeployment()
