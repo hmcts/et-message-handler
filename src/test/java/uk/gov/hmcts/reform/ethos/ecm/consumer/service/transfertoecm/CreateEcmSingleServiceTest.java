@@ -64,15 +64,16 @@ public class CreateEcmSingleServiceTest {
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
+        
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
 
         CaseDetails ecmCaseDetails = new CaseDetails();
         ecmCaseDetails.setCaseData(new uk.gov.hmcts.ecm.common.model.ccd.CaseData());
         ecmCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
 
-        ArgumentCaptor<CaseDetails> ecmCcdDetailsCaptor = ArgumentCaptor.forClass(CaseDetails.class);
-        verify(transferToEcmCaseDataHelper).objectMapper(ecmCcdDetailsCaptor.capture(), any());
-        assertEquals(ecmCaseDetails.getCaseTypeId(), ecmCcdDetailsCaptor.getValue().getCaseTypeId());
+        ArgumentCaptor<CaseDetails> ecmCaseDetailsCaptor = ArgumentCaptor.forClass(CaseDetails.class);
+        verify(transferToEcmCaseDataHelper).objectMapper(ecmCaseDetailsCaptor.capture(), any());
+        assertEquals(ecmCaseDetails.getCaseTypeId(), ecmCaseDetailsCaptor.getValue().getCaseTypeId());
     }
 
 }
