@@ -64,7 +64,7 @@ public class CreateEcmSingleServiceTest {
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
-        
+
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
 
         CaseDetails ecmCaseDetails = new CaseDetails();
@@ -72,7 +72,7 @@ public class CreateEcmSingleServiceTest {
         ecmCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
 
         ArgumentCaptor<CaseDetails> ecmCaseDetailsCaptor = ArgumentCaptor.forClass(CaseDetails.class);
-        verify(transferToEcmCaseDataHelper).objectMapper(ecmCaseDetailsCaptor.capture(), any());
+        verify(transferToEcmCaseDataHelper).convertEcmToEtCaseDetails(ecmCaseDetailsCaptor.capture(), any());
         assertEquals(ecmCaseDetails.getCaseTypeId(), ecmCaseDetailsCaptor.getValue().getCaseTypeId());
     }
 

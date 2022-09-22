@@ -44,7 +44,8 @@ public class CreateEcmSingleService {
                                                              ccdGatewayBaseUrl, jurisdiction,
                                                              oldSubmitEvent.getState(), reasonForCT);
         uk.gov.hmcts.et.common.model.ccd.CaseDetails etCaseDetails = (uk.gov.hmcts.et.common.model.ccd.CaseDetails)
-            dataHelper.objectMapper(newEcmCaseDetailsCt, uk.gov.hmcts.et.common.model.ccd.CaseDetails.class);
+            dataHelper.convertEcmToEtCaseDetails(newEcmCaseDetailsCt,
+                                                 uk.gov.hmcts.et.common.model.ccd.CaseDetails.class);
 
         CCDRequest returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, etCaseDetails);
         log.info("Creating case in {} for ET case {}", officeCT, caseId);
