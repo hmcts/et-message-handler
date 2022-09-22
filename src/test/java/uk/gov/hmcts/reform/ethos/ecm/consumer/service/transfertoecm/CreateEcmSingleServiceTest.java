@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
@@ -48,8 +49,10 @@ public class CreateEcmSingleServiceTest {
 
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessage();
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
-        verify(ccdClient).startCaseCreationTransfer(eq(TEST_AUTH_TOKEN), any());
-        verify(ccdClient).submitCaseCreation(eq(TEST_AUTH_TOKEN), any(), any());
+        verify(ccdClient, times(1))
+            .startCaseCreationTransfer(eq(TEST_AUTH_TOKEN), any());
+        verify(ccdClient, times(1))
+            .submitCaseCreation(eq(TEST_AUTH_TOKEN), any(), any());
     }
 
     @Test
@@ -72,7 +75,8 @@ public class CreateEcmSingleServiceTest {
         ecmCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
 
         ArgumentCaptor<CaseDetails> ecmCaseDetailsCaptor = ArgumentCaptor.forClass(CaseDetails.class);
-        verify(transferToEcmCaseDataHelper).convertEcmToEtCaseDetails(ecmCaseDetailsCaptor.capture(), any());
+        verify(transferToEcmCaseDataHelper, times(1))
+            .convertEcmToEtCaseDetails(ecmCaseDetailsCaptor.capture(), any());
         assertEquals(ecmCaseDetails.getCaseTypeId(), ecmCaseDetailsCaptor.getValue().getCaseTypeId());
     }
 

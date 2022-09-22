@@ -27,51 +27,52 @@ public class CreateEcmSingleService {
 
     public void sendCreation(SubmitEvent oldSubmitEvent, String accessToken, CreateUpdatesMsg createUpdatesMsg)
         throws IOException {
-        TransferToEcmDataModel transferToEcmDataModel = (TransferToEcmDataModel) createUpdatesMsg.getDataModelParent();
-        String officeCT = transferToEcmDataModel.getOfficeCT();
-        String reasonForCT = transferToEcmDataModel.getReasonForCT();
-        String ccdGatewayBaseUrl = transferToEcmDataModel.getCcdGatewayBaseUrl();
-        String jurisdiction = createUpdatesMsg.getJurisdiction();
-        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
-
-        transferNewCase(oldSubmitEvent, caseId, officeCT, ccdGatewayBaseUrl, jurisdiction, accessToken, reasonForCT);
+        transferNewCase(oldSubmitEvent, createUpdatesMsg, accessToken);
     }
 
-    private void transferNewCase(SubmitEvent oldSubmitEvent, String caseId, String officeCT, String ccdGatewayBaseUrl,
-                                 String jurisdiction, String accessToken, String reasonForCT)
+    private void transferNewCase(SubmitEvent oldSubmitEvent, CreateUpdatesMsg createUpdatesMsg, String accessToken)
         throws IOException {
-        CaseDetails newEcmCaseDetailsCt = createCaseDetailsCaseTransfer(oldSubmitEvent.getCaseData(), caseId, officeCT,
-                                                             ccdGatewayBaseUrl, jurisdiction,
-                                                             oldSubmitEvent.getState(), reasonForCT);
+
+        CaseDetails newEcmCaseDetailsCt = createCaseDetailsCaseTransfer(oldSubmitEvent, createUpdatesMsg);
         uk.gov.hmcts.et.common.model.ccd.CaseDetails etCaseDetails = (uk.gov.hmcts.et.common.model.ccd.CaseDetails)
             dataHelper.convertEcmToEtCaseDetails(newEcmCaseDetailsCt,
                                                  uk.gov.hmcts.et.common.model.ccd.CaseDetails.class);
 
         CCDRequest returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, etCaseDetails);
+
+        TransferToEcmDataModel transferToEcmDataModel = (TransferToEcmDataModel) createUpdatesMsg.getDataModelParent();
+        String officeCT = transferToEcmDataModel.getOfficeCT();
+        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         log.info("Creating case in {} for ET case {}", officeCT, caseId);
         ccdClient.submitCaseCreation(accessToken, etCaseDetails, returnedRequest);
     }
 
-    private CaseDetails createCaseDetailsCaseTransfer(uk.gov.hmcts.et.common.model.ccd.CaseData caseData,
-                                                      String caseId, String officeCT, String ccdGatewayBaseUrl,
-                                                      String jurisdiction, String state,
-                                                      String reasonForCT) {
-        CaseData newEcmCaseData = generateNewCaseDataForCaseTransfer(caseData, caseId, ccdGatewayBaseUrl, state);
+    private CaseDetails createCaseDetailsCaseTransfer(SubmitEvent oldSubmitEvent, CreateUpdatesMsg createUpdatesMsg) {
+
+        TransferToEcmDataModel transferToEcmDataModel = (TransferToEcmDataModel) createUpdatesMsg.getDataModelParent();
+        String officeCT = transferToEcmDataModel.getOfficeCT();
+        String reasonForCT = transferToEcmDataModel.getReasonForCT();
+        String ccdGatewayBaseUrl = transferToEcmDataModel.getCcdGatewayBaseUrl();
+
+        CaseData newEcmCaseData = generateNewCaseDataForCaseTransfer(oldSubmitEvent, ccdGatewayBaseUrl);
         newEcmCaseData.setReasonForCT(reasonForCT);
         CaseDetails newEcmCaseDetails = new CaseDetails();
         newEcmCaseDetails.setCaseData(newEcmCaseData);
         String caseTypeId =  TribunalOffice.isScotlandOffice(officeCT) ? officeName : getCorrectedOfficeName(officeCT);
         newEcmCaseDetails.setCaseTypeId(caseTypeId);
-        newEcmCaseDetails.setJurisdiction(jurisdiction);
+        newEcmCaseDetails.setJurisdiction(createUpdatesMsg.getJurisdiction());
         return newEcmCaseDetails;
+
     }
 
-    private CaseData generateNewCaseDataForCaseTransfer(uk.gov.hmcts.et.common.model.ccd.CaseData caseData,
-                                                        String caseId, String ccdGatewayBaseUrl,
-                                                        String state) {
+    private CaseData generateNewCaseDataForCaseTransfer(SubmitEvent oldSubmitEvent, String ccdGatewayBaseUrl) {
+
+        uk.gov.hmcts.et.common.model.ccd.CaseData caseData = oldSubmitEvent.getCaseData();
+        String state = oldSubmitEvent.getState();
+        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         log.info("Copying case data for case {}", caseId);
-        return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(),
-                                                        caseId, ccdGatewayBaseUrl, state);
+        return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(), caseId, ccdGatewayBaseUrl, state);
+
     }
 
     private static String getCorrectedOfficeName(String oldCaseOfficeName) {
