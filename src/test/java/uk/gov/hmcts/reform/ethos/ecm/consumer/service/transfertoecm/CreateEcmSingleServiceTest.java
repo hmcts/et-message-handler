@@ -7,13 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
-import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
+import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEcmCaseDataHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
@@ -28,9 +27,6 @@ public class CreateEcmSingleServiceTest {
 
     @Mock
     private CcdClient ccdClient;
-
-    @Mock
-    private TransferToEcmCaseDataHelper transferToEcmCaseDataHelper;
 
     @InjectMocks
     private CreateEcmSingleService createEcmSingleService;
@@ -67,17 +63,18 @@ public class CreateEcmSingleServiceTest {
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
-
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
 
-        CaseDetails ecmCaseDetails = new CaseDetails();
-        ecmCaseDetails.setCaseData(new uk.gov.hmcts.ecm.common.model.ccd.CaseData());
+        uk.gov.hmcts.ecm.common.model.ccd.CaseDetails ecmCaseDetails =
+            new uk.gov.hmcts.ecm.common.model.ccd.CaseDetails();
         ecmCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
+        uk.gov.hmcts.ecm.common.model.ccd.CaseData  ecmCaseData = new uk.gov.hmcts.ecm.common.model.ccd.CaseData();
+        ecmCaseDetails.setCaseData(ecmCaseData);
 
-        ArgumentCaptor<CaseDetails> ecmCaseDetailsCaptor = ArgumentCaptor.forClass(CaseDetails.class);
-        verify(transferToEcmCaseDataHelper, times(1))
-            .convertEcmToEtCaseDetails(ecmCaseDetailsCaptor.capture(), any());
-        assertEquals(ecmCaseDetails.getCaseTypeId(), ecmCaseDetailsCaptor.getValue().getCaseTypeId());
+        ArgumentCaptor<CaseDetails> ccdRequestCaptor = ArgumentCaptor.forClass(CaseDetails.class);
+        verify(ccdClient, times(1))
+            .submitCaseCreation(eq(TEST_AUTH_TOKEN), ccdRequestCaptor.capture(), any());
+        assertEquals(ecmCaseDetails.getCaseTypeId(), ccdRequestCaptor.getValue().getCaseTypeId());
     }
 
 }
