@@ -23,7 +23,6 @@ public class CreateEcmSingleService {
 
     private final CcdClient ccdClient;
     private final String officeName = TribunalOffice.SCOTLAND.getOfficeName();
-    private final TransferToEcmCaseDataHelper dataHelper;
 
     public void sendCreation(SubmitEvent oldSubmitEvent, String accessToken, CreateUpdatesMsg createUpdatesMsg)
         throws IOException {
@@ -35,7 +34,7 @@ public class CreateEcmSingleService {
 
         CaseDetails newEcmCaseDetailsCt = createCaseDetailsCaseTransfer(oldSubmitEvent, createUpdatesMsg);
         uk.gov.hmcts.et.common.model.ccd.CaseDetails etCaseDetails = (uk.gov.hmcts.et.common.model.ccd.CaseDetails)
-            dataHelper.convertEcmToEtCaseDetails(newEcmCaseDetailsCt,
+            TransferToEcmCaseDataHelper.objectMapper(newEcmCaseDetailsCt,
                                                  uk.gov.hmcts.et.common.model.ccd.CaseDetails.class);
 
         CCDRequest returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, etCaseDetails);
@@ -60,6 +59,7 @@ public class CreateEcmSingleService {
         newEcmCaseDetails.setCaseData(newEcmCaseData);
         String caseTypeId =  TribunalOffice.isScotlandOffice(officeCT) ? officeName : getCorrectedOfficeName(officeCT);
         newEcmCaseDetails.setCaseTypeId(caseTypeId);
+
         newEcmCaseDetails.setJurisdiction(createUpdatesMsg.getJurisdiction());
         return newEcmCaseDetails;
 
@@ -72,7 +72,6 @@ public class CreateEcmSingleService {
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         log.info("Copying case data for case {}", caseId);
         return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(), caseId, ccdGatewayBaseUrl, state);
-
     }
 
     private static String getCorrectedOfficeName(String oldCaseOfficeName) {
