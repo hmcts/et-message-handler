@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,8 @@ public class CreateEcmSingleService {
 
         CaseDetails newEcmCaseDetailsCt = createCaseDetailsCaseTransfer(oldSubmitEvent, createUpdatesMsg);
         uk.gov.hmcts.et.common.model.ccd.CaseDetails etCaseDetails = (uk.gov.hmcts.et.common.model.ccd.CaseDetails)
-            TransferToEcmCaseDataHelper.objectMapper(newEcmCaseDetailsCt,
-                                                 uk.gov.hmcts.et.common.model.ccd.CaseDetails.class);
+            TransferToEcmCaseDataHelper.objectMapper(
+                newEcmCaseDetailsCt, uk.gov.hmcts.et.common.model.ccd.CaseDetails.class, new ObjectMapper());
 
         CCDRequest returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, etCaseDetails);
 
