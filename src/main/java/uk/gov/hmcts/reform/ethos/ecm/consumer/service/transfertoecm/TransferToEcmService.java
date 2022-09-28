@@ -26,7 +26,9 @@ public class TransferToEcmService {
             log.warn("Invalid model state for messageID {}", createUpdatesMsg.getMsgId());
             return;
         }
+
         String accessToken = userService.getAccessToken();
+
         List<SubmitEvent> submitEvents = ccdClient.retrieveCasesElasticSearch(
             accessToken, createUpdatesMsg.getCaseTypeId(), createUpdatesMsg.getEthosCaseRefCollection());
 
