@@ -171,7 +171,7 @@ ext {
   reformLoggingVersion = '5.1.9'
   serenity = '3.3.4'
   springBoot = springBoot.class.package.implementationVersion
-  tomcatEmbedVersion = '9.0.65'
+  tomcatEmbedVersion = '9.0.67'
 }
 
 ext["rest-assured.version"] = '5.1.0'
@@ -198,7 +198,7 @@ dependencies {
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
-  implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.26'
+  implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.27'
   implementation group: 'org.apache.santuario', name: 'xmlsec', version: '3.0.1'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: tomcatEmbedVersion
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: tomcatEmbedVersion
@@ -210,11 +210,11 @@ dependencies {
     }
   }
 
-  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.3.1'
+  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.4.0'
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.0'
   // CVE-2022-25857
-  implementation group: 'org.yaml', name: 'snakeyaml', version: '1.32'
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
+  implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'org.springframework.boot:spring-boot-configuration-processor'
