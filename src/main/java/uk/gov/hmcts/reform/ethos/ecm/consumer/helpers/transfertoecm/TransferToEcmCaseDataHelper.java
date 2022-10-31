@@ -37,88 +37,87 @@ import java.util.UUID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 
-public class TransferToEcmCaseDataHelper {
-
+@SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops"})
+public final class TransferToEcmCaseDataHelper {
     private TransferToEcmCaseDataHelper() {
+        // Access through static methods
     }
 
     public static CaseData copyCaseData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData,
-                                        String caseId, String ccdGatewayBaseUrl, String positionTypeCT, String state,
-                                        String reasonForCT) {
+                                        String caseId, String ccdGatewayBaseUrl, String state) {
+        ObjectMapper mapper = new ObjectMapper();
         caseData.setEcmCaseType(oldCaseData.getEcmCaseType());
-        caseData.setTribunalCorrespondenceAddress(
-            (Address) objectMapper(oldCaseData.getTribunalCorrespondenceAddress(), Address.class));
+        caseData.setTribunalCorrespondenceAddress((Address) objectMapper(
+            oldCaseData.getTribunalCorrespondenceAddress(), Address.class, mapper));
         caseData.setTribunalCorrespondenceTelephone(oldCaseData.getTribunalCorrespondenceTelephone());
         caseData.setTribunalCorrespondenceFax(oldCaseData.getTribunalCorrespondenceFax());
         caseData.setTribunalCorrespondenceDX(oldCaseData.getTribunalCorrespondenceDX());
         caseData.setTribunalCorrespondenceEmail(oldCaseData.getTribunalCorrespondenceEmail());
         caseData.setClaimantTypeOfClaimant(oldCaseData.getClaimantTypeOfClaimant());
         caseData.setClaimantCompany(oldCaseData.getClaimantCompany());
-        caseData.setClaimantIndType(
-            (ClaimantIndType) objectMapper(oldCaseData.getClaimantIndType(), ClaimantIndType.class));
-        caseData.setClaimantType((ClaimantType) objectMapper(oldCaseData.getClaimantType(), ClaimantType.class));
-        caseData.setClaimantOtherType(
-            (ClaimantOtherType) objectMapper(oldCaseData.getClaimantOtherType(), ClaimantOtherType.class));
-        caseData.setPreAcceptCase(
-            (CasePreAcceptType) objectMapper(oldCaseData.getClaimantType(), CasePreAcceptType.class));
+        caseData.setClaimantIndType((ClaimantIndType) objectMapper(
+            oldCaseData.getClaimantIndType(), ClaimantIndType.class, mapper));
+        caseData.setClaimantType((ClaimantType) objectMapper(oldCaseData.getClaimantType(),
+                                                                        ClaimantType.class, mapper));
+        caseData.setClaimantOtherType((ClaimantOtherType) objectMapper(
+            oldCaseData.getClaimantOtherType(), ClaimantOtherType.class, mapper));
+        caseData.setPreAcceptCase((CasePreAcceptType) objectMapper(
+            oldCaseData.getClaimantType(), CasePreAcceptType.class, mapper));
         caseData.setReceiptDate(oldCaseData.getReceiptDate());
         caseData.setClaimServedDate(oldCaseData.getClaimServedDate());
         caseData.setFeeGroupReference(oldCaseData.getFeeGroupReference());
         caseData.setClaimantWorkAddressQuestion(oldCaseData.getClaimantWorkAddressQuestion());
-        caseData.setClaimantWorkAddressQRespondent(
-            (DynamicFixedListType) objectMapper(oldCaseData.getClaimantWorkAddressQRespondent(),
-                                                DynamicFixedListType.class));
-        caseData.setRepresentativeClaimantType(
-            (RepresentedTypeC) objectMapper(oldCaseData.getRepresentativeClaimantType(), RepresentedTypeC.class));
+        caseData.setClaimantWorkAddressQRespondent((DynamicFixedListType) objectMapper(
+            oldCaseData.getClaimantWorkAddressQRespondent(), DynamicFixedListType.class, mapper));
+        caseData.setRepresentativeClaimantType((RepresentedTypeC) objectMapper(
+            oldCaseData.getRepresentativeClaimantType(), RepresentedTypeC.class, mapper));
         caseData.setPositionType(oldCaseData.getPositionType());
         caseData.setDateToPosition(oldCaseData.getDateToPosition());
         caseData.setCurrentPosition(oldCaseData.getCurrentPosition());
         caseData.setUserLocation(oldCaseData.getUserLocation());
-        caseData.setAdditionalCaseInfoType(
-            (AdditionalCaseInfoType) objectMapper(oldCaseData.getAdditionalCaseInfoType(),
-                                                  AdditionalCaseInfoType.class));
-        caseData.setCorrespondenceScotType(
-            (CorrespondenceScotType) objectMapper(oldCaseData.getCorrespondenceScotType(),
-                                                  CorrespondenceScotType.class));
-        caseData.setCorrespondenceType(
-            (CorrespondenceType) objectMapper(oldCaseData.getCorrespondenceType(), CorrespondenceType.class));
-        caseData.setAddressLabelsSelectionType(
-            (AddressLabelsSelectionType) objectMapper(oldCaseData.getAddressLabelsSelectionType(),
-                                                  AddressLabelsSelectionType.class));
-        caseData.setAddressLabelsAttributesType(
-            (AddressLabelsAttributesType) objectMapper(oldCaseData.getAddressLabelsAttributesType(),
-                                                   AddressLabelsAttributesType.class));
+        caseData.setAdditionalCaseInfoType((AdditionalCaseInfoType) objectMapper(
+            oldCaseData.getAdditionalCaseInfoType(), AdditionalCaseInfoType.class, mapper));
+        caseData.setCorrespondenceScotType((CorrespondenceScotType) objectMapper(
+            oldCaseData.getCorrespondenceScotType(), CorrespondenceScotType.class, mapper));
+        caseData.setCorrespondenceType((CorrespondenceType) objectMapper(
+            oldCaseData.getCorrespondenceType(), CorrespondenceType.class, mapper));
+        caseData.setAddressLabelsSelectionType((AddressLabelsSelectionType) objectMapper(
+            oldCaseData.getAddressLabelsSelectionType(), AddressLabelsSelectionType.class, mapper));
+        caseData.setAddressLabelsAttributesType((AddressLabelsAttributesType) objectMapper(
+            oldCaseData.getAddressLabelsAttributesType(), AddressLabelsAttributesType.class, mapper));
         caseData.setCaseNotes(oldCaseData.getCaseNotes());
-        caseData.setClaimantWorkAddress((ClaimantWorkAddressType) objectMapper(oldCaseData.getClaimantWorkAddress(),
-                                                   ClaimantWorkAddressType.class));
+        caseData.setClaimantWorkAddress((ClaimantWorkAddressType) objectMapper(
+            oldCaseData.getClaimantWorkAddress(), ClaimantWorkAddressType.class, mapper));
         caseData.setClaimantRepresentedQuestion(oldCaseData.getClaimantRepresentedQuestion());
         caseData.setCaseSource(oldCaseData.getCaseSource());
         caseData.setConciliationTrack(oldCaseData.getConciliationTrack());
         caseData.setCounterClaim(oldCaseData.getCounterClaim());
         caseData.setRestrictedReporting((
-            RestrictedReportingType) objectMapper(oldCaseData.getRestrictedReporting(), RestrictedReportingType.class));
+            RestrictedReportingType) objectMapper(oldCaseData.getRestrictedReporting(),
+                                                  RestrictedReportingType.class, mapper));
         caseData.setTargetHearingDate(oldCaseData.getTargetHearingDate());
         caseData.setClaimant(oldCaseData.getClaimant());
         caseData.setRespondent(oldCaseData.getRespondent());
-        caseData.setEQP(oldCaseData.getEQP());
+        caseData.setEQP(oldCaseData.getEqp());
         caseData.setFlag1(oldCaseData.getFlag1());
         caseData.setFlag2(oldCaseData.getFlag2());
         caseData.setDocMarkUp(oldCaseData.getDocMarkUp());
         caseData.setCaseRefECC(oldCaseData.getCaseRefECC());
-        caseData.setRespondentECC(
-            (DynamicFixedListType) objectMapper(oldCaseData.getRespondentECC(), DynamicFixedListType.class));
+        caseData.setRespondentECC((DynamicFixedListType) objectMapper(
+            oldCaseData.getRespondentECC(), DynamicFixedListType.class, mapper));
         caseData.setCcdID(oldCaseData.getCcdID());
         caseData.setFlagsImageFileName(oldCaseData.getFlagsImageFileName());
         caseData.setFlagsImageAltText(oldCaseData.getFlagsImageAltText());
-        caseData.setCompanyPremises(
-            (CompanyPremisesType) objectMapper(oldCaseData.getCompanyPremises(), CompanyPremisesType.class));
+        caseData.setCompanyPremises((CompanyPremisesType) objectMapper(
+            oldCaseData.getCompanyPremises(), CompanyPremisesType.class, mapper));
         caseData.setReasonForCT(oldCaseData.getReasonForCT());
         if (state != null && !state.equals(CLOSED_STATE)) {
             caseData.setPositionType(POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY);
         }
-        caseData.setDocumentCollection(createDocumentCollection(oldCaseData.getDocumentCollection()));
-        caseData.setJurCodesCollection(createJurCodesCollection(oldCaseData.getJurCodesCollection()));
-        caseData.setAddressLabelCollection(createAddressLabelCollecton(oldCaseData.getAddressLabelCollection()));
+        caseData.setDocumentCollection(createDocumentCollection(oldCaseData.getDocumentCollection(), mapper));
+        caseData.setJurCodesCollection(createJurCodesCollection(oldCaseData.getJurCodesCollection(), mapper));
+        caseData.setAddressLabelCollection(createAddressLabelCollecton(
+            oldCaseData.getAddressLabelCollection(), mapper));
         if (oldCaseData.getFileLocation() != null) {
             caseData.setFileLocation(oldCaseData.getFileLocation().getSelectedCode());
         }
@@ -129,7 +128,7 @@ public class TransferToEcmCaseDataHelper {
         if (TribunalOffice.isScotlandOffice(oldCaseData.getManagingOffice())) {
             copyScotlandData(oldCaseData, caseData);
         }
-        caseData.setRespondentCollection(createRespondentCollection(oldCaseData.getRespondentCollection()));
+        caseData.setRespondentCollection(createRespondentCollection(oldCaseData.getRespondentCollection(), mapper));
         caseData.setLinkedCaseCT(generateMarkUp(ccdGatewayBaseUrl, caseId, oldCaseData.getEthosCaseReference()));
         return caseData;
     }
@@ -152,14 +151,13 @@ public class TransferToEcmCaseDataHelper {
     }
 
     private static List<RespondentSumTypeItem> createRespondentCollection(
-        List<uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem> respondentCollection) {
-
+        List<uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem> respondentCollection, ObjectMapper mapper) {
         List<RespondentSumTypeItem> respondentSumTypeItems = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(respondentCollection)) {
-            for (var respondent : respondentCollection) {
-                var respondentSumType = (RespondentSumType) objectMapper(
-                    respondent.getValue(), RespondentSumType.class);
-                var respondentSumTypeItem = new RespondentSumTypeItem();
+            for (uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem respondent : respondentCollection) {
+                RespondentSumType respondentSumType = (RespondentSumType) objectMapper(
+                    respondent.getValue(), RespondentSumType.class, mapper);
+                RespondentSumTypeItem respondentSumTypeItem = new RespondentSumTypeItem();
                 respondentSumTypeItem.setId(UUID.randomUUID().toString());
                 respondentSumTypeItem.setValue(respondentSumType);
                 respondentSumTypeItems.add(respondentSumTypeItem);
@@ -170,13 +168,14 @@ public class TransferToEcmCaseDataHelper {
     }
 
     private static List<AddressLabelTypeItem> createAddressLabelCollecton(
-        List<uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem> addressLabelCollection) {
-
+        List<uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem> addressLabelCollection,
+        ObjectMapper mapper) {
         List<AddressLabelTypeItem> addressLabelTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(addressLabelCollection)) {
-            for (var addressLabel : addressLabelCollection) {
-                var addressLabelType = (AddressLabelType) objectMapper(addressLabel.getValue(), AddressLabelType.class);
-                var addressLabelTypeItem = new AddressLabelTypeItem();
+            for (uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem addressLabel : addressLabelCollection) {
+                AddressLabelType addressLabelType = (AddressLabelType) objectMapper(
+                    addressLabel.getValue(), AddressLabelType.class, mapper);
+                AddressLabelTypeItem addressLabelTypeItem = new AddressLabelTypeItem();
                 addressLabelTypeItem.setId(UUID.randomUUID().toString());
                 addressLabelTypeItem.setValue(addressLabelType);
                 addressLabelTypeItemList.add(addressLabelTypeItem);
@@ -187,13 +186,13 @@ public class TransferToEcmCaseDataHelper {
     }
 
     private static List<JurCodesTypeItem> createJurCodesCollection(
-        List<uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem> jurCodesCollection) {
-
+        List<uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem> jurCodesCollection, ObjectMapper mapper) {
         List<JurCodesTypeItem> jurCodesTypeItemList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(jurCodesCollection)) {
-            for (var jurCodes : jurCodesCollection) {
-                var jurCodesType = (JurCodesType) objectMapper(jurCodes.getValue(), JurCodesType.class);
-                var jurCodesTypeItem = new JurCodesTypeItem();
+            for (uk.gov.hmcts.et.common.model.ccd.items.JurCodesTypeItem jurCodes : jurCodesCollection) {
+                JurCodesType jurCodesType = (JurCodesType)
+                    objectMapper(jurCodes.getValue(), JurCodesType.class, mapper);
+                JurCodesTypeItem  jurCodesTypeItem = new JurCodesTypeItem();
                 jurCodesTypeItem.setId(UUID.randomUUID().toString());
                 jurCodesTypeItem.setValue(jurCodesType);
                 jurCodesTypeItemList.add(jurCodesTypeItem);
@@ -204,20 +203,18 @@ public class TransferToEcmCaseDataHelper {
     }
 
     private static List<DocumentTypeItem> createDocumentCollection(
-        List<uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem> documentCollection) {
-
+        List<uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem> documentCollection, ObjectMapper mapper) {
         List<DocumentTypeItem> documentTypeItemsList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(documentCollection)) {
-            for (var document : documentCollection) {
-                var documentType = new DocumentType();
+            for (uk.gov.hmcts.et.common.model.ccd.items.DocumentTypeItem document : documentCollection) {
+                DocumentType documentType = new DocumentType();
                 documentType.setOwnerDocument(document.getValue().getOwnerDocument());
                 documentType.setTypeOfDocument(document.getValue().getTypeOfDocument());
                 documentType.setUploadedDocument((UploadedDocumentType) objectMapper(
-                    document.getValue().getUploadedDocument(), UploadedDocumentType.class));
+                    document.getValue().getUploadedDocument(), UploadedDocumentType.class, mapper));
                 documentType.setCreationDate(document.getValue().getCreationDate());
                 documentType.setShortDescription(document.getValue().getShortDescription());
-
-                var documentTypeItem = new DocumentTypeItem();
+                DocumentTypeItem documentTypeItem = new DocumentTypeItem();
                 documentTypeItem.setId(UUID.randomUUID().toString());
                 documentTypeItem.setValue(documentType);
                 documentTypeItemsList.add(documentTypeItem);
@@ -231,9 +228,9 @@ public class TransferToEcmCaseDataHelper {
         return "<a target=\"_blank\" href=\"" + url + "\">" + ethosCaseRef + "</a>";
     }
 
-    public static Object objectMapper(Object object, Class<?> classType) {
-        var mapper = new ObjectMapper();
+    public static Object objectMapper(Object object, Class<?> classType, ObjectMapper mapper) {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         return mapper.convertValue(object, classType);
     }
+
 }

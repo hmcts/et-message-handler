@@ -31,6 +31,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class UpdateCaseBusReceiverTask implements IMessageHandler {
 
+    @SuppressWarnings("PMD.DoNotUseThreads")
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private static final int MAX_RETRIES = 10;

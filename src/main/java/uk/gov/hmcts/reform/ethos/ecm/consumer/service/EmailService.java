@@ -6,12 +6,11 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.config.EmailClient;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.MultipleErrors;
 import uk.gov.service.notify.NotificationClientException;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.CONFIRMATION_ERROR_EMAIL;
@@ -49,7 +48,7 @@ public class EmailService {
     }
 
     private Map<String, String> buildPersonalisation(List<MultipleErrors> multipleErrorsList, String multipleRef) {
-        Map<String, String> personalisation = new HashMap<>();
+        Map<String, String> personalisation = new ConcurrentHashMap<>();
 
         String errors = multipleErrorsList.stream()
             .map(MultipleErrors::toString)
