@@ -203,7 +203,7 @@ dependencies {
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: tomcatEmbedVersion
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: tomcatEmbedVersion
   //to remove CVEs
-  implementation group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.15', ext: 'pom'
+  implementation group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.16', ext: 'pom'
   implementation('org.elasticsearch:elasticsearch') {
     version {
       strictly '7.17.4'
@@ -226,8 +226,6 @@ dependencies {
 
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
-  //to remove CVEs
-  implementation group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.15', ext: 'pom'
 
   testImplementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
   testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
