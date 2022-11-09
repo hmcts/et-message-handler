@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import uk.gov.hmcts.ecm.common.model.bulk.types.DynamicFixedListType;
 import uk.gov.hmcts.ecm.common.model.ccd.Address;
@@ -37,7 +38,9 @@ import java.util.UUID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 
-@SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops"})
+@Slf4j
+@SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.ExcessiveMethodLength"})
 public final class TransferToEcmCaseDataHelper {
     private TransferToEcmCaseDataHelper() {
         // Access through static methods
@@ -121,6 +124,7 @@ public final class TransferToEcmCaseDataHelper {
         if (oldCaseData.getFileLocation() != null) {
             caseData.setFileLocation(oldCaseData.getFileLocation().getSelectedCode());
         }
+
         if (oldCaseData.getClerkResponsible() != null) {
             caseData.setClerkResponsible(oldCaseData.getClerkResponsible().getSelectedCode());
         }
@@ -136,6 +140,7 @@ public final class TransferToEcmCaseDataHelper {
     private static void copyScotlandData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData) {
         caseData.setManagingOffice(oldCaseData.getManagingOffice());
         caseData.setAllocatedOffice(oldCaseData.getAllocatedOffice());
+
         if (oldCaseData.getFileLocationAberdeen() != null) {
             caseData.setFileLocationAberdeen(oldCaseData.getFileLocationAberdeen().getSelectedCode());
         }
