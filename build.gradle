@@ -223,7 +223,6 @@ dependencies {
   implementation 'org.springframework.retry:spring-retry'
   implementation group: 'org.testng', name: 'testng', version: '7.6.1'
   implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.3-RELEASE'
-
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
 
