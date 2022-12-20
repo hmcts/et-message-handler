@@ -140,7 +140,7 @@ dependencyManagement {
     dependencySet(group: 'com.google.guava', version: '31.1-jre') {
       entry 'guava'
     }
-    dependencySet(group: 'io.netty', version: '4.1.77.Final') {
+    dependencySet(group: 'io.netty', version: '4.1.86.Final') {
       entry 'netty-buffer'
       entry 'netty-codec'
       entry 'netty-codec-http'
@@ -211,7 +211,7 @@ dependencies {
   }
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.4.0'
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.0'
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
   // CVE-2022-25857
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
