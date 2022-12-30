@@ -140,7 +140,7 @@ dependencyManagement {
     dependencySet(group: 'com.google.guava', version: '31.1-jre') {
       entry 'guava'
     }
-    dependencySet(group: 'io.netty', version: '4.1.77.Final') {
+    dependencySet(group: 'io.netty', version: '4.1.86.Final') {
       entry 'netty-buffer'
       entry 'netty-codec'
       entry 'netty-codec-http'
@@ -171,7 +171,7 @@ ext {
   reformLoggingVersion = '5.1.9'
   serenity = '3.3.4'
   springBoot = springBoot.class.package.implementationVersion
-  tomcatEmbedVersion = '9.0.67'
+  tomcatEmbedVersion = '9.0.69'
 }
 
 ext["rest-assured.version"] = '5.1.0'
@@ -185,7 +185,7 @@ dependencies {
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.3', ext: 'pom'
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.1'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
   implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.1'
@@ -194,7 +194,7 @@ dependencies {
   implementation group: 'io.github.openfeign', name: 'feign-core', version: feignVersion
   implementation group: 'junit', name: 'junit', version: '4.13.2'
   implementation group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: '4.42.0'
-  implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.21'
+  implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.22'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
@@ -212,7 +212,7 @@ dependencies {
   }
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.4.0'
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.0'
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
   // CVE-2022-25857
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
@@ -222,7 +222,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.4'
   implementation 'org.springframework.retry:spring-retry'
-  implementation group: 'org.testng', name: 'testng', version: '7.6.1'
+  implementation group: 'org.testng', name: 'testng', version: '7.7.0'
   implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.3-RELEASE'
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
