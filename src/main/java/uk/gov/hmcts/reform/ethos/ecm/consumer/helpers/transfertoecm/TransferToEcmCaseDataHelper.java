@@ -37,6 +37,7 @@ import java.util.UUID;
 
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
+import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
 
 @Slf4j
 @SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops",
@@ -47,7 +48,7 @@ public final class TransferToEcmCaseDataHelper {
     }
 
     public static CaseData copyCaseData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData,
-                                        String caseId, String ccdGatewayBaseUrl, String state) {
+                                        String caseId, String ccdGatewayBaseUrl, String state, String caseTypeId) {
         ObjectMapper mapper = new ObjectMapper();
         caseData.setEcmCaseType(oldCaseData.getEcmCaseType());
         caseData.setTribunalCorrespondenceAddress((Address) objectMapper(
@@ -128,8 +129,7 @@ public final class TransferToEcmCaseDataHelper {
         if (oldCaseData.getClerkResponsible() != null) {
             caseData.setClerkResponsible(oldCaseData.getClerkResponsible().getSelectedCode());
         }
-
-        if (TribunalOffice.isScotlandOffice(oldCaseData.getManagingOffice())) {
+        if (caseTypeId.equals(SCOTLAND_CASE_TYPE_ID)) {
             copyScotlandData(oldCaseData, caseData);
         }
         caseData.setRespondentCollection(createRespondentCollection(oldCaseData.getRespondentCollection(), mapper));
@@ -138,8 +138,12 @@ public final class TransferToEcmCaseDataHelper {
     }
 
     private static void copyScotlandData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData) {
-        caseData.setManagingOffice(oldCaseData.getManagingOffice());
-        caseData.setAllocatedOffice(oldCaseData.getAllocatedOffice());
+        caseData.setManagingOffice(oldCaseData.getManagingOffice().equals("Unassigned")
+                                       ? TribunalOffice.GLASGOW.getOfficeName()
+                                       : oldCaseData.getManagingOffice());
+        caseData.setAllocatedOffice(oldCaseData.getAllocatedOffice().equals("Unassigned")
+                                        ? TribunalOffice.GLASGOW.getOfficeName()
+                                        : oldCaseData.getAllocatedOffice());
 
         if (oldCaseData.getFileLocationAberdeen() != null) {
             caseData.setFileLocationAberdeen(oldCaseData.getFileLocationAberdeen().getSelectedCode());

@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEc
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 public class TransferToEcmCaseDataHelperTest {
@@ -25,8 +26,8 @@ public class TransferToEcmCaseDataHelperTest {
     public void testCopyCaseData() {
         CaseData ecmCaseData = new CaseData();
         uk.gov.hmcts.et.common.model.ccd.CaseData etCaseData = createEtCaseData();
-        ecmCaseData = TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
-                                                                "Accepted");
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+                                                 "Accepted", SCOTLAND_CASE_TYPE_ID);
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
         assertEquals(TEST, ecmCaseData.getFileLocationGlasgow());
