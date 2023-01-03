@@ -7,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
+import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
-import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter", "PMD.UnnecessaryFullyQualifiedName"})
 @RunWith(MockitoJUnitRunner.class)
 public class CreateEcmSingleServiceTest {
 
@@ -45,10 +45,10 @@ public class CreateEcmSingleServiceTest {
 
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessage();
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
-        verify(ccdClient, times(1))
-            .startCaseCreationTransfer(eq(TEST_AUTH_TOKEN), any());
-        verify(ccdClient, times(1))
-            .submitCaseCreation(eq(TEST_AUTH_TOKEN), any(), any());
+
+        verify(ccdClient, times(1)).startEcmCaseCreationTransfer(eq(TEST_AUTH_TOKEN), any());
+        verify(ccdClient, times(1)).submitEcmCaseCreation(eq(TEST_AUTH_TOKEN), any(), any());
+
     }
 
     @Test
@@ -65,15 +65,16 @@ public class CreateEcmSingleServiceTest {
         CreateUpdatesMsg createUpdateMsg = Helper.transferToEcmMessageForLondonEast();
         createEcmSingleService.sendCreation(submitEvent, TEST_AUTH_TOKEN, createUpdateMsg);
 
-        uk.gov.hmcts.ecm.common.model.ccd.CaseDetails ecmCaseDetails =
-            new uk.gov.hmcts.ecm.common.model.ccd.CaseDetails();
+        CaseDetails ecmCaseDetails = new CaseDetails();
         ecmCaseDetails.setCaseTypeId(managingOffice.replace(" ", ""));
         uk.gov.hmcts.ecm.common.model.ccd.CaseData  ecmCaseData = new uk.gov.hmcts.ecm.common.model.ccd.CaseData();
         ecmCaseDetails.setCaseData(ecmCaseData);
 
         ArgumentCaptor<CaseDetails> ccdRequestCaptor = ArgumentCaptor.forClass(CaseDetails.class);
+
         verify(ccdClient, times(1))
-            .submitCaseCreation(eq(TEST_AUTH_TOKEN), ccdRequestCaptor.capture(), any());
+            .submitEcmCaseCreation(eq(TEST_AUTH_TOKEN), ccdRequestCaptor.capture(), any());
+
         assertEquals(ecmCaseDetails.getCaseTypeId(), ccdRequestCaptor.getValue().getCaseTypeId());
     }
 
