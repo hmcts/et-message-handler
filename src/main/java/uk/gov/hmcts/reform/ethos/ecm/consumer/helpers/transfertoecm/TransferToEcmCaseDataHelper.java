@@ -38,10 +38,11 @@ import java.util.UUID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNASSIGNED_OFFICE;
 
 @Slf4j
 @SuppressWarnings({"PMD.NcssCount", "PMD.CouplingBetweenObjects", "PMD.AvoidInstantiatingObjectsInLoops",
-    "PMD.ExcessiveMethodLength"})
+    "PMD.ExcessiveMethodLength", "PMD.LawOfDemeter"})
 public final class TransferToEcmCaseDataHelper {
     private TransferToEcmCaseDataHelper() {
         // Access through static methods
@@ -138,10 +139,10 @@ public final class TransferToEcmCaseDataHelper {
     }
 
     private static void copyScotlandData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData) {
-        caseData.setManagingOffice(oldCaseData.getManagingOffice().equals("Unassigned")
+        caseData.setManagingOffice(oldCaseData.getManagingOffice().equals(UNASSIGNED_OFFICE)
                                        ? TribunalOffice.GLASGOW.getOfficeName()
                                        : oldCaseData.getManagingOffice());
-        caseData.setAllocatedOffice(oldCaseData.getAllocatedOffice().equals("Unassigned")
+        caseData.setAllocatedOffice(oldCaseData.getAllocatedOffice().equals(UNASSIGNED_OFFICE)
                                         ? TribunalOffice.GLASGOW.getOfficeName()
                                         : oldCaseData.getAllocatedOffice());
 
