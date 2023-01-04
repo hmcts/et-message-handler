@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
@@ -16,17 +17,25 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEc
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNASSIGNED_OFFICE;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 public class TransferToEcmCaseDataHelperTest {
     private static final String TEST = "Test";
+    private CaseData ecmCaseData;
+    private uk.gov.hmcts.et.common.model.ccd.CaseData etCaseData;
+
+    @Before
+    public void setup() {
+        ecmCaseData = new CaseData();
+        etCaseData = createEtCaseData();
+    }
 
     @Test
     public void testCopyCaseData() {
-        CaseData ecmCaseData = new CaseData();
-        uk.gov.hmcts.et.common.model.ccd.CaseData etCaseData = createEtCaseData();
-        ecmCaseData = TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
-                                                                "Accepted");
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+                                                 "Accepted", SCOTLAND_CASE_TYPE_ID);
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
         assertEquals(TEST, ecmCaseData.getFileLocationGlasgow());
@@ -35,6 +44,16 @@ public class TransferToEcmCaseDataHelperTest {
         assertEquals(1, ecmCaseData.getRespondentCollection().size());
         assertEquals(1, ecmCaseData.getDocumentCollection().size());
         assertEquals(TEST, ecmCaseData.getClerkResponsible());
+    }
+
+    @Test
+    public void checkUnassignedOffice() {
+        etCaseData.setManagingOffice(UNASSIGNED_OFFICE);
+        etCaseData.setAllocatedOffice(UNASSIGNED_OFFICE);
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+                                                 "Accepted", SCOTLAND_CASE_TYPE_ID);
+        assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
+        assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
     }
 
     private uk.gov.hmcts.et.common.model.ccd.CaseData createEtCaseData() {

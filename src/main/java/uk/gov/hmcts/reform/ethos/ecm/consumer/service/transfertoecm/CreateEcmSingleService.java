@@ -41,24 +41,28 @@ public class CreateEcmSingleService {
 
     private CaseDetails createCaseDetailsCaseTransfer(SubmitEvent oldSubmitEvent, CreateUpdatesMsg createUpdatesMsg) {
         TransferToEcmDataModel transferToEcmDataModel = (TransferToEcmDataModel) createUpdatesMsg.getDataModelParent();
-        String officeCT = transferToEcmDataModel.getOfficeCT();
+        String originalCaseTypeId = createUpdatesMsg.getCaseTypeId();
         String ccdGatewayBaseUrl = transferToEcmDataModel.getCcdGatewayBaseUrl();
-        CaseData newEcmCaseData = generateNewCaseDataForCaseTransfer(oldSubmitEvent, ccdGatewayBaseUrl);
+        CaseData newEcmCaseData = generateNewCaseDataForCaseTransfer(oldSubmitEvent, ccdGatewayBaseUrl,
+                                                                     originalCaseTypeId);
         newEcmCaseData.setReasonForCT(transferToEcmDataModel.getReasonForCT());
         CaseDetails newEcmCaseDetails = new CaseDetails();
         newEcmCaseDetails.setCaseData(newEcmCaseData);
+        String officeCT = transferToEcmDataModel.getOfficeCT();
         String caseTypeId =  TribunalOffice.isScotlandOffice(officeCT) ? officeName : getCorrectedOfficeName(officeCT);
         newEcmCaseDetails.setCaseTypeId(caseTypeId);
         newEcmCaseDetails.setJurisdiction(createUpdatesMsg.getJurisdiction());
         return newEcmCaseDetails;
     }
 
-    private CaseData generateNewCaseDataForCaseTransfer(SubmitEvent oldSubmitEvent, String ccdGatewayBaseUrl) {
+    private CaseData generateNewCaseDataForCaseTransfer(SubmitEvent oldSubmitEvent, String ccdGatewayBaseUrl,
+                                                        String caseTypeId) {
         uk.gov.hmcts.et.common.model.ccd.CaseData caseData = oldSubmitEvent.getCaseData();
         String state = oldSubmitEvent.getState();
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         log.info("Copying case data for case {}", caseId);
-        return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(), caseId, ccdGatewayBaseUrl, state);
+        return TransferToEcmCaseDataHelper.copyCaseData(caseData, new CaseData(), caseId, ccdGatewayBaseUrl, state,
+                                                        caseTypeId);
     }
 
     private static String getCorrectedOfficeName(String oldCaseOfficeName) {
