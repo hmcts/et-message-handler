@@ -29,18 +29,16 @@ public class AccessTokenServiceTest {
     @InjectMocks
     private transient AccessTokenService accessTokenService;
     @Mock
-    private transient OAuth2Configuration oauth2Configuration;
-    @Mock
     private transient RestTemplate restTemplate;
 
     @Before
     public void setUp() {
-        oauth2Configuration = new OAuth2Configuration("redirectUri", "id", "secret");
+        OAuth2Configuration oauth2Configuration = new OAuth2Configuration("redirectUri", "id", "secret");
         accessTokenService = new AccessTokenService(oauth2Configuration, restTemplate);
     }
 
     @Test
-    public void getAccessTokenTest() {
+    public void testGetAccessTokenTest() {
         String url = "http://sidam-api:5000/o/token";
         ReflectionTestUtils.setField(accessTokenService, "idamApiOidcUrl", url);
         HttpHeaders headers = new HttpHeaders();
@@ -53,7 +51,7 @@ public class AccessTokenServiceTest {
     }
 
     @Test
-    public void getAccessTokenTestEmptyBody() {
+    public void testGetAccessTokenEmptyBody() {
         String url = "http://sidam-api:5000/o/token";
         ReflectionTestUtils.setField(accessTokenService, "idamApiOidcUrl", url);
         HttpHeaders headers = new HttpHeaders();

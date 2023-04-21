@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
@@ -16,34 +17,54 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEc
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNASSIGNED_OFFICE;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class TransferToEcmCaseDataHelperTest {
+    private static final String TEST = "Test";
+    private CaseData ecmCaseData;
+    private uk.gov.hmcts.et.common.model.ccd.CaseData etCaseData;
+
+    @Before
+    public void setup() {
+        ecmCaseData = new CaseData();
+        etCaseData = createEtCaseData();
+    }
 
     @Test
     public void testCopyCaseData() {
-        var ecmCaseData = new CaseData();
-        var etCaseData = createEtCaseData();
-        ecmCaseData = TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
-                                                               "postionTypeCT", "Accepted", "Test");
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+                                                 "Accepted", SCOTLAND_CASE_TYPE_ID);
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
-        assertEquals("Test", ecmCaseData.getFileLocationGlasgow());
+        assertEquals(TEST, ecmCaseData.getFileLocationGlasgow());
         assertEquals(1, ecmCaseData.getJurCodesCollection().size());
-        assertEquals("Test", ecmCaseData.getJurCodesCollection().get(0).getValue().getJuridictionCodesList());
+        assertEquals(TEST, ecmCaseData.getJurCodesCollection().get(0).getValue().getJuridictionCodesList());
         assertEquals(1, ecmCaseData.getRespondentCollection().size());
         assertEquals(1, ecmCaseData.getDocumentCollection().size());
-        assertEquals("Test", ecmCaseData.getClerkResponsible());
+        assertEquals(TEST, ecmCaseData.getClerkResponsible());
+    }
+
+    @Test
+    public void checkUnassignedOffice() {
+        etCaseData.setManagingOffice(UNASSIGNED_OFFICE);
+        etCaseData.setAllocatedOffice(UNASSIGNED_OFFICE);
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+                                                 "Accepted", SCOTLAND_CASE_TYPE_ID);
+        assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
+        assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
     }
 
     private uk.gov.hmcts.et.common.model.ccd.CaseData createEtCaseData() {
-        var caseData = new uk.gov.hmcts.et.common.model.ccd.CaseData();
+        uk.gov.hmcts.et.common.model.ccd.CaseData caseData = new uk.gov.hmcts.et.common.model.ccd.CaseData();
         caseData.setManagingOffice(TribunalOffice.GLASGOW.getOfficeName());
         caseData.setAllocatedOffice(TribunalOffice.GLASGOW.getOfficeName());
-        caseData.setFileLocationGlasgow(DynamicFixedListType.of(DynamicValueType.create("Test", "Test")));
-        var jurCodesType = new JurCodesType();
-        jurCodesType.setJuridictionCodesList("Test");
-        jurCodesType.setJudgmentOutcome("Test");
-        var jurCodeTypeItem = new JurCodesTypeItem();
+        caseData.setFileLocationGlasgow(DynamicFixedListType.of(DynamicValueType.create(TEST, TEST)));
+        JurCodesType jurCodesType = new JurCodesType();
+        jurCodesType.setJuridictionCodesList(TEST);
+        jurCodesType.setJudgmentOutcome(TEST);
+        JurCodesTypeItem jurCodeTypeItem = new JurCodesTypeItem();
         jurCodeTypeItem.setValue(jurCodesType);
         caseData.setJurCodesCollection(List.of(jurCodeTypeItem));
 
@@ -53,14 +74,14 @@ public class TransferToEcmCaseDataHelperTest {
         respondentSumTypeItem.setValue(respondentSumType);
         caseData.setRespondentCollection(List.of(respondentSumTypeItem));
 
-        var documentType = new DocumentType();
+        DocumentType documentType = new DocumentType();
         documentType.setTypeOfDocument("Test Doc");
         documentType.setOwnerDocument("Test Owner");
-        var documentTypeItem = new DocumentTypeItem();
+        DocumentTypeItem documentTypeItem = new DocumentTypeItem();
         documentTypeItem.setValue(documentType);
         caseData.setDocumentCollection(List.of(documentTypeItem));
 
-        caseData.setClerkResponsible(DynamicFixedListType.of(DynamicValueType.create("Test", "Test")));
+        caseData.setClerkResponsible(DynamicFixedListType.of(DynamicValueType.create(TEST, TEST)));
 
         return caseData;
     }

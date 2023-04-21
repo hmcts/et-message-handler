@@ -22,8 +22,6 @@ public class UserServiceTest {
     @InjectMocks
     private transient UserService userService;
     @Mock
-    private transient IdamApi idamApi;
-    @Mock
     private transient AccessTokenService accessTokenService;
     private transient UserDetails userDetails;
 
@@ -32,7 +30,7 @@ public class UserServiceTest {
     @Before
     public void setUp() {
         userDetails = getUserDetails();
-        idamApi = authorisation -> getUserDetails();
+        IdamApi idamApi = authorisation -> getUserDetails();
         userService = new UserService(idamApi, accessTokenService);
         ReflectionTestUtils.setField(userService, "caseWorkerUserName", "example@gmail.com");
         ReflectionTestUtils.setField(userService, "caseWorkerPassword", "123456");
@@ -58,7 +56,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getAccessToken() {
+    public void testGetAccessToken() {
         when(accessTokenService.getAccessToken(anyString(), anyString())).thenReturn(TOKEN);
         assertEquals(TOKEN, userService.getAccessToken());
     }
