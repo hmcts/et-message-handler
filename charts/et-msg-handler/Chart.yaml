@@ -7,9 +7,9 @@ maintainers:
   - name: HMCTS Employment Tribunals Team
 dependencies:
   - name: java
-    version: 4.0.13
+    version: 4.1.0
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
   - name: servicebus
-    version: 0.4.0
+    version: 1.0.2
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
     condition: servicebus.enabled
