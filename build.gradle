@@ -232,6 +232,19 @@ dependencies {
   implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.3-RELEASE'
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
+  
+  // CVE-2023-20863
+  implementation group: 'org.springframework', name: 'spring-aop', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-aspects', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-beans', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-context', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-core', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-expression', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-jcl', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-webmvc', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-orm', version: '5.3.27'
+  implementation group: 'org.springframework', name: 'spring-tx', version: '5.3.27'
 
   testImplementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
   testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
