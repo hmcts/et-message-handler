@@ -174,7 +174,7 @@ ext {
   logbackVersion = '1.2.11'
   serenity = '3.3.4'
   springBoot = springBoot.class.package.implementationVersion
-  tomcatEmbedVersion = '9.0.73'
+  tomcatEmbedVersion = '9.0.75'
 }
 
 ext["rest-assured.version"] = '5.1.0'
@@ -231,7 +231,7 @@ dependencies {
   implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.17.3-RELEASE'
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
-  
+
   testImplementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
   testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
   testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
