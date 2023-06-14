@@ -187,8 +187,10 @@ dependencies {
 
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+  implementation group: 'net.minidev', name: 'accessors-smart', version: '2.4.11'
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.3', ext: 'pom'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.1'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.15.2'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '5.1.9'
   implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.1'
   implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.25.4'
@@ -222,6 +224,7 @@ dependencies {
   implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
   implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.5'
+  implementation group: 'com.microsoft.azure', name: 'adal4j', version: '1.6.7'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'org.springframework.boot:spring-boot-configuration-processor'
