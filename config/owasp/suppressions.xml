@@ -18,7 +18,7 @@
     <notes><![CDATA[
     file name: accessors-smart-2.4.11.jar
     ]]></notes>
-    <packageUrl regex="true">^pkg:maven/net.minidev/accessors-smart@@.*$</packageUrl>
+    <packageUrl regex="true">^pkg:maven/net.minidev/accessors-smart@.*$</packageUrl>
     <cve>CVE-2022-45688</cve>
   </suppress>
   <suppress>
