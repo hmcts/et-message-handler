@@ -3,16 +3,19 @@ java:
   ingressHost: ${SERVICE_FQDN}
   postgresql:
     enabled: true
-  secrets:
-    CREATE_UPDATES_CONN_STRING:
-      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-create-updates
-      key: connectionString
-    UPDATE_CASE_CONN_STRING:
-      secretRef: servicebus-secret-queue-{{ .Release.Name }}-servicebus-update-case
-      key: connectionString
   keyVaults:
     et-msg-handler:
       secrets:
+        - name: msg-handler-POSTGRES-HOST
+          alias: ET_MSG_HANDLER_POSTGRES_HOST
+        - name: msg-handler-POSTGRES-PORT
+          alias: ET_MSG_HANDLER_POSTGRES_PORT
+        - name: msg-handler-POSTGRES-DATABASE
+          alias: ET_MSG_HANDLER_POSTGRES_DATABASE
+        - name: msg-handler-POSTGRES-USER
+          alias: ET_MSG_HANDLER_POSTGRES_USER
+        - name: msg-handler-POSTGRES-PASS
+          alias: ET_MSG_HANDLER_POSTGRES_PASSWORD
         - name: caseworker-user-name
           alias: CASEWORKER_USER_NAME
         - name: caseworker-password
@@ -23,6 +26,18 @@ java:
           alias: ET_MSG_HANDLER_S2S_SECRET
         - name: idam-client-secret
           alias: IDAM_CLIENT_SECRET
+    et:
+      secrets:
+        - name: create-updates-queue-send-connection-string
+          alias: CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING
+        - name: create-updates-queue-listen-connection-string
+          alias: CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING
+        - name: update-case-queue-send-connection-string
+          alias: UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING
+        - name: update-case-queue-listen-connection-string
+          alias: UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING
+        - name: app-insights-connection-string
+          alias: app-insights-connection-string
   environment:
     ET_MSG_HANDLER_POSTGRES_HOST: "{{ .Release.Name }}-postgresql"
     ET_MSG_HANDLER_POSTGRES_DATABASE: "{{ .Values.postgresql.auth.database}}"
@@ -33,12 +48,3 @@ java:
     CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "$(CREATE_UPDATES_CONN_STRING)"
     UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
     UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
-
-servicebus:
-  enabled: true
-  resourceGroup: et-aks
-  teamName: et
-  setup:
-    queues:
-      - name: create-updates
-      - name: update-case
