@@ -30,7 +30,18 @@ public class UserServiceTest {
     @Before
     public void setUp() {
         userDetails = getUserDetails();
-        IdamApi idamApi = authorisation -> getUserDetails();
+        IdamApi idamApi = new IdamApi() {
+            @Override
+            public UserDetails retrieveUserDetails(String authorisation) {
+                return getUserDetails();
+            }
+
+            @Override
+            public UserDetails getUserByUserId(String authorisation, String userId) {
+                return getUserDetails();
+            }
+        };
+
         userService = new UserService(idamApi, accessTokenService);
         ReflectionTestUtils.setField(userService, "caseWorkerUserName", "example@gmail.com");
         ReflectionTestUtils.setField(userService, "caseWorkerPassword", "123456");
@@ -59,6 +70,11 @@ public class UserServiceTest {
     public void testGetAccessToken() {
         when(accessTokenService.getAccessToken(anyString(), anyString())).thenReturn(TOKEN);
         assertEquals(TOKEN, userService.getAccessToken());
+    }
+
+    @Test
+    public void getUserDetailsById() { //NOPMD - suppressed LinguisticNaming
+        assertEquals(userDetails, userService.getUserDetailsById("TOKEN", "id"));
     }
 
 }
