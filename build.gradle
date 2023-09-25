@@ -177,7 +177,8 @@ dependencies {
       }
     }
   }
-
+  implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.8.7'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '5.1.9'
