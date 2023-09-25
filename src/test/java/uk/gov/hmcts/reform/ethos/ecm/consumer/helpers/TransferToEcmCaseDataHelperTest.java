@@ -34,7 +34,7 @@ public class TransferToEcmCaseDataHelperTest {
 
     @Test
     public void testCopyCaseData() {
-        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBaseUrl",
                                                  "Accepted", SCOTLAND_CASE_TYPE_ID);
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
@@ -50,7 +50,7 @@ public class TransferToEcmCaseDataHelperTest {
     public void checkUnassignedOffice() {
         etCaseData.setManagingOffice(UNASSIGNED_OFFICE);
         etCaseData.setAllocatedOffice(UNASSIGNED_OFFICE);
-        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBsaeUrl",
+        TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBaseUrl",
                                                  "Accepted", SCOTLAND_CASE_TYPE_ID);
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getAllocatedOffice());
