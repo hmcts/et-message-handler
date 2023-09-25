@@ -36,7 +36,8 @@ java:
 
 servicebus:
   enabled: true
-  resourceGroup: et-aks
+  resourceGroup: et-aso-preview-rg
+  sbNamespace: et-sb-preview
   teamName: et
   setup:
     queues:
