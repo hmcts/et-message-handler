@@ -28,4 +28,11 @@
     <packageUrl regex="true">^pkg:maven/com.fasterxml.jackson.core/jackson-core@.*$</packageUrl>
     <cve>CVE-2022-45688</cve>
   </suppress>
+  <suppress>
+    <!-- jackson related false positives -->
+
+    <!-- according to jackson community, this is not a security issue,
+         see: https://github.com/FasterXML/jackson-databind/issues/3972#issuecomment-1596193098 -->
+    <cve>CVE-2023-35116</cve>
+  </suppress>
 </suppressions>
