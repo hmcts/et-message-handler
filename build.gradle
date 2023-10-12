@@ -159,7 +159,7 @@ ext {
   serenity = '3.7.1'
   springBoot = springBoot.class.package.implementationVersion
   tomcatEmbedVersion = '9.0.80'
-  nettyVersion = '4.1.98.Final'
+  nettyVersion = '4.1.100.Final'
 }
 
 ext["rest-assured.version"] = '5.1.0'
