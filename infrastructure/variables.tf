@@ -43,3 +43,5 @@ variable "team_contact" {
   description = "Team contact"
   default     = "#et-tech"
 }
+
+variable "aks_subscription_id" {}
