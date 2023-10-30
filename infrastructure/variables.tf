@@ -45,3 +45,7 @@ variable "team_contact" {
 }
 
 variable "aks_subscription_id" {}
+
+variable "businessArea" {
+  default = "CFT"
+}

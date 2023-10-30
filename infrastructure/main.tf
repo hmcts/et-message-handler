@@ -13,12 +13,12 @@ locals {
   tagEnv = var.env == "aat" ? "staging" : var.env == "perftest" ? "testing" : var.env
   tags = merge(var.common_tags,
     tomap({
-      "environment" = local.tagEnv,
-      "managedBy" = var.team_name,
+      "environment"  = local.tagEnv,
+      "managedBy"    = var.team_name,
       "Team Contact" = var.team_contact
-      "application" = "employment-tribunals",
-      "businessArea" = "CFT",
-      "builtFrom" = "et-msg-handler"
+      "application"  = "employment-tribunals",
+      "businessArea" = var.businessArea,
+      "builtFrom"    = "et-msg-handler"
 
     })
   )
