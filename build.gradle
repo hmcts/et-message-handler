@@ -168,7 +168,7 @@ dependencies {
   implementation 'com.github.hmcts:et-common:1.2.7'
   implementation 'com.github.hmcts:et-data-model:2.8.1'
   implementation 'com.github.hmcts:ecm-common:2.0.4'
-  implementation 'com.github.hmcts:ecm-data-model:1.1.5'
+  implementation 'com.github.hmcts:ecm-data-model:1.1.6'
 
   configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
