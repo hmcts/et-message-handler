@@ -233,7 +233,7 @@ public final class TransferToEcmCaseDataHelper {
         return documentTypeItemsList;
     }
 
-    private static String generateMarkUp(String ccdGatewayBaseUrl, String caseId, String ethosCaseRef) {
+    public static String generateMarkUp(String ccdGatewayBaseUrl, String caseId, String ethosCaseRef) {
         var url = ccdGatewayBaseUrl + "/cases/case-details/" + caseId;
         return "<a target=\"_blank\" href=\"" + url + "\">" + ethosCaseRef + "</a>";
     }

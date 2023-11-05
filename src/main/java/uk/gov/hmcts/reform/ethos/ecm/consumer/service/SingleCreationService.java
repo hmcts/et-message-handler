@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
@@ -11,6 +12,8 @@ import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
 import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
+import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.SingleCreationServiceHelper;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,12 +28,15 @@ public class SingleCreationService {
     public static final String CREATE_CASE_EVENT_SUMMARY_TEMPLATE = "Case created by transfer from %s";
 
     private final CcdClient ccdClient;
+    @Value("${ccd_gateway_base_url}")
+    private String ccdGatewayBaseUrl;
 
     public void sendCreation(SubmitEvent oldSubmitEvent, String accessToken, UpdateCaseMsg updateCaseMsg)
         throws IOException {
 
         CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg.getDataModelParent();
         String caseTypeId = TribunalOffice.getCaseTypeId(creationSingleDataModel.getOfficeCT());
+        String sourceCaseTypeId = updateCaseMsg.getCaseTypeId();
         String ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
         String jurisdiction = updateCaseMsg.getJurisdiction();
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
@@ -41,7 +47,7 @@ public class SingleCreationService {
         if (caseDestinationOffice == null) {
             log.info("Creating new case for transfer to {} {}", caseTypeId, ethosCaseReference);
             transferNewCase(oldSubmitEvent, caseId, caseTypeId, ccdGatewayBaseUrl,
-                            jurisdiction, accessToken, creationSingleDataModel);
+                            jurisdiction, accessToken, creationSingleDataModel, sourceCaseTypeId);
         } else {
             log.info("Case exists for transfer to {} {}", caseTypeId, ethosCaseReference);
             updateExistingCase(caseDestinationOffice, oldSubmitEvent, caseId, caseTypeId, jurisdiction, accessToken,
@@ -86,8 +92,8 @@ public class SingleCreationService {
     private void transferNewCase(SubmitEvent oldSubmitEvent, String caseId,
                                  String caseTypeId, String ccdGatewayBaseUrl,
                                  String jurisdiction, String accessToken,
-                                 CreationSingleDataModel creationSingleDataModel) throws IOException {
-
+                                 CreationSingleDataModel creationSingleDataModel,
+                                 String sourceCaseTypeId) throws IOException {
         CaseDetails newCaseDetailsCT = createCaseDetailsCaseTransfer(oldSubmitEvent.getCaseData(),
                                                                      caseId,
                                                                      caseTypeId,
@@ -97,19 +103,29 @@ public class SingleCreationService {
                                                                      oldSubmitEvent.getState(),
                                                                      creationSingleDataModel.getOfficeCT(),
                                                                      creationSingleDataModel.getReasonForCT());
-
         CCDRequest returnedRequest = ccdClient.startCaseCreationTransfer(accessToken, newCaseDetailsCT);
-
         String eventSummary = String.format(CREATE_CASE_EVENT_SUMMARY_TEMPLATE,
                                          oldSubmitEvent.getCaseData().getManagingOffice());
-        ccdClient.submitCaseCreation(accessToken, newCaseDetailsCT, returnedRequest, eventSummary);
+        SubmitEvent newCase = ccdClient.submitCaseCreation(accessToken, newCaseDetailsCT, returnedRequest,
+                                                           eventSummary);
+        if (newCase != null) {
+            String transferredCaseLink =
+                SingleCreationServiceHelper.getTransferredCaseLink(ccdGatewayBaseUrl,
+                                                                   String.valueOf(newCase.getCaseId()),
+                                                                   newCase.getCaseData().getEthosCaseReference());
+            CCDRequest updateCCDRequest = ccdClient.startEventForCase(accessToken, sourceCaseTypeId, jurisdiction,
+                                                                      caseId);
+
+            updateCCDRequest.getCaseDetails().getCaseData().setTransferredCaseLink(transferredCaseLink);
+            ccdClient.submitEventForCase(accessToken, updateCCDRequest.getCaseDetails().getCaseData(), sourceCaseTypeId,
+                                         jurisdiction, updateCCDRequest, caseId);
+        }
     }
 
     private SubmitEvent existCaseDestinationOffice(String accessToken, String ethosCaseReference,
                                                    String destinationCaseTypeId) throws IOException {
         List<SubmitEvent> submitEvents = retrieveDestinationCase(accessToken, ethosCaseReference,
                                                                  destinationCaseTypeId);
-
         return submitEvents.isEmpty() ? null : submitEvents.get(0);
     }
 
