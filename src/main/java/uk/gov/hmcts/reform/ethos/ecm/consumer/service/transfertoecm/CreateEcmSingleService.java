@@ -33,7 +33,9 @@ public class CreateEcmSingleService {
 
     private void transferNewCase(SubmitEvent oldSubmitEvent, CreateUpdatesMsg createUpdatesMsg, String accessToken)
         throws IOException {
-        CaseDetails newEcmCaseDetailsCt = createCaseDetailsCaseTransfer(oldSubmitEvent, createUpdatesMsg);
+        CaseDetails newEcmCaseDetailsCt = createCaseDetailsCaseTransfer(
+            oldSubmitEvent, createUpdatesMsg);
+
         uk.gov.hmcts.ecm.common.model.ccd.CCDRequest returnedEcmCcdRequest =
             ccdClient.startEcmCaseCreationTransfer(accessToken, newEcmCaseDetailsCt);
 
@@ -42,8 +44,8 @@ public class CreateEcmSingleService {
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         log.info("Creating case in {} for ET case {}", officeCT, caseId);
         uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent newCase = ccdClient.submitEcmCaseCreation(accessToken,
-                                                                                               newEcmCaseDetailsCt,
-                                                                                               returnedEcmCcdRequest);
+                                                                                                newEcmCaseDetailsCt,
+                                                                                                 returnedEcmCcdRequest);
         if (newCase != null) {
             String transferredCaseLink = SingleCreationServiceHelper.getTransferredCaseLink(
                 ccdGatewayBaseUrl,
