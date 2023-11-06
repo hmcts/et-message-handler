@@ -177,6 +177,25 @@ dependencies {
       }
     }
   }
+
+  //To Remove vulnerabilities CVE-2023-31582, CVE-2023-4586
+  dependencySet(group: 'io.netty', version: '4.1.100.Final') {
+    entry 'netty-buffer'
+    entry 'netty-codec'
+    entry 'netty-codec-http'
+    entry 'netty-codec-socks'
+    entry 'netty-common'
+    entry 'netty-handler'
+    entry 'netty-handler-proxy'
+    entry 'netty-resolver'
+    entry 'netty-transport'
+    entry 'netty-transport-native-epoll'
+    entry 'netty-transport-native-kqueue'
+    entry 'netty-transport-native-unix-common'
+    entry 'netty-transport-classes-epoll'
+    entry 'netty-transport-classes-kqueue'
+  }
+  
   implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.8.8'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
@@ -203,8 +222,6 @@ dependencies {
   implementation group: 'commons-net', name: 'commons-net', version: '3.10.0'
   implementation group: 'com.fasterxml.woodstox', name: 'woodstox-core', version: '6.5.1'
 
-  //To Remove vulnerabilities CVE-2023-31582, CVE-2023-4586
-  implementation group: 'org.bitbucket.b_c', name: 'jose4j', version: '0.9.3'
   implementation('org.elasticsearch:elasticsearch') {
     version {
       strictly '7.17.4'
