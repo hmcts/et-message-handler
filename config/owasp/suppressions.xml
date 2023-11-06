@@ -42,4 +42,14 @@
     <packageUrl regex="true">^pkg:maven/org\.json/json@.*$</packageUrl>
     <cpe>cpe:/a:json-java_project:json-java</cpe>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: netty-transport-4.1.100.Final.jar
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.json/json@.*$
+      pkg:maven/io.netty/netty-transport@4.1.100.Final
+    </packageUrl>
+    <cpe>cpe:2.3:/a:netty:netty:4.1.100:*:*:*:*:*:*:*:*</cpe>
+    <cve>CVE-2023-4586</cve>
+  </suppress>
 </suppressions>
