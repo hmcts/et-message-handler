@@ -48,23 +48,18 @@ public class SingleCreationService {
     }
 
     private void updateExistingCase(SubmitEvent caseDestinationOffice, SubmitEvent oldSubmitEvent,
-                                    String jurisdiction,
-                                    String accessToken, UpdateCaseMsg updateCaseMsg)
+                                    String jurisdiction, String accessToken, UpdateCaseMsg updateCaseMsg)
         throws IOException {
         CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg.getDataModelParent();
         String caseTypeId = TribunalOffice.getCaseTypeId(creationSingleDataModel.getOfficeCT());
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         String destinationCaseId = String.valueOf(caseDestinationOffice.getCaseId());
         ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
-        CCDRequest returnedRequest = ccdClient.returnCaseCreationTransfer(
-            accessToken,
-            caseTypeId,
-            jurisdiction,
-            destinationCaseId
+        CCDRequest returnedRequest = ccdClient.returnCaseCreationTransfer(accessToken, caseTypeId, jurisdiction,
+                                                                          destinationCaseId
         );
 
-        ccdClient.submitEventForCase(
-            accessToken,
+        ccdClient.submitEventForCase(accessToken,
             generateCaseDataCaseTransfer(caseDestinationOffice.getCaseData(),
                                          oldSubmitEvent.getCaseData(),
                                          caseId,
