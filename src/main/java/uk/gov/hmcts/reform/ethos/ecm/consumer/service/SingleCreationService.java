@@ -34,34 +34,28 @@ public class SingleCreationService {
 
         CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg.getDataModelParent();
         String caseTypeId = TribunalOffice.getCaseTypeId(creationSingleDataModel.getOfficeCT());
-        String sourceCaseTypeId = updateCaseMsg.getCaseTypeId();
-        ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
         String jurisdiction = updateCaseMsg.getJurisdiction();
-        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         String ethosCaseReference = oldSubmitEvent.getCaseData().getEthosCaseReference();
-
         SubmitEvent caseDestinationOffice = existCaseDestinationOffice(accessToken, ethosCaseReference, caseTypeId);
 
         if (caseDestinationOffice == null) {
             log.info("Creating new case for transfer to {} {}", caseTypeId, ethosCaseReference);
-            transferNewCase(oldSubmitEvent, caseId, caseTypeId, ccdGatewayBaseUrl,
-                            jurisdiction, accessToken, creationSingleDataModel, sourceCaseTypeId);
+            transferNewCase(oldSubmitEvent, jurisdiction, accessToken, updateCaseMsg);
         } else {
             log.info("Case exists for transfer to {} {}", caseTypeId, ethosCaseReference);
-            updateExistingCase(caseDestinationOffice, oldSubmitEvent, caseId, caseTypeId, jurisdiction, accessToken,
-                               ccdGatewayBaseUrl, creationSingleDataModel
-            );
+            updateExistingCase(caseDestinationOffice, oldSubmitEvent, jurisdiction, accessToken, updateCaseMsg);
         }
     }
 
     private void updateExistingCase(SubmitEvent caseDestinationOffice, SubmitEvent oldSubmitEvent,
-                                    String caseId, String caseTypeId, String jurisdiction,
-                                    String accessToken, String ccdGatewayBaseUrl,
-                                    CreationSingleDataModel creationSingleDataModel)
+                                    String jurisdiction,
+                                    String accessToken, UpdateCaseMsg updateCaseMsg)
         throws IOException {
-
+        CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg.getDataModelParent();
+        String caseTypeId = TribunalOffice.getCaseTypeId(creationSingleDataModel.getOfficeCT());
+        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         String destinationCaseId = String.valueOf(caseDestinationOffice.getCaseId());
-
+        ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
         CCDRequest returnedRequest = ccdClient.returnCaseCreationTransfer(
             accessToken,
             caseTypeId,
@@ -87,11 +81,13 @@ public class SingleCreationService {
         );
     }
 
-    private void transferNewCase(SubmitEvent oldSubmitEvent, String caseId,
-                                 String caseTypeId, String ccdGatewayBaseUrl,
-                                 String jurisdiction, String accessToken,
-                                 CreationSingleDataModel creationSingleDataModel,
-                                 String sourceCaseTypeId) throws IOException {
+    private void transferNewCase(SubmitEvent oldSubmitEvent, String jurisdiction, String accessToken,
+                                 UpdateCaseMsg updateCaseMsg) throws IOException {
+        CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg.getDataModelParent();
+        ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
+        String sourceCaseTypeId = updateCaseMsg.getCaseTypeId();
+        String caseId = String.valueOf(oldSubmitEvent.getCaseId());
+        String caseTypeId = TribunalOffice.getCaseTypeId(creationSingleDataModel.getOfficeCT());
         CaseDetails newCaseDetailsCT = createCaseDetailsCaseTransfer(oldSubmitEvent.getCaseData(),
                                                                      caseId,
                                                                      caseTypeId,
