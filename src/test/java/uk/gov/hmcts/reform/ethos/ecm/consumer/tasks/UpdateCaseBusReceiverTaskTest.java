@@ -27,6 +27,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SuppressWarnings("PMD.UnusedPrivateMethod")
 public class UpdateCaseBusReceiverTaskTest {
 
     @InjectMocks

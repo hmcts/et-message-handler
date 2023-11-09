@@ -30,7 +30,6 @@
   </suppress>
   <suppress>
     <!-- jackson related false positives -->
-
     <!-- according to jackson community, this is not a security issue,
          see: https://github.com/FasterXML/jackson-databind/issues/3972#issuecomment-1596193098 -->
     <cve>CVE-2023-35116</cve>
@@ -43,6 +42,6 @@
     <cpe>cpe:/a:json-java_project:json-java</cpe>
   </suppress>
   <suppress>
-     <cve>CVE-2023-4586</cve>
- </suppress>
+    <cve>CVE-2023-4586</cve>
+  </suppress>
 </suppressions>
