@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
@@ -28,7 +27,6 @@ public class SingleCreationService {
     public static final String CREATE_CASE_EVENT_SUMMARY_TEMPLATE = "Case created by transfer from %s";
 
     private final CcdClient ccdClient;
-    @Value("${ccd_gateway_base_url}")
     private String ccdGatewayBaseUrl;
 
     public void sendCreation(SubmitEvent oldSubmitEvent, String accessToken, UpdateCaseMsg updateCaseMsg)
@@ -37,7 +35,7 @@ public class SingleCreationService {
         CreationSingleDataModel creationSingleDataModel = (CreationSingleDataModel) updateCaseMsg.getDataModelParent();
         String caseTypeId = TribunalOffice.getCaseTypeId(creationSingleDataModel.getOfficeCT());
         String sourceCaseTypeId = updateCaseMsg.getCaseTypeId();
-        String ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
+        ccdGatewayBaseUrl = creationSingleDataModel.getCcdGatewayBaseUrl();
         String jurisdiction = updateCaseMsg.getJurisdiction();
         String caseId = String.valueOf(oldSubmitEvent.getCaseId());
         String ethosCaseReference = oldSubmitEvent.getCaseData().getEthosCaseReference();
