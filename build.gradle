@@ -191,7 +191,7 @@ dependencies {
       }
     }
   }
-  implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.8.8'
+  implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.1.5'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
@@ -237,7 +237,7 @@ dependencies {
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.8'
   implementation 'org.springframework.retry:spring-retry'
   implementation group: 'org.testng', name: 'testng', version: '7.8.0'
-  implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '3.19.2-RELEASE'
+  implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '4.1.0-RELEASE'
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
 
