@@ -52,13 +52,6 @@ public class CreateEcmSingleServiceTest {
         ccdRequest.setCaseDetails(caseDetails);
         uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent ecmSubmitEvent =
             new uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent();
-
-        uk.gov.hmcts.ecm.common.model.ccd.CaseData ecmCaseData = new uk.gov.hmcts.ecm.common.model.ccd.CaseData();
-        ecmCaseData.setEthosCaseReference(ethosCaseReference);
-        ecmCaseData.setManagingOffice(managingOffice);
-        ecmCaseData.setEthosCaseReference("18850001/2020");
-        ecmSubmitEvent.setCaseData(ecmCaseData);
-
         uk.gov.hmcts.ecm.common.model.ccd.CCDRequest returnedEcmCcdRequest =
             new uk.gov.hmcts.ecm.common.model.ccd.CCDRequest();
         uk.gov.hmcts.ecm.common.model.ccd.CaseDetails ecmCaseDetails =
@@ -66,9 +59,13 @@ public class CreateEcmSingleServiceTest {
         returnedEcmCcdRequest.setCaseDetails(ecmCaseDetails);
         when(ccdClient.startEcmCaseCreationTransfer(eq(TEST_AUTH_TOKEN),
                                                     any(uk.gov.hmcts.ecm.common.model.ccd.CaseDetails.class)))
-
             .thenReturn(returnedEcmCcdRequest);
 
+        uk.gov.hmcts.ecm.common.model.ccd.CaseData ecmCaseData = new uk.gov.hmcts.ecm.common.model.ccd.CaseData();
+        ecmCaseData.setEthosCaseReference(ethosCaseReference);
+        ecmCaseData.setManagingOffice(managingOffice);
+        ecmCaseData.setEthosCaseReference("18850001/2020");
+        ecmSubmitEvent.setCaseData(ecmCaseData);
         when(ccdClient.submitEcmCaseCreation(eq(TEST_AUTH_TOKEN),
                                              any(uk.gov.hmcts.ecm.common.model.ccd.CaseDetails.class),
                                              any(uk.gov.hmcts.ecm.common.model.ccd.CCDRequest.class)))
