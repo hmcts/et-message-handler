@@ -47,11 +47,9 @@ public class CreateEcmSingleServiceTest {
         uk.gov.hmcts.et.common.model.ccd.CaseDetails caseDetails = new uk.gov.hmcts.et.common.model.ccd.CaseDetails();
         caseDetails.setCaseData(caseData);
         caseDetails.setCaseTypeId("Leeds");
-
         CCDRequest ccdRequest = new CCDRequest();
         ccdRequest.setCaseDetails(caseDetails);
-        uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent ecmSubmitEvent =
-            new uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent();
+
         uk.gov.hmcts.ecm.common.model.ccd.CCDRequest returnedEcmCcdRequest =
             new uk.gov.hmcts.ecm.common.model.ccd.CCDRequest();
         uk.gov.hmcts.ecm.common.model.ccd.CaseDetails ecmCaseDetails =
@@ -61,6 +59,8 @@ public class CreateEcmSingleServiceTest {
                                                     any(uk.gov.hmcts.ecm.common.model.ccd.CaseDetails.class)))
             .thenReturn(returnedEcmCcdRequest);
 
+        uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent ecmSubmitEvent =
+            new uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent();
         uk.gov.hmcts.ecm.common.model.ccd.CaseData ecmCaseData = new uk.gov.hmcts.ecm.common.model.ccd.CaseData();
         ecmCaseData.setEthosCaseReference(ethosCaseReference);
         ecmCaseData.setManagingOffice(managingOffice);
