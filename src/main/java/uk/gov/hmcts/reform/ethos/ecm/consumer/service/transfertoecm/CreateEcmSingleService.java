@@ -50,7 +50,7 @@ public class CreateEcmSingleService {
             String transferredCaseLink = SingleCreationServiceHelper.getTransferredCaseLink(
                 ccdGatewayBaseUrl,
                 String.valueOf(newCase.getCaseId()),
-                oldSubmitEvent.getCaseData().getEthosCaseReference());
+                newCase.getCaseData().getEthosCaseReference());
             uk.gov.hmcts.et.common.model.ccd.CCDRequest updateCCDRequest =
                 ccdClient.startEventForCase(accessToken, transferToEcmDataModel.getOfficeCT(),
                                             returnedEcmCcdRequest.getCaseDetails().getJurisdiction(), caseId);
