@@ -7,11 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
+import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.TransferToEcmDataModel;
-import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.SingleCreationServiceHelper;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEcmCaseDataHelper;
 
 import java.io.IOException;
@@ -45,21 +44,7 @@ public class CreateEcmSingleService {
         log.info("Creating case in {} for ET case {}", officeCT, caseId);
         uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent newCase = ccdClient.submitEcmCaseCreation(accessToken,
                                                                                                 newEcmCaseDetailsCt,
-                                                                                                returnedEcmCcdRequest);
-         /*if (newCase != null) {
-            String transferredCaseLink = SingleCreationServiceHelper.getTransferredCaseLink(
-                ccdGatewayBaseUrl,
-                String.valueOf(newCase.getCaseId()),
-                newCase.getCaseData().getEthosCaseReference());
-            uk.gov.hmcts.et.common.model.ccd.CCDRequest updateCCDRequest =
-                ccdClient.startEventForCase(accessToken, transferToEcmDataModel.getOfficeCT(),
-                                            returnedEcmCcdRequest.getCaseDetails().getJurisdiction(), caseId);
-            updateCCDRequest.getCaseDetails().getCaseData().setTransferredCaseLink(transferredCaseLink);
-            ccdClient.submitEventForCase(accessToken, updateCCDRequest.getCaseDetails().getCaseData(),
-                                         transferToEcmDataModel.getOfficeCT(),
-                                         returnedEcmCcdRequest.getCaseDetails().getJurisdiction(),
-                                         updateCCDRequest, caseId);
-        }*/
+                                                                                                returnedEcmCcdRequest)
 
     }
 

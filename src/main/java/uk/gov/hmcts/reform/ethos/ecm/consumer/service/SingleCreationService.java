@@ -4,19 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
+import uk.gov.hmcts.ecm.common.model.ccd.CCDRequest;
+import uk.gov.hmcts.ecm.common.model.ccd.CaseDetails;
+import uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataModel;
-import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
-import uk.gov.hmcts.et.common.model.ccd.CaseData;
-import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
-import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.SingleCreationServiceHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 
 @Slf4j
@@ -97,19 +96,6 @@ public class SingleCreationService {
                                          oldSubmitEvent.getCaseData().getManagingOffice());
         SubmitEvent newCase = ccdClient.submitCaseCreation(accessToken, newCaseDetailsCT, returnedRequest,
                                                            eventSummary);
-        /*if (newCase != null) {
-            String transferredCaseLink =
-                SingleCreationServiceHelper.getTransferredCaseLink(ccdGatewayBaseUrl,
-                                                                   String.valueOf(newCase.getCaseId()),
-                                                                   newCase.getCaseData().getEthosCaseReference());
-            CCDRequest updateCCDRequest = ccdClient.startEventForCase(accessToken, sourceCaseTypeId, jurisdiction,
-                                                                      caseId);
-
-            updateCCDRequest.getCaseDetails().getCaseData().setTransferredCaseLink(transferredCaseLink);
-            ccdClient.submitEventForCase(accessToken, updateCCDRequest.getCaseDetails().getCaseData(), sourceCaseTypeId,
-                                         jurisdiction, updateCCDRequest, caseId);
-        }
-        */
     }
 
     private SubmitEvent existCaseDestinationOffice(String accessToken, String ethosCaseReference,
