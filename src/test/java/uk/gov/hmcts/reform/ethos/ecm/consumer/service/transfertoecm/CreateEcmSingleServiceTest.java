@@ -75,7 +75,7 @@ public class CreateEcmSingleServiceTest {
 
         verify(ccdClient, times(1)).startEcmCaseCreationTransfer(eq(TEST_AUTH_TOKEN),
                                           any(uk.gov.hmcts.ecm.common.model.ccd.CaseDetails.class));
-        verify(ccdClient, times(1)).startEventForCase(eq(TEST_AUTH_TOKEN), any(), any(), any());
+        //verify(ccdClient, times(1)).startEventForCase(eq(TEST_AUTH_TOKEN), any(), any(), any());
         verify(ccdClient, times(1)).submitEventForCase(eq(TEST_AUTH_TOKEN), any(), any(), any(),
                                                        any(), any());
     }

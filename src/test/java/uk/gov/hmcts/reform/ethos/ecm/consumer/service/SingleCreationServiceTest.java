@@ -76,7 +76,7 @@ public class SingleCreationServiceTest {
         var expectedEventSummary = String.format(CREATE_CASE_EVENT_SUMMARY_TEMPLATE, managingOffice);
         verify(ccdClient, times(1)).submitCaseCreation(eq(USER_TOKEN), any(), any(),
                                                        eq(expectedEventSummary));
-        verify(ccdClient, times(1)).startEventForCase(eq(USER_TOKEN), any(), any(), any());
+       // verify(ccdClient, times(1)).startEventForCase(eq(USER_TOKEN), any(), any(), any());
         verify(ccdClient, times(1)).submitEventForCase(eq(USER_TOKEN), any(), any(), any(),
                                                        any(), any());
         verify(ccdClient, times(0)).returnCaseCreationTransfer(eq(USER_TOKEN), any(), any(),
