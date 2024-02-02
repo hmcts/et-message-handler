@@ -45,8 +45,8 @@ public class CreateEcmSingleService {
         log.info("Creating case in {} for ET case {}", officeCT, caseId);
         uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent newCase = ccdClient.submitEcmCaseCreation(accessToken,
                                                                                                 newEcmCaseDetailsCt,
-                                                                                                 returnedEcmCcdRequest);
-        if (newCase != null) {
+                                                                                                returnedEcmCcdRequest);
+         /*if (newCase != null) {
             String transferredCaseLink = SingleCreationServiceHelper.getTransferredCaseLink(
                 ccdGatewayBaseUrl,
                 String.valueOf(newCase.getCaseId()),
@@ -59,7 +59,8 @@ public class CreateEcmSingleService {
                                          transferToEcmDataModel.getOfficeCT(),
                                          returnedEcmCcdRequest.getCaseDetails().getJurisdiction(),
                                          updateCCDRequest, caseId);
-        }
+        }*/
+
     }
 
     private CaseDetails createCaseDetailsCaseTransfer(SubmitEvent oldSubmitEvent, CreateUpdatesMsg createUpdatesMsg) {

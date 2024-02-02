@@ -97,7 +97,7 @@ public class SingleCreationService {
                                          oldSubmitEvent.getCaseData().getManagingOffice());
         SubmitEvent newCase = ccdClient.submitCaseCreation(accessToken, newCaseDetailsCT, returnedRequest,
                                                            eventSummary);
-        if (newCase != null) {
+        /*if (newCase != null) {
             String transferredCaseLink =
                 SingleCreationServiceHelper.getTransferredCaseLink(ccdGatewayBaseUrl,
                                                                    String.valueOf(newCase.getCaseId()),
@@ -109,6 +109,7 @@ public class SingleCreationService {
             ccdClient.submitEventForCase(accessToken, updateCCDRequest.getCaseDetails().getCaseData(), sourceCaseTypeId,
                                          jurisdiction, updateCCDRequest, caseId);
         }
+        */
     }
 
     private SubmitEvent existCaseDestinationOffice(String accessToken, String ethosCaseReference,
