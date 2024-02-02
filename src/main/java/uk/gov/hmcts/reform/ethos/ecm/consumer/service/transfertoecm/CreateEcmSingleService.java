@@ -44,8 +44,7 @@ public class CreateEcmSingleService {
         log.info("Creating case in {} for ET case {}", officeCT, caseId);
         uk.gov.hmcts.ecm.common.model.ccd.SubmitEvent newCase = ccdClient.submitEcmCaseCreation(accessToken,
                                                                                                 newEcmCaseDetailsCt,
-                                                                                                returnedEcmCcdRequest)
-
+                                                                                                returnedEcmCcdRequest);
     }
 
     private CaseDetails createCaseDetailsCaseTransfer(SubmitEvent oldSubmitEvent, CreateUpdatesMsg createUpdatesMsg) {
