@@ -32,6 +32,8 @@ public class SingleUpdateService {
     @Value("${ccd_gateway_base_url}")
     private String ccdGatewayBaseUrl;
 
+    private static final String MULTIPLE_SEND_NOTIFICATION_EVENT = "sendNotificationMultiple";
+
     public void sendUpdate(SubmitEvent submitEvent, String accessToken,
                            UpdateCaseMsg updateCaseMsg) throws IOException {
 
@@ -88,7 +90,7 @@ public class SingleUpdateService {
                 caseTypeId,
                 jurisdiction,
                 caseId,
-                "sendNotificationMultiple"
+                MULTIPLE_SEND_NOTIFICATION_EVENT
             );
         } else {
             return ccdClient.startEventForCaseAPIRole(
