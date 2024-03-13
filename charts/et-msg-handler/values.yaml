@@ -35,9 +35,9 @@ java:
           alias: ET_MSG_HANDLER_POSTGRES_HOST
         - name: cos-POSTGRES-PORT
           alias: ET_MSG_HANDLER_POSTGRES_PORT
-        - name: et-cos-POSTGRES-USER
+        - name: cos-POSTGRES-USER
           alias: ET_MSG_HANDLER_POSTGRES_USER
-        - name: et-cos-POSTGRES-PASS
+        - name: cos-POSTGRES-PASS
           alias: ET_MSG_HANDLER_POSTGRES_PASSWORD
     et:
       secrets:
