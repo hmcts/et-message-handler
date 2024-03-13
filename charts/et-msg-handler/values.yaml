@@ -31,13 +31,13 @@ java:
           # TO BE ACTIVATED ONCE DATA HAS BEEN MIGRATED TO V15 DB
     et-cos:
       secrets:
-        - name: et-msg-handler-postgres-host-v15
+        - name: cos-POSTGRES-HOST
           alias: ET_MSG_HANDLER_POSTGRES_HOST
-        - name: et-msg-handler-postgres-port-v15
+        - name: cos-POSTGRES-PORT
           alias: ET_MSG_HANDLER_POSTGRES_PORT
-        - name: et-msg-handler-postgres-user-v15
+        - name: et-cos-POSTGRES-USER
           alias: ET_MSG_HANDLER_POSTGRES_USER
-        - name: et-msg-handler-postgres-password-v15
+        - name: et-cos-POSTGRES-PASS
           alias: ET_MSG_HANDLER_POSTGRES_PASSWORD
     et:
       secrets:
