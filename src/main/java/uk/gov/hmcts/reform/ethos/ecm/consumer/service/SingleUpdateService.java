@@ -42,6 +42,8 @@ public class SingleUpdateService {
 
         CCDRequest returnedRequest = getReturnedRequest(accessToken, caseTypeId,
                                                         jurisdiction, caseId, updateCaseMsg);
+
+        submitEvent.setCaseData(returnedRequest.getCaseDetails().getCaseData());
         updateCaseMsg.runTask(submitEvent);
 
         ccdClient.submitEventForCase(accessToken,
