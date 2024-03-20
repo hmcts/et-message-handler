@@ -171,8 +171,12 @@ public class SingleUpdateServiceTest {
 
     @Test
     public void sendUpdateForSendNotification() throws IOException {
+
+        SendNotificationType sendNotification = SendNotificationType.builder()
+            .sendNotificationNotify("Lead case")
+            .build();
         updateCaseMsg.setDataModelParent(SendNotificationDataModel.builder()
-                                             .sendNotification(new SendNotificationType())
+                                             .sendNotification(sendNotification)
                                              .build());
 
         singleUpdateService.sendUpdate(submitEvent, userToken, updateCaseMsg);
