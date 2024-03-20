@@ -10,6 +10,7 @@ import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CloseDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.PreAcceptDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.RejectDataModel;
+import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.SendNotificationDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.UpdateDataModel;
 import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
@@ -31,8 +32,10 @@ public class SingleUpdateService {
     @Value("${ccd_gateway_base_url}")
     private String ccdGatewayBaseUrl;
 
+    private static final String MULTIPLE_SEND_NOTIFICATION_EVENT = "sendNotificationMultiple";
+
     public void sendUpdate(SubmitEvent submitEvent, String accessToken,
-                            UpdateCaseMsg updateCaseMsg) throws IOException {
+                           UpdateCaseMsg updateCaseMsg) throws IOException {
 
         var caseTypeId = UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId());
         var jurisdiction = updateCaseMsg.getJurisdiction();
@@ -41,19 +44,22 @@ public class SingleUpdateService {
         updateMultipleReferenceLinkMarkUp(submitEvent, accessToken, updateCaseMsg);
 
         CCDRequest returnedRequest = getReturnedRequest(accessToken, caseTypeId,
-                                                        jurisdiction, caseId, updateCaseMsg);
+                                                        jurisdiction, caseId, updateCaseMsg
+        );
         updateCaseMsg.runTask(submitEvent);
 
-        ccdClient.submitEventForCase(accessToken,
-                                    submitEvent.getCaseData(),
-                                    caseTypeId,
-                                    jurisdiction,
-                                    returnedRequest,
-                                    caseId);
+        ccdClient.submitEventForCase(
+            accessToken,
+            submitEvent.getCaseData(),
+            caseTypeId,
+            jurisdiction,
+            returnedRequest,
+            caseId
+        );
     }
 
     private CCDRequest getReturnedRequest(String accessToken, String caseTypeId, String jurisdiction,
-                                         String caseId, UpdateCaseMsg updateCaseMsg) throws IOException {
+                                          String caseId, UpdateCaseMsg updateCaseMsg) throws IOException {
 
         if (updateCaseMsg.getDataModelParent() instanceof PreAcceptDataModel
             || updateCaseMsg.getDataModelParent() instanceof RejectDataModel) {
@@ -61,26 +67,38 @@ public class SingleUpdateService {
                 accessToken,
                 caseTypeId,
                 jurisdiction,
-                caseId);
+                caseId
+            );
         } else if (updateCaseMsg.getDataModelParent() instanceof UpdateDataModel
             && YES.equals(((UpdateDataModel) updateCaseMsg.getDataModelParent()).getIsRespondentRepRemovalUpdate())) {
             return ccdClient.startEventForCase(
                 accessToken,
                 caseTypeId,
                 jurisdiction,
-                caseId);
+                caseId
+            );
         } else if (updateCaseMsg.getDataModelParent() instanceof CloseDataModel) {
             return ccdClient.startDisposeEventForCase(
-                    accessToken,
-                    caseTypeId,
-                    jurisdiction,
-                    caseId);
+                accessToken,
+                caseTypeId,
+                jurisdiction,
+                caseId
+            );
+        } else if (updateCaseMsg.getDataModelParent() instanceof SendNotificationDataModel) {
+            return ccdClient.startEventForCase(
+                accessToken,
+                caseTypeId,
+                jurisdiction,
+                caseId,
+                MULTIPLE_SEND_NOTIFICATION_EVENT
+            );
         } else {
             return ccdClient.startEventForCaseAPIRole(
                 accessToken,
                 caseTypeId,
                 jurisdiction,
-                caseId);
+                caseId
+            );
         }
     }
 
@@ -91,9 +109,11 @@ public class SingleUpdateService {
             List<SubmitMultipleEvent> submitMultipleEvents = retrieveMultipleCase(accessToken, updateCaseMsg);
             if (!submitMultipleEvents.isEmpty()) {
                 submitEvent.getCaseData().setMultipleReferenceLinkMarkUp(
-                    generateMarkUp(ccdGatewayBaseUrl,
-                                   String.valueOf(submitMultipleEvents.get(0).getCaseId()),
-                                   submitEvent.getCaseData().getMultipleReference()));
+                    generateMarkUp(
+                        ccdGatewayBaseUrl,
+                        String.valueOf(submitMultipleEvents.get(0).getCaseId()),
+                        submitEvent.getCaseData().getMultipleReference()
+                    ));
             }
         }
     }
@@ -104,7 +124,8 @@ public class SingleUpdateService {
         return ccdClient.retrieveMultipleCasesElasticSearchWithRetries(
             authToken,
             updateCaseMsg.getCaseTypeId(),
-            updateCaseMsg.getMultipleRef());
+            updateCaseMsg.getMultipleRef()
+        );
     }
 
     private String generateMarkUp(String ccdGatewayBaseUrl, String caseId, String ethosCaseRef) {
