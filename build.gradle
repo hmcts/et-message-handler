@@ -158,7 +158,7 @@ ext {
   logbackVersion = '1.5.3'
   serenity = '4.1.3'
   springBoot = springBoot.class.package.implementationVersion
-  tomcatEmbedVersion = '9.0.86'
+  tomcatEmbedVersion = '9.0.87'
   nettyVersion = '4.1.107.Final'
 }
 
