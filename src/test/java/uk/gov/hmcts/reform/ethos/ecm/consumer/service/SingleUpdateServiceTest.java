@@ -12,7 +12,7 @@ import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.SendNotificationDataModel;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
-import uk.gov.hmcts.et.common.model.ccd.types.SendNotificationType;
+import uk.gov.hmcts.et.common.model.ccd.types.SendNotificationTypeMultiple;
 import uk.gov.hmcts.et.common.model.multiples.MultipleData;
 import uk.gov.hmcts.et.common.model.multiples.SubmitMultipleEvent;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
@@ -172,9 +172,9 @@ public class SingleUpdateServiceTest {
     @Test
     public void sendUpdateForSendNotification() throws IOException {
 
-        SendNotificationType sendNotification = SendNotificationType.builder()
-            .sendNotificationNotify("Lead case")
-            .build();
+        SendNotificationTypeMultiple sendNotification = new SendNotificationTypeMultiple();
+        sendNotification.setSendNotificationNotify("Lead case");
+
         updateCaseMsg.setDataModelParent(SendNotificationDataModel.builder()
                                              .sendNotification(sendNotification)
                                              .build());
