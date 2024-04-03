@@ -9,10 +9,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.helpers.UtilHelper;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
+import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.SendNotificationDataModel;
 import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
 import uk.gov.hmcts.et.common.model.ccd.CaseDetails;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
+import uk.gov.hmcts.et.common.model.ccd.types.SendNotificationTypeMultiple;
 import uk.gov.hmcts.et.common.model.multiples.MultipleData;
 import uk.gov.hmcts.et.common.model.multiples.SubmitMultipleEvent;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
@@ -81,16 +83,20 @@ public class SingleUpdateServiceTest {
             .thenReturn(submitEvent);
         singleUpdateService.sendUpdate(submitEvent, userToken, updateCaseMsg);
 
-        verify(ccdClient).startEventForCaseAPIRole(eq(userToken),
-                                                   eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                                   eq(updateCaseMsg.getJurisdiction()),
-                                                   any());
-        verify(ccdClient).submitEventForCase(eq(userToken),
-                                             any(),
-                                             eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                             eq(updateCaseMsg.getJurisdiction()),
-                                             any(),
-                                             any());
+        verify(ccdClient).startEventForCaseAPIRole(
+            eq(userToken),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any()
+        );
+        verify(ccdClient).submitEventForCase(
+            eq(userToken),
+            any(),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any(),
+            any()
+        );
         verifyNoMoreInteractions(ccdClient);
     }
 
@@ -109,12 +115,14 @@ public class SingleUpdateServiceTest {
             eq(updateCaseMsg.getJurisdiction()),
             any()
         );
-        verify(ccdClient).submitEventForCase(eq(userToken),
-                                             any(),
-                                             eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                             eq(updateCaseMsg.getJurisdiction()),
-                                             any(),
-                                             any());
+        verify(ccdClient).submitEventForCase(
+            eq(userToken),
+            any(),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any(),
+            any()
+        );
         verifyNoMoreInteractions(ccdClient);
     }
 
@@ -127,16 +135,20 @@ public class SingleUpdateServiceTest {
             .thenReturn(submitEvent);
         singleUpdateService.sendUpdate(submitEvent, userToken, updateCaseMsg);
 
-        verify(ccdClient).startDisposeEventForCase(eq(userToken),
-                                                   eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                                   eq(updateCaseMsg.getJurisdiction()),
-                                                   any());
-        verify(ccdClient).submitEventForCase(eq(userToken),
-                                             any(),
-                                             eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                             eq(updateCaseMsg.getJurisdiction()),
-                                             any(),
-                                             any());
+        verify(ccdClient).startDisposeEventForCase(
+            eq(userToken),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any()
+        );
+        verify(ccdClient).submitEventForCase(
+            eq(userToken),
+            any(),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any(),
+            any()
+        );
         verifyNoMoreInteractions(ccdClient);
     }
 
@@ -151,20 +163,47 @@ public class SingleUpdateServiceTest {
             .thenReturn(submitMultipleEvents);
         singleUpdateService.sendUpdate(submitEvent, userToken, updateCaseMsg);
 
-        verify(ccdClient).startEventForCaseAPIRole(eq(userToken),
-                                                   eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                                   eq(updateCaseMsg.getJurisdiction()),
-                                                   any());
-        verify(ccdClient).submitEventForCase(eq(userToken),
-                                             any(),
-                                             eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
-                                             eq(updateCaseMsg.getJurisdiction()),
-                                             any(),
-                                             any());
-        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(eq(userToken),
-                                                   eq(updateCaseMsg.getCaseTypeId()),
-                                                   any());
+        verify(ccdClient).startEventForCaseAPIRole(
+            eq(userToken),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any()
+        );
+        verify(ccdClient).submitEventForCase(
+            eq(userToken),
+            any(),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any(),
+            any()
+        );
+        verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(
+            eq(userToken),
+            eq(updateCaseMsg.getCaseTypeId()),
+            any()
+        );
         verifyNoMoreInteractions(ccdClient);
+    }
+
+    @Test
+    public void sendUpdateForSendNotification() throws IOException {
+
+        SendNotificationTypeMultiple sendNotification = new SendNotificationTypeMultiple();
+        sendNotification.setSendNotificationNotify("Lead case");
+
+        updateCaseMsg.setDataModelParent(SendNotificationDataModel.builder()
+                                             .sendNotification(sendNotification)
+                                             .build());
+
+        singleUpdateService.sendUpdate(submitEvent, userToken, updateCaseMsg);
+
+        verify(ccdClient).startEventForCase(
+            eq(userToken),
+            eq(UtilHelper.getCaseTypeId(updateCaseMsg.getCaseTypeId())),
+            eq(updateCaseMsg.getJurisdiction()),
+            any(),
+            eq("sendNotificationMultiple")
+        );
     }
 
 }
