@@ -187,6 +187,8 @@ public class SingleUpdateServiceTest {
 
     @Test
     public void sendUpdateForSendNotification() throws IOException {
+        when(ccdClient.startEventForCase(anyString(), anyString(), anyString(), any(), anyString()))
+            .thenReturn(returnedRequest);
 
         SendNotificationTypeMultiple sendNotification = new SendNotificationTypeMultiple();
         sendNotification.setSendNotificationNotify("Lead case");
