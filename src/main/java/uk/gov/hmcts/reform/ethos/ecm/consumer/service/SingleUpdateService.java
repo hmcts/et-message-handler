@@ -44,8 +44,10 @@ public class SingleUpdateService {
         updateMultipleReferenceLinkMarkUp(submitEvent, accessToken, updateCaseMsg);
 
         CCDRequest returnedRequest = getReturnedRequest(accessToken, caseTypeId,
-                                                        jurisdiction, caseId, updateCaseMsg
-        );
+                                                        jurisdiction, caseId, updateCaseMsg);
+
+        submitEvent.setCaseData(returnedRequest.getCaseDetails().getCaseData());
+
         updateCaseMsg.runTask(submitEvent);
 
         ccdClient.submitEventForCase(
