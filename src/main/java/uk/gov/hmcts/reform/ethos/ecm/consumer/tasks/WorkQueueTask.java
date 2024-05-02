@@ -164,6 +164,17 @@ public class WorkQueueTask {
         }
     }
 
+    private void recordMultipleError(Connection conn, String multipleRef, String ethosCaseRef, String description) {
+        try (CallableStatement call = conn.prepareCall("{ call fn_persistentQ_logMultipleError(?, ?, ?) }")) {
+            call.setString(1, multipleRef);
+            call.setString(2, ethosCaseRef);
+            call.setString(3, description);
+            call.execute();
+        } catch (SQLException ex) {
+            log.error("Failed recording error for multiple", ex);
+        }
+    }
+
     public List<WorkItem> pickUpWork(Connection conn, int batchSize) throws SQLException {
         List<WorkItem> workItems = new ArrayList<>();
         try (Statement stmt = conn.createStatement()) {
