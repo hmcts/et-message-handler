@@ -1,12 +1,10 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.tasks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -21,34 +19,28 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.TransferToEc
 import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.sql.DataSource;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class WorkQueueTask {
-    @Value("${etcos.spring.datasource.url}")
-    private String url;
-    @Value("${etcos.spring.datasource.username}")
-    private String user;
-    @Value("${etcos.spring.datasource.password}")
-    private String password;
     @Value("${queue.batchSize:50}")
     private String batchSize;
 
+    private final DataSource dataSource;
     private final TransferToEcmService transferToEcmService;
-    @Autowired
-    private UpdateManagementService updateManagementService;
+    private final UpdateManagementService updateManagementService;
 
     @Scheduled(cron = "${cron.pickupWorkTask:0 * * * * *}")
-    public void pollDatabaseForWorkMultiple() throws JsonMappingException, JsonProcessingException {
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+    public void pollDatabaseForWorkMultiple() throws JsonProcessingException {
+        try (Connection conn = dataSource.getConnection()) {
 
             List<WorkItem> workTasks = pickUpWork(conn, Integer.parseInt(batchSize));
 
@@ -64,7 +56,7 @@ public class WorkQueueTask {
         }
     }
 
-    private void processWorkItem(Connection conn, WorkItem work) throws JsonProcessingException, JsonMappingException {
+    private void processWorkItem(Connection conn, WorkItem work) throws JsonProcessingException {
         CreateUpdatesMsg message = new ObjectMapper().readValue(work.getJsonData(), CreateUpdatesMsg.class);
 
         if (message.getEthosCaseRefCollection() == null) {
@@ -101,12 +93,12 @@ public class WorkQueueTask {
     }
 
     private void sendUpdateCaseMessages(CreateUpdatesMsg createUpdatesMsg)
-            throws JsonProcessingException, SQLException {
+            throws SQLException {
         if (createUpdatesMsg.getEthosCaseRefCollection() == null) {
             return;
         }
 
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        try (Connection conn = dataSource.getConnection()) {
             for (String ethosCaseReference : createUpdatesMsg.getEthosCaseRefCollection()) {
                 UpdateCaseMsg updateCaseMsg = UpdateCaseMsg.builder()
                         .msgId(UUID.randomUUID().toString())
@@ -161,17 +153,6 @@ public class WorkQueueTask {
             call.execute();
         } catch (SQLException ex) {
             log.error("Failed marking work as errored", ex);
-        }
-    }
-
-    private void recordMultipleError(Connection conn, String multipleRef, String ethosCaseRef, String description) {
-        try (CallableStatement call = conn.prepareCall("{ call fn_persistentQ_logMultipleError(?, ?, ?) }")) {
-            call.setString(1, multipleRef);
-            call.setString(2, ethosCaseRef);
-            call.setString(3, description);
-            call.execute();
-        } catch (SQLException ex) {
-            log.error("Failed recording error for multiple", ex);
         }
     }
 
