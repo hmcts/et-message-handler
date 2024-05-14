@@ -2,8 +2,11 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.tasks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,21 +32,16 @@ import javax.sql.DataSource;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class WorkQueueTask {
     @Value("${queue.batchSize:50}")
     private String batchSize;
 
+    @Autowired
     @Qualifier("etcos")
     private final DataSource dataSource;
     private final TransferToEcmService transferToEcmService;
     private final UpdateManagementService updateManagementService;
-
-    public WorkQueueTask(@Qualifier("etcos") DataSource dataSource, TransferToEcmService transferToEcmService,
-        UpdateManagementService updateManagementService) {
-        this.dataSource = dataSource;
-        this.transferToEcmService = transferToEcmService;
-        this.updateManagementService = updateManagementService;
-    }
 
     @Scheduled(cron = "${cron.pickupWorkTask:0 * * * * *}")
     public void pollDatabaseForWorkMultiple() throws JsonProcessingException {

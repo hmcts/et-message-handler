@@ -11,9 +11,9 @@ import javax.sql.DataSource;
 @Configuration
 public class CosDataSource {
     @Qualifier("etcos")
-    @Bean(name = "etcos")
+    @Bean
     @ConfigurationProperties("etcos.spring.datasource")
-    public DataSource cosDataSource() {
+    public DataSource etcos() {
         return DataSourceBuilder.create().build();
     }
 }
