@@ -43,6 +43,9 @@ java:
     CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "$(CREATE_UPDATES_CONN_STRING)"
     UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
     UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
+    ET_COS_DB_HOST: "{{ .Release.Name }}-postgresql"
+    ET_COS_DB_USER_NAME: "{{ .Values.postgresql.auth.username}}"
+    ET_COS_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
 
 servicebus:
   enabled: true
