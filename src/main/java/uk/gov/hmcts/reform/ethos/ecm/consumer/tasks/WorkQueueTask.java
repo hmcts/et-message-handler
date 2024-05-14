@@ -33,11 +33,12 @@ public class WorkQueueTask {
     @Value("${queue.batchSize:50}")
     private String batchSize;
 
+    @Qualifier("etcos")
     private final DataSource dataSource;
     private final TransferToEcmService transferToEcmService;
     private final UpdateManagementService updateManagementService;
 
-    public WorkQueueTask(@Qualifier("etcos")DataSource dataSource, TransferToEcmService transferToEcmService,
+    public WorkQueueTask(@Qualifier("etcos") DataSource dataSource, TransferToEcmService transferToEcmService,
         UpdateManagementService updateManagementService) {
         this.dataSource = dataSource;
         this.transferToEcmService = transferToEcmService;
