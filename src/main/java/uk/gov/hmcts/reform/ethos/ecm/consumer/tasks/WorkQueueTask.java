@@ -37,7 +37,8 @@ public class WorkQueueTask {
     private final TransferToEcmService transferToEcmService;
     private final UpdateManagementService updateManagementService;
 
-    public WorkQueueTask(@Qualifier("etcos")DataSource dataSource, TransferToEcmService transferToEcmService, UpdateManagementService updateManagementService) {
+    public WorkQueueTask(@Qualifier("etcos")DataSource dataSource, TransferToEcmService transferToEcmService,
+        UpdateManagementService updateManagementService) {
         this.dataSource = dataSource;
         this.transferToEcmService = transferToEcmService;
         this.updateManagementService = updateManagementService;
