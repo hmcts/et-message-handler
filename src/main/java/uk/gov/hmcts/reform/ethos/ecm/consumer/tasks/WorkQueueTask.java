@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.tasks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
