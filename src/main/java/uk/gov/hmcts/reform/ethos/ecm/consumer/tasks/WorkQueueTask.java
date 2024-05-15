@@ -37,14 +37,14 @@ public class WorkQueueTask {
     private String batchSize;
 
     @Autowired
-    @Qualifier("etcos")
-    private final DataSource dataSource;
+    @Qualifier("etcosDataSource")
+    private final DataSource etcosDataSource;
     private final TransferToEcmService transferToEcmService;
     private final UpdateManagementService updateManagementService;
 
     @Scheduled(cron = "${cron.pickupWorkTask:0 * * * * *}")
     public void pollDatabaseForWorkMultiple() throws JsonProcessingException {
-        try (Connection conn = dataSource.getConnection()) {
+        try (Connection conn = etcosDataSource.getConnection()) {
 
             List<WorkItem> workTasks = pickUpWork(conn, Integer.parseInt(batchSize));
 
@@ -102,7 +102,7 @@ public class WorkQueueTask {
             return;
         }
 
-        try (Connection conn = dataSource.getConnection()) {
+        try (Connection conn = etcosDataSource.getConnection()) {
             for (String ethosCaseReference : createUpdatesMsg.getEthosCaseRefCollection()) {
                 UpdateCaseMsg updateCaseMsg = UpdateCaseMsg.builder()
                         .msgId(UUID.randomUUID().toString())
