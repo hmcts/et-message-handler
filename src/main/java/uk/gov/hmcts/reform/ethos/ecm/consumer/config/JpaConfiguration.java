@@ -12,7 +12,8 @@ import javax.sql.DataSource;
 public class JpaConfiguration {
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("sbDataSource") DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+        @Qualifier("sbDataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("uk.gov.hmcts.reform.ethos.ecm.consumer.domain");
