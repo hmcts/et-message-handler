@@ -146,7 +146,7 @@ public class WorkQueueTask {
             call.setArray(1, sqlArray);
             call.execute();
         } catch (SQLException ex) {
-            log.error("Failed marking work as errored", ex);
+            log.error("Failed marking work as completed", ex);
         }
     }
 
