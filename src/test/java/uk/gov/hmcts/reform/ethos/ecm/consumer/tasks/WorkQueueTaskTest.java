@@ -75,9 +75,9 @@ class WorkQueueTaskTest {
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 if (isFirstInvocation) {
                     isFirstInvocation = false;
-                    return true; // Return true for the first invocation
+                    return true;
                 } else {
-                    return false; // Return false for the second and subsequent invocations
+                    return false;
                 }
             }
         });
@@ -122,9 +122,9 @@ class WorkQueueTaskTest {
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 if (isFirstInvocation) {
                     isFirstInvocation = false;
-                    return true; // Return true for the first invocation
+                    return true;
                 } else {
-                    return false; // Return false for the second and subsequent invocations
+                    return false;
                 }
             }
         });
@@ -168,9 +168,9 @@ class WorkQueueTaskTest {
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 if (isFirstInvocation) {
                     isFirstInvocation = false;
-                    return true; // Return true for the first invocation
+                    return true;
                 } else {
-                    return false; // Return false for the second and subsequent invocations
+                    return false;
                 }
             }
         });

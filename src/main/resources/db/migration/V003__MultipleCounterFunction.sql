@@ -1,4 +1,5 @@
-/* CREATE FUNCTION */
+
+﻿/* CREATE FUNCTION */
 
 CREATE OR REPLACE FUNCTION fn_persistentQ_getNextMultipleCountVal (p_multipleRef varchar(25)) RETURNS Integer AS $$
 
