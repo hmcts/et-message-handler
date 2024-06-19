@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientResponseException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.exceptions.CaseCreationException;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.LegalRepDataModel;
+import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.et.common.model.ccd.items.ListTypeItem;
 import uk.gov.hmcts.et.common.model.ccd.types.SubCaseLegalRepDetails;
 import uk.gov.hmcts.et.common.model.multiples.MultipleData;
@@ -33,11 +36,18 @@ public class LegalRepAccessService {
     private final CcdClient ccdClient;
     private final UserService userService;
 
+    private void printDebug(String name, Object obj) throws JsonProcessingException {
+        log.error("/\\/\\/\\/\\" + name + "is: " + new ObjectMapper().writeValueAsString(obj));
+    }
+
     public void run(LegalRepDataModel data) throws IOException {
         log.info("Giving permissions to legalreps for Multiple case");
         String accessToken = userService.getAccessToken();
 
-        SubmitMultipleEvent submitEvent = ccdClient.getMultipleByReference(accessToken, data.getCaseType(), data.getMultipleReference());
+        String caseType = data.getCaseType();
+        SubmitMultipleEvent submitEvent = ccdClient.getMultipleByName(accessToken, caseType, data.getMultipleName());
+        printDebug("submitEvent", submitEvent);
+
         MultipleData multipleData = submitEvent.getCaseData();
         var legalRepsByCaseId = data.getLegalRepIdsByCase();
 
@@ -46,10 +56,11 @@ public class LegalRepAccessService {
         }
 
         HashMap<String, Boolean> processedIds = new HashMap<>();
+        String caseId = String.valueOf(submitEvent.getCaseId());
 
         for (Entry<String, List<String>> byCase : legalRepsByCaseId.entrySet()) {
             
-            for (String userId : byCase.getValue()){
+            for (String userId : byCase.getValue()) {
                 updateLegalRepCollection(multipleData.getLegalRepCollection(), byCase.getKey(), userId);
 
                 if (processedIds.containsKey(userId)) {
@@ -58,23 +69,27 @@ public class LegalRepAccessService {
 
                 processedIds.put(userId, true);
 
-                addUserToMultiple(accessToken, EMPLOYMENT, data.getCaseType(), data.getMultipleReference(), userId);
+                addUserToMultiple(accessToken, EMPLOYMENT, caseType, caseId, userId);
             }
         }
+
+        // Save Multiple back
+        CCDRequest returnedRequest = ccdClient.startBulkAmendEventForCase(accessToken, caseType, EMPLOYMENT, caseId);
+        ccdClient.submitMultipleEventForCase(accessToken, multipleData, caseType, EMPLOYMENT, returnedRequest, caseId);
     }
 
     private void updateLegalRepCollection(ListTypeItem<SubCaseLegalRepDetails> legalReps, String caseRef, String id) {
         Optional<SubCaseLegalRepDetails> subCase = legalReps.findFirst(o -> caseRef.equals(o.getCaseReference()));
         
         if (subCase.isPresent()) {
-            legalReps.addAsItem(SubCaseLegalRepDetails.builder()
-                .caseReference(caseRef)
-                .legalRepIds(ListTypeItem.from(id))
-                .build());
-
-        } else {
             subCase.get().getLegalRepIds().addDistinct(id);
+            return;
         }
+
+        legalReps.addAsItem(SubCaseLegalRepDetails.builder()
+            .caseReference(caseRef)
+            .legalRepIds(ListTypeItem.from(id))
+            .build());
     }
 
     public void addUserToMultiple(String adminUserToken,
