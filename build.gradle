@@ -140,7 +140,7 @@ dependencyManagement {
   dependencies {
     dependency group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
     // CVE-2018-10237 - Unbounded memory allocation
-    dependencySet(group: 'com.google.guava', version: '33.2.0-jre') {
+    dependencySet(group: 'com.google.guava', version: '33.2.1-jre') {
       entry 'guava'
     }
   }
@@ -154,21 +154,21 @@ repositories {
 
 ext {
   junitJupiterVersion = '5.10.2'
-  feignVersion = '13.2.1'
+  feignVersion = '13.3'
   junitPlatform = '1.6.2'
   log4JVersion = '2.23.1'
   logbackVersion = '1.5.6'
-  serenity = '4.1.14'
+  serenity = '4.1.20'
   springBoot = springBoot.class.package.implementationVersion
-  tomcatEmbedVersion = '9.0.89'
+  tomcatEmbedVersion = '9.0.90'
   nettyVersion = '4.1.107.Final'
 }
 
 ext["rest-assured.version"] = '5.1.0'
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:2.0.4'
-  implementation 'com.github.hmcts:et-data-model:3.14.0'
+  implementation 'com.github.hmcts:et-common:2.1.2'
+  implementation 'com.github.hmcts:et-data-model:3.15.2'
   implementation 'com.github.hmcts:ecm-common:2.0.5'
   implementation 'com.github.hmcts:ecm-data-model:1.3.4'
 
@@ -180,13 +180,13 @@ dependencies {
     }
   }
   
-  implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.3.0'
+  implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.3.1'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.1.4'
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.1.5'
   implementation group: 'com.google.code.gson', name: 'gson', version: '2.11.0'
-  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.39.2'
+  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.40'
   implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: feignVersion
   implementation group: 'io.github.openfeign', name: 'feign-core', version: feignVersion
   implementation group: 'junit', name: 'junit', version: '4.13.2'
@@ -203,8 +203,8 @@ dependencies {
   //to remove CVEs
   implementation group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.17', ext: 'pom'
   implementation group: 'org.apache.xmlgraphics', name: 'xmlgraphics-commons', version: '2.9'
-  implementation group: 'commons-net', name: 'commons-net', version: '3.10.0'
-  implementation group: 'com.fasterxml.woodstox', name: 'woodstox-core', version: '6.6.2'
+  implementation group: 'commons-net', name: 'commons-net', version: '3.11.1'
+  implementation group: 'com.fasterxml.woodstox', name: 'woodstox-core', version: '7.0.0'
 
   implementation('org.elasticsearch:elasticsearch') {
     version {
@@ -237,7 +237,7 @@ dependencies {
   testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
 
   testImplementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
-  testImplementation 'com.github.hmcts:fortify-client:1.4.1:all'
+  testImplementation 'com.github.hmcts:fortify-client:1.4.3:all'
   testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
   testImplementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: serenity
