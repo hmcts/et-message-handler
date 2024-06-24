@@ -36,8 +36,8 @@ public class UpdateManagementService {
     public void updateLogic(UpdateCaseMsg updateCaseMsg) throws IOException, InterruptedException,
         NameNotFoundException {
 
-        if (updateCaseMsg.getDataModelParent() instanceof LegalRepDataModel) {
-            legalRepAccessService.run((LegalRepDataModel)updateCaseMsg.getDataModelParent());
+        if (updateCaseMsg.getDataModelParent() instanceof LegalRepDataModel legalRepDataModel) {
+            legalRepAccessService.run(legalRepDataModel);
             return;
         }
 
