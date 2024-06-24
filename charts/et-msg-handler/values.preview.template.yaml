@@ -11,16 +11,6 @@ java:
       secretRef: et-sb-preview
       key: connectionString
   keyVaults:
-    et-cos:
-      secrets:
-        - name: et-cos-postgres-user-v15
-          alias: ET_COS_DB_USER_NAME
-        - name: et-cos-postgres-password-v15
-          alias: ET_COS_DB_PASSWORD
-        - name: et-cos-postgres-host-v15
-          alias: ET_COS_DB_HOST
-        - name: et-cos-postgres-port-v15
-          alias: ET_COS_DB_PORT
     et-msg-handler:
       secrets:
         - name: caseworker-user-name
@@ -43,10 +33,6 @@ java:
     CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING: "$(CREATE_UPDATES_CONN_STRING)"
     UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
     UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING: "$(UPDATE_CASE_CONN_STRING)"
-    ET_COS_DB_HOST: "{{ .Release.Name }}-postgresql"
-    ET_COS_DB_NAME: "{{ .Values.postgresql.auth.database}}"
-    ET_COS_DB_USER_NAME: "{{ .Values.postgresql.auth.username}}"
-    ET_COS_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
 
 servicebus:
   enabled: true

@@ -4,16 +4,6 @@ java:
   ingressHost: et-msg-handler-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: et
   keyVaults:
-    et-cos:
-      secrets:
-        - name: et-cos-postgres-user-v15
-          alias: ET_COS_DB_USER_NAME
-        - name: et-cos-postgres-password-v15
-          alias: ET_COS_DB_PASSWORD
-        - name: et-cos-postgres-host-v15
-          alias: ET_COS_DB_HOST
-        - name: et-cos-postgres-port-v15
-          alias: ET_COS_DB_PORT
     et-msg-handler:
       secrets:
         - name: caseworker-user-name
