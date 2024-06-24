@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
-
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.LegalRepDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.ResetStateDataModel;
@@ -16,6 +15,7 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleErrorsRe
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.List;
+import javax.naming.NameNotFoundException;
 
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.YES;
@@ -33,7 +33,8 @@ public class UpdateManagementService {
     private final EmailService emailService;
     private final LegalRepAccessService legalRepAccessService;
 
-    public void updateLogic(UpdateCaseMsg updateCaseMsg) throws IOException, InterruptedException {
+    public void updateLogic(UpdateCaseMsg updateCaseMsg) throws IOException, InterruptedException,
+        NameNotFoundException {
 
         if (updateCaseMsg.getDataModelParent() instanceof LegalRepDataModel) {
             legalRepAccessService.run((LegalRepDataModel)updateCaseMsg.getDataModelParent());
