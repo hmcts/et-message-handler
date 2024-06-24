@@ -201,7 +201,7 @@ dependencies {
   implementation group: 'org.apache.xmlgraphics', name: 'batik-all', version: '1.17', ext: 'pom'
   implementation group: 'org.apache.xmlgraphics', name: 'xmlgraphics-commons', version: '2.9'
   implementation group: 'commons-net', name: 'commons-net', version: '3.11.1'
-  implementation group: 'com.fasterxml.woodstox', name: 'woodstox-core', version: '6.6.2'
+  implementation group: 'com.fasterxml.woodstox', name: 'woodstox-core', version: '7.0.0'
 
   implementation('org.elasticsearch:elasticsearch') {
     version {
