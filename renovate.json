@@ -3,5 +3,8 @@
   "extends": [
     "local>hmcts/.github:renovate-config",
     "local>hmcts/.github//renovate/automerge-all"
-  ]
+  ],
+  "ignoreDeps": [
+    "com.fasterxml.jackson.core:jackson-databind"
+  ],
 }
