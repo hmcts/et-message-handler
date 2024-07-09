@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.naming.NameNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -49,7 +50,7 @@ public class UpdateManagementServiceTest {
     }
 
     @Test
-    public void updateLogic() throws IOException, InterruptedException {
+    public void updateLogic() throws IOException, InterruptedException, NameNotFoundException {
         when(multipleCounterRepository.persistentQGetNextMultipleCountVal(
             updateCaseMsg.getMultipleRef())).thenReturn(1);
         when(multipleErrorsRepository.findByMultipleref(updateCaseMsg.getMultipleRef())).thenReturn(new ArrayList<>());
@@ -75,7 +76,8 @@ public class UpdateManagementServiceTest {
     }
 
     @Test
-    public void updateLogicWithErrorsDefaultConstructor() throws IOException, InterruptedException {
+    public void updateLogicWithErrorsDefaultConstructor() throws IOException, InterruptedException, 
+        NameNotFoundException {
         MultipleErrors multipleErrors = new MultipleErrors();
         when(multipleCounterRepository.persistentQGetNextMultipleCountVal(
             updateCaseMsg.getMultipleRef())).thenReturn(1);
@@ -118,7 +120,7 @@ public class UpdateManagementServiceTest {
     }
 
     @Test
-    public void updateLogicResetState() throws IOException, InterruptedException {
+    public void updateLogicResetState() throws IOException, InterruptedException, NameNotFoundException {
 
         ResetStateDataModel resetStateDataModel = ResetStateDataModel.builder().build();
         updateCaseMsg.setDataModelParent(resetStateDataModel);

@@ -20,6 +20,7 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.service.UpdateManagementService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
 
 import java.io.IOException;
+import javax.naming.NameNotFoundException;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,7 +89,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void checkIfFinishWhenError() throws IOException, InterruptedException {
+    public void checkIfFinishWhenError() throws IOException, InterruptedException, NameNotFoundException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             UpdateCaseMsg.class
@@ -98,7 +99,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void checkIfFinishWhenErrorException() throws IOException, InterruptedException {
+    public void checkIfFinishWhenErrorException() throws IOException, InterruptedException, NameNotFoundException {
         doThrow(new IOException("Update logic failed")).when(updateManagementService).updateLogic(any());
         doThrow(new IOException("Check If finish failed")).when(updateManagementService).checkIfFinish(any());
         updateCaseBusReceiverTask.onMessageAsync(message);
