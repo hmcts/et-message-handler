@@ -8,6 +8,7 @@ import com.microsoft.azure.servicebus.IMessage;
 import com.microsoft.azure.servicebus.IMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.exceptions.InvalidMessageException;
@@ -29,10 +30,9 @@ import java.util.concurrent.Executors;
 @DependsOn("update-case-completor")
 @Service
 @Slf4j
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class UpdateCaseBusReceiverTask implements IMessageHandler {
-
-    @SuppressWarnings("PMD.DoNotUseThreads")
-    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor;
 
     private static final int MAX_RETRIES = 10;
 
@@ -42,17 +42,19 @@ public class UpdateCaseBusReceiverTask implements IMessageHandler {
 
     public UpdateCaseBusReceiverTask(ObjectMapper objectMapper,
                                      @Qualifier("update-case-completor") MessageAutoCompletor messageCompletor,
-                                     UpdateManagementService updateManagementService) {
+                                     UpdateManagementService updateManagementService,
+                                     @Value("${threads}") int threads) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;
         this.updateManagementService = updateManagementService;
+        executor = Executors.newFixedThreadPool(threads);
     }
 
     @Override
     public CompletableFuture<Void> onMessageAsync(IMessage message) {
         return CompletableFuture
-            .supplyAsync(() -> tryProcessMessage(message), EXECUTOR)
-            .thenComposeAsync(processingResult -> tryFinaliseMessageAsync(message, processingResult), EXECUTOR)
+            .supplyAsync(() -> tryProcessMessage(message), executor)
+            .thenComposeAsync(processingResult -> tryFinaliseMessageAsync(message, processingResult), executor)
             .handleAsync((v, error) -> {
                 // Individual steps are supposed to handle their exceptions themselves.
                 // This code is here to make sure errors are logged even when they fail to do that.

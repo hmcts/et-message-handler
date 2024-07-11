@@ -52,7 +52,7 @@ public class CreateUpdatesBusReceiverTaskTest {
     @Before
     public void setUp() {
         createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(
-            objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository);
+            objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository, 10);
         msg = Helper.generateCreateUpdatesMsg();
         message = createMessage(msg);
     }

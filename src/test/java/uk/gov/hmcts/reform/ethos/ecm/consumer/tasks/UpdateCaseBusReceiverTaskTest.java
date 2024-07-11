@@ -46,7 +46,7 @@ public class UpdateCaseBusReceiverTaskTest {
     public void setUp() {
         updateCaseBusReceiverTask = new UpdateCaseBusReceiverTask(objectMapper,
                                                                   messageCompletor,
-                                                                  updateManagementService);
+                                                                  updateManagementService, 10);
         message = createMessage();
     }
 

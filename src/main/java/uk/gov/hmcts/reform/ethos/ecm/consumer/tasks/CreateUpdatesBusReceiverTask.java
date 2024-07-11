@@ -8,6 +8,7 @@ import com.microsoft.azure.servicebus.IMessage;
 import com.microsoft.azure.servicebus.IMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.ecm.common.exceptions.InvalidMessageException;
@@ -34,10 +35,9 @@ import java.util.concurrent.Executors;
 @DependsOn({"create-updates-completor", "update-case-send-helper"})
 @Service
 @Slf4j
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class CreateUpdatesBusReceiverTask implements IMessageHandler {
-
-    @SuppressWarnings("PMD.DoNotUseThreads")
-    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor;
 
     private final ObjectMapper objectMapper;
     private final MessageAutoCompletor messageCompletor;
@@ -50,19 +50,21 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
         ObjectMapper objectMapper,
         @Qualifier("create-updates-completor") MessageAutoCompletor messageCompletor,
         @Qualifier("update-case-send-helper") ServiceBusSender serviceBusSender,
-        TransferToEcmService transferToEcmService, MultipleCounterRepository multipleCounterRepository) {
+        TransferToEcmService transferToEcmService, MultipleCounterRepository multipleCounterRepository,
+        @Value("${threads}") int threads) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;
         this.serviceBusSender = serviceBusSender;
         this.transferToEcmService = transferToEcmService;
         this.multipleCounterRepository = multipleCounterRepository;
+        executor = Executors.newFixedThreadPool(threads);
     }
 
     @Override
     public CompletableFuture<Void> onMessageAsync(IMessage message) {
         return CompletableFuture
-            .supplyAsync(() -> tryProcessMessage(message), EXECUTOR)
-            .thenComposeAsync(processingResult -> tryFinaliseMessage(message, processingResult), EXECUTOR)
+            .supplyAsync(() -> tryProcessMessage(message), executor)
+            .thenComposeAsync(processingResult -> tryFinaliseMessage(message, processingResult), executor)
             .handleAsync((v, error) -> {
                 // Individual steps are supposed to handle their exceptions themselves.
                 // This code is here to make sure errors are logged even when they fail to do that.
