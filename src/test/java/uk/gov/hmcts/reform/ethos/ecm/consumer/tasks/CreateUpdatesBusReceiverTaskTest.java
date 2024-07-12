@@ -44,8 +44,9 @@ class CreateUpdatesBusReceiverTaskTest {
     private transient MultipleCounterRepository multipleCounterRepository;
 
     @InjectMocks
-    private transient final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(
-        objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository, 10);
+    private final transient CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask =
+        new CreateUpdatesBusReceiverTask(objectMapper, messageCompletor, serviceBusSender,
+                                         transferToEcmService, multipleCounterRepository, 10);
 
     private transient Message message;
     private transient CreateUpdatesMsg msg;
