@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.et.common.model.ccd.CaseData;
 import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
@@ -22,8 +22,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.ACCEPTED_STATE;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-public class SingleReadingServiceTest {
+@ExtendWith(SpringExtension.class)
+class SingleReadingServiceTest {
 
     @InjectMocks
     private transient SingleReadingService singleReadingService;
@@ -39,7 +39,7 @@ public class SingleReadingServiceTest {
     private transient List<SubmitEvent> submitEvents;
     private static final String USER_TOKEN = "my-test-token";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         SubmitEvent submitEvent = new SubmitEvent();
         CaseData caseData = new CaseData();
@@ -50,7 +50,7 @@ public class SingleReadingServiceTest {
     }
 
     @Test
-    public void sendUpdateToSingleLogic() throws IOException {
+    void sendUpdateToSingleLogic() throws IOException {
         var updateCaseMsg = Helper.generateUpdateCaseMsg();
         when(userService.getAccessToken()).thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEvents);
@@ -62,7 +62,7 @@ public class SingleReadingServiceTest {
     }
 
     @Test
-    public void sendTransferredToSingleLogic() throws IOException {
+    void sendTransferredToSingleLogic() throws IOException {
         var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         when(userService.getAccessToken()).thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(submitEvents);
@@ -74,7 +74,7 @@ public class SingleReadingServiceTest {
     }
 
     @Test
-    public void sendUpdateToSingleLogicNoCasesFound() throws IOException {
+    void sendUpdateToSingleLogicNoCasesFound() throws IOException {
         var updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         when(userService.getAccessToken()).thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList())).thenReturn(null);

@@ -50,7 +50,8 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
         ObjectMapper objectMapper,
         @Qualifier("create-updates-completor") MessageAutoCompletor messageCompletor,
         @Qualifier("update-case-send-helper") ServiceBusSender serviceBusSender,
-        TransferToEcmService transferToEcmService, MultipleCounterRepository multipleCounterRepository,
+        TransferToEcmService transferToEcmService,
+        MultipleCounterRepository multipleCounterRepository,
         @Value("${threads}") int threads) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;

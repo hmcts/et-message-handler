@@ -1,23 +1,23 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.ecm.common.idam.models.UserDetails;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.idam.IdamApi;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+@ExtendWith(SpringExtension.class)
+class UserServiceTest {
 
     @InjectMocks
     private transient UserService userService;
@@ -27,7 +27,7 @@ public class UserServiceTest {
 
     private static final String TOKEN = "accessToken";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         userDetails = getUserDetails();
         IdamApi idamApi = new IdamApi() {
@@ -46,23 +46,13 @@ public class UserServiceTest {
         ReflectionTestUtils.setField(userService, "caseWorkerPassword", "123456");
     }
 
-    private UserDetails getUserDetails() {
-        UserDetails userDetails = new UserDetails();
-        userDetails.setUid("id");
-        userDetails.setEmail("mail@mail.com");
-        userDetails.setFirstName("Mike");
-        userDetails.setLastName("Jordan");
-        userDetails.setRoles(Collections.singletonList("role"));
-        return userDetails;
-    }
-
     @Test
-    public void getUserDetailsById() { //NOPMD - suppressed LinguisticNaming
+    void getUserDetailsById() { //NOPMD - suppressed LinguisticNaming
         assertEquals(userDetails, userService.getUserDetailsById("TOKEN", "id"));
     }
 
     @Test
-    public void shouldCheckAllUserDetails() {
+    void shouldCheckAllUserDetails() {
         assertEquals("mail@mail.com", userService.getUserDetails(TOKEN).getEmail());
         assertEquals("Mike", userService.getUserDetails(TOKEN).getFirstName());
         assertEquals("Jordan", userService.getUserDetails(TOKEN).getLastName());
@@ -71,9 +61,19 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetAccessToken() {
+    void testGetAccessToken() {
         when(accessTokenService.getAccessToken(anyString(), anyString())).thenReturn(TOKEN);
         assertEquals(TOKEN, userService.getAccessToken());
+    }
+
+    private UserDetails getUserDetails() {
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUid("id");
+        userDetails.setEmail("mail@mail.com");
+        userDetails.setFirstName("Mike");
+        userDetails.setLastName("Jordan");
+        userDetails.setRoles(Collections.singletonList("role"));
+        return userDetails;
     }
 
 }

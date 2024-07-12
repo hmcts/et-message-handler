@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.servicebus.Message;
 import com.microsoft.azure.servicebus.MessageBody;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.exceptions.InvalidMessageException;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.Msg;
@@ -29,12 +29,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SuppressWarnings("PMD.UnusedPrivateMethod")
-public class CreateUpdatesBusReceiverTaskTest {
+@ExtendWith(SpringExtension.class)
+class CreateUpdatesBusReceiverTaskTest {
 
-    @InjectMocks
-    private transient CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
     @Mock
     private transient ObjectMapper objectMapper;
     @Mock
@@ -46,19 +43,21 @@ public class CreateUpdatesBusReceiverTaskTest {
     @Mock
     private transient MultipleCounterRepository multipleCounterRepository;
 
+    @InjectMocks
+    private transient final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(
+        objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository, 10);
+
     private transient Message message;
     private transient CreateUpdatesMsg msg;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        createUpdatesBusReceiverTask = new CreateUpdatesBusReceiverTask(
-            objectMapper, messageCompletor, serviceBusSender, transferToEcmService, multipleCounterRepository, 10);
         msg = Helper.generateCreateUpdatesMsg();
         message = createMessage(msg);
     }
 
     @Test
-    public void onMessageAsync() throws IOException {
+    void onMessageAsync() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             CreateUpdatesMsg.class
@@ -67,7 +66,7 @@ public class CreateUpdatesBusReceiverTaskTest {
     }
 
     @Test
-    public void onMessageAsyncEmptyEthosCaseRefCollection() throws IOException {
+    void onMessageAsyncEmptyEthosCaseRefCollection() throws IOException {
         msg.setEthosCaseRefCollection(null);
         message = createMessage(msg);
         when(objectMapper.readValue(
@@ -80,7 +79,7 @@ public class CreateUpdatesBusReceiverTaskTest {
     }
 
     @Test
-    public void onMessageAsyncFailedToParse() throws IOException {
+    void onMessageAsyncFailedToParse() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             CreateUpdatesMsg.class
@@ -89,7 +88,7 @@ public class CreateUpdatesBusReceiverTaskTest {
     }
 
     @Test
-    public void onMessageAsyncException() throws IOException {
+    void onMessageAsyncException() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             CreateUpdatesMsg.class

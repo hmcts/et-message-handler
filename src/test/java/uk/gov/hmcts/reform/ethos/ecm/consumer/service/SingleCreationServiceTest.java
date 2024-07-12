@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
@@ -30,9 +30,8 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.ENGLANDWALES_CASE_T
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleCreationService.CREATE_CASE_EVENT_SUMMARY_TEMPLATE;
 
-@SuppressWarnings("PMD.LawOfDemeter")
-@RunWith(SpringJUnit4ClassRunner.class)
-public class SingleCreationServiceTest {
+@ExtendWith(SpringExtension.class)
+class SingleCreationServiceTest {
     @InjectMocks
     private SingleCreationService singleCreationService;
     @Mock
@@ -40,7 +39,8 @@ public class SingleCreationServiceTest {
     private static final String USER_TOKEN = "accessToken";
 
     @Test
-    public void caseTransferToScotlandCreateCase() throws IOException {
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    void caseTransferToScotlandCreateCase() throws IOException {
         var ethosCaseReference = "4150002/2020";
         var managingOffice = TribunalOffice.MANCHESTER.getOfficeName();
         var caseData = new CaseData();
@@ -85,7 +85,8 @@ public class SingleCreationServiceTest {
     }
 
     @Test
-    public void caseTransferToEnglandCreateCase() throws IOException {
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    void caseTransferToEnglandCreateCase() throws IOException {
         String ethosCaseReference = "4150002/2020";
         String managingOffice = TribunalOffice.DUNDEE.getOfficeName();
         CaseData caseData = new CaseData();
@@ -111,7 +112,8 @@ public class SingleCreationServiceTest {
     }
 
     @Test
-    public void caseTransferToScotlandUpdateExisting() throws IOException {
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    void caseTransferToScotlandUpdateExisting() throws IOException {
         var ethosCaseReference = "4150002/2020";
         var managingOffice = TribunalOffice.MANCHESTER.getOfficeName();
         var caseData = new CaseData();

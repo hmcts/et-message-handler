@@ -1,16 +1,16 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -18,27 +18,27 @@ import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.config.OAuth2Configuration;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.idam.TokenResponse;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.AccessTokenService.BEARER_AUTH_TYPE;
 
-@RunWith(MockitoJUnitRunner.class)
-public class AccessTokenServiceTest {
+@ExtendWith(SpringExtension.class)
+class AccessTokenServiceTest {
 
     @InjectMocks
     private transient AccessTokenService accessTokenService;
     @Mock
     private transient RestTemplate restTemplate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         OAuth2Configuration oauth2Configuration = new OAuth2Configuration("redirectUri", "id", "secret");
         accessTokenService = new AccessTokenService(oauth2Configuration, restTemplate);
     }
 
     @Test
-    public void testGetAccessTokenTest() {
+    void testGetAccessTokenTest() {
         String url = "http://sidam-api:5000/o/token";
         ReflectionTestUtils.setField(accessTokenService, "idamApiOidcUrl", url);
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +51,7 @@ public class AccessTokenServiceTest {
     }
 
     @Test
-    public void testGetAccessTokenEmptyBody() {
+    void testGetAccessTokenEmptyBody() {
         String url = "http://sidam-api:5000/o/token";
         ReflectionTestUtils.setField(accessTokenService, "idamApiOidcUrl", url);
         HttpHeaders headers = new HttpHeaders();

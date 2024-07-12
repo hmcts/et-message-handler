@@ -1,13 +1,10 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.idam;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TokenResponseTest {
+class TokenResponseTest {
 
     private TokenResponse getTokenResponse() {
         return new TokenResponse("accessToken", "expiresIn",
@@ -15,7 +12,7 @@ public class TokenResponseTest {
     }
 
     @Test
-    public void tokenResponseTest() {
+    void tokenResponseTest() {
         TokenResponse tokenResponse = getTokenResponse();
         assertEquals("accessToken", tokenResponse.accessToken);
         assertEquals("expiresIn", tokenResponse.expiresIn);

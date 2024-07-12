@@ -1,18 +1,18 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus;
 
 import com.microsoft.azure.servicebus.IQueueClient;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.UUID;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-public class MessageAutoCompletorTest {
+@ExtendWith(SpringExtension.class)
+class MessageAutoCompletorTest {
 
     @InjectMocks
     private transient MessageAutoCompletor completor;
@@ -21,13 +21,13 @@ public class MessageAutoCompletorTest {
 
     private static final UUID LOCK_TOKEN = UUID.randomUUID();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         completor = new MessageAutoCompletor(queueClient);
     }
 
     @Test
-    public void completeAsync() {
+    void completeAsync() {
         completor.completeAsync(LOCK_TOKEN);
         Mockito.verify(queueClient).completeAsync(LOCK_TOKEN);
         Mockito.verifyNoMoreInteractions(queueClient);

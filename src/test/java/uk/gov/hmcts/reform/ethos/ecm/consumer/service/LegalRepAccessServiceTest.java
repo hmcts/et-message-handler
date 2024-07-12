@@ -46,7 +46,7 @@ class LegalRepAccessServiceTest {
     private MultipleDetails details;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         when(userService.getAccessToken()).thenReturn(ACCESS_TOKEN);
         details = new MultipleDetails();
         details.setCaseTypeId(ENGLANDWALES_BULK_CASE_TYPE_ID);
@@ -106,7 +106,7 @@ class LegalRepAccessServiceTest {
         event.setCaseData(caseData);
 
         String singleRef1 = "6000001/2024";
-        
+
         SubCaseLegalRepDetails subCaseLegalRepDetails = SubCaseLegalRepDetails.builder()
             .caseReference(singleRef1)
             .legalRepIds(ListTypeItem.from(USER_ID_1))

@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.helpers;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.ecm.common.model.ccd.CaseData;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.et.common.model.bulk.types.DynamicFixedListType;
@@ -16,24 +16,24 @@ import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.transfertoecm.TransferToEc
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNASSIGNED_OFFICE;
 
 @SuppressWarnings("PMD.LawOfDemeter")
-public class TransferToEcmCaseDataHelperTest {
+class TransferToEcmCaseDataHelperTest {
     private static final String TEST = "Test";
     private CaseData ecmCaseData;
     private uk.gov.hmcts.et.common.model.ccd.CaseData etCaseData;
 
-    @Before
+    @BeforeEach
     public void setup() {
         ecmCaseData = new CaseData();
         etCaseData = createEtCaseData();
     }
 
     @Test
-    public void testCopyCaseData() {
+    void testCopyCaseData() {
         TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBaseUrl",
                                                  "Accepted", SCOTLAND_CASE_TYPE_ID);
         assertEquals(TribunalOffice.GLASGOW.getOfficeName(), ecmCaseData.getManagingOffice());
@@ -47,7 +47,7 @@ public class TransferToEcmCaseDataHelperTest {
     }
 
     @Test
-    public void checkUnassignedOffice() {
+    void checkUnassignedOffice() {
         etCaseData.setManagingOffice(UNASSIGNED_OFFICE);
         etCaseData.setAllocatedOffice(UNASSIGNED_OFFICE);
         TransferToEcmCaseDataHelper.copyCaseData(etCaseData, ecmCaseData, "caseId", "ccdGatewayBaseUrl",

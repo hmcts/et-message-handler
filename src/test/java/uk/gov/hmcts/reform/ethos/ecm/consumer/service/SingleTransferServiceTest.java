@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.client.CcdSubmitEventParams;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
@@ -18,7 +18,7 @@ import uk.gov.hmcts.et.common.model.ccd.SubmitEvent;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -27,9 +27,8 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.ENGLANDWALES_CASE_T
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SINGLE_CASE_TYPE;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.service.SingleTransferService.SAME_COUNTRY_EVENT_SUMMARY_TEMPLATE;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
-public class SingleTransferServiceTest {
+@ExtendWith(SpringExtension.class)
+class SingleTransferServiceTest {
 
     @InjectMocks
     private transient SingleTransferService singleTransferService;
@@ -41,7 +40,8 @@ public class SingleTransferServiceTest {
     private transient ArgumentCaptor<CcdSubmitEventParams> ccdSubmitEventParamsArgumentCaptor;
 
     @Test
-    public void testTransferSameCountry() throws IOException {
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    void testTransferSameCountry() throws IOException {
         String caseTypeId = ENGLANDWALES_CASE_TYPE_ID;
         String jurisdiction = "EMPLOYMENT";
         String officeCT = TribunalOffice.NEWCASTLE.getOfficeName();
@@ -81,7 +81,8 @@ public class SingleTransferServiceTest {
     }
 
     @Test
-    public void testTransferDifferentCountry() throws IOException {
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    void testTransferDifferentCountry() throws IOException {
         var submitEvent = new SubmitEvent();
         var userToken = "my-test-token";
         var jurisdiction = "EMPLOYMENT";

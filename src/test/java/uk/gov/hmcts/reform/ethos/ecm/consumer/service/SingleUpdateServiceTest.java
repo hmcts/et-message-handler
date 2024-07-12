@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.helpers.UtilHelper;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
@@ -33,8 +33,8 @@ import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.ACCEPTED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.MULTIPLE_CASE_TYPE;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-public class SingleUpdateServiceTest {
+@ExtendWith(SpringExtension.class)
+class SingleUpdateServiceTest {
 
     @InjectMocks
     private transient SingleUpdateService singleUpdateService;
@@ -47,7 +47,7 @@ public class SingleUpdateServiceTest {
     private transient String userToken;
     private CCDRequest returnedRequest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         submitEvent = new SubmitEvent();
         CaseData caseData = new CaseData();
@@ -72,11 +72,10 @@ public class SingleUpdateServiceTest {
 
         updateCaseMsg = Helper.generateUpdateCaseMsg();
         userToken = "accessToken";
-
     }
 
     @Test
-    public void sendUpdate() throws IOException {
+    void sendUpdate() throws IOException {
         when(ccdClient.startEventForCaseAPIRole(anyString(), anyString(), anyString(), any()))
             .thenReturn(returnedRequest);
         when(ccdClient.submitEventForCase(anyString(), any(), anyString(), anyString(), any(), anyString()))
@@ -101,7 +100,7 @@ public class SingleUpdateServiceTest {
     }
 
     @Test
-    public void sendPreAcceptToSingleLogic() throws IOException {
+    void sendPreAcceptToSingleLogic() throws IOException {
         updateCaseMsg = Helper.generatePreAcceptCaseMsg();
         when(ccdClient.startEventForCasePreAcceptBulkSingle(anyString(), anyString(), anyString(), any()))
             .thenReturn(returnedRequest);
@@ -127,7 +126,7 @@ public class SingleUpdateServiceTest {
     }
 
     @Test
-    public void sendDisposeToSingleLogic() throws IOException {
+    void sendDisposeToSingleLogic() throws IOException {
         updateCaseMsg = Helper.generateCloseCaseMsg();
         when(ccdClient.startDisposeEventForCase(anyString(), anyString(), anyString(), any()))
             .thenReturn(returnedRequest);
@@ -153,7 +152,7 @@ public class SingleUpdateServiceTest {
     }
 
     @Test
-    public void updateMultipleReferenceLinkMarkUp() throws IOException {
+    void updateMultipleReferenceLinkMarkUp() throws IOException {
         submitEvent.getCaseData().setMultipleReferenceLinkMarkUp(null);
         when(ccdClient.startEventForCaseAPIRole(anyString(), anyString(), anyString(), any()))
             .thenReturn(returnedRequest);
@@ -186,7 +185,7 @@ public class SingleUpdateServiceTest {
     }
 
     @Test
-    public void sendUpdateForSendNotification() throws IOException {
+    void sendUpdateForSendNotification() throws IOException {
         when(ccdClient.startEventForCase(anyString(), anyString(), anyString(), any(), anyString()))
             .thenReturn(returnedRequest);
 
@@ -207,5 +206,4 @@ public class SingleUpdateServiceTest {
             eq("sendNotificationMultiple")
         );
     }
-
 }
