@@ -38,7 +38,7 @@ class UpdateCaseBusReceiverTaskTest {
     private transient UpdateManagementService updateManagementService;
 
     @InjectMocks
-    private transient final UpdateCaseBusReceiverTask updateCaseBusReceiverTask =
+    private final transient UpdateCaseBusReceiverTask updateCaseBusReceiverTask =
         new UpdateCaseBusReceiverTask(objectMapper, messageCompletor, updateManagementService, 10);
 
     private transient Message message;
