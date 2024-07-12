@@ -26,7 +26,7 @@ public class ServiceBusUpdateCaseReceiverConf {
         Executors.newSingleThreadExecutor(r -> new Thread(r, "update-case-queue-listen"));
 
     private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
+        new MessageHandlerOptions(10, false, Duration.ofMinutes(5));
 
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {

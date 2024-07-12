@@ -22,7 +22,7 @@ public class ServiceBusCreateUpdatesReceiverConf {
 
     private final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
     private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
+        new MessageHandlerOptions(10, false, Duration.ofMinutes(5));
 
     private static final ExecutorService CREATE_UPDATES_LISTEN_EXECUTOR =
         Executors.newSingleThreadExecutor(r -> new Thread(r, "create-updates-queue-listen")
