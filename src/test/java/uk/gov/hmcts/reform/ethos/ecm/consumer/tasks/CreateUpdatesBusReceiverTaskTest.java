@@ -16,7 +16,6 @@ import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.Msg;
 import uk.gov.hmcts.ecm.common.servicebus.MessageBodyRetriever;
 import uk.gov.hmcts.ecm.common.servicebus.ServiceBusSender;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleCounterRepository;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm.TransferToEcmService;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.servicebus.MessageAutoCompletor;
@@ -40,13 +39,11 @@ class CreateUpdatesBusReceiverTaskTest {
     private transient ServiceBusSender serviceBusSender;
     @Mock
     private TransferToEcmService transferToEcmService;
-    @Mock
-    private transient MultipleCounterRepository multipleCounterRepository;
 
     @InjectMocks
     private final transient CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask =
         new CreateUpdatesBusReceiverTask(objectMapper, messageCompletor, serviceBusSender,
-                                         transferToEcmService, multipleCounterRepository, 10);
+                                         transferToEcmService, 10);
 
     private transient Message message;
     private transient CreateUpdatesMsg msg;
