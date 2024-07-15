@@ -19,14 +19,14 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class ServiceBusCreateUpdatesReceiverConf {
     @Value("${maxConcurrentCalls}")
-    private static int MAX_CONCURRENT_CALLS;
+    private static int maxConcurrentCalls;
 
     private final IQueueClient createUpdatesListenClient;
 
     private final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
 
     private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(MAX_CONCURRENT_CALLS, false, Duration.ofMinutes(5));
+        new MessageHandlerOptions(maxConcurrentCalls, false, Duration.ofMinutes(5));
 
     private static final ExecutorService CREATE_UPDATES_LISTEN_EXECUTOR =
         Executors.newSingleThreadExecutor(r -> new Thread(r, "create-updates-queue-listen")
