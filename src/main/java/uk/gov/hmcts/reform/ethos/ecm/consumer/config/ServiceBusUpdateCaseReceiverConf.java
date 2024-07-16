@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class ServiceBusUpdateCaseReceiverConf {
-    @Value("${maxConcurrentCalls}")
+    @Value("${multithreading.update-case-bus-receiver.maxConcurrentCalls}")
     private int maxConcurrentCalls;
 
     private final IQueueClient updateCaseListenClient;

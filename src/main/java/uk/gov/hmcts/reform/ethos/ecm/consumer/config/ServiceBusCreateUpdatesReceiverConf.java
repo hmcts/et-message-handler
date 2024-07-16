@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 @AutoConfigureAfter(ServiceBusSenderConfiguration.class)
 @Configuration
 public class ServiceBusCreateUpdatesReceiverConf {
-    @Value("${maxConcurrentCalls}")
+    @Value("${multithreading.create-updates-bus-receiver.maxConcurrentCalls}")
     private int maxConcurrentCalls;
 
     private final IQueueClient createUpdatesListenClient;

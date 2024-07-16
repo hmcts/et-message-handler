@@ -49,7 +49,7 @@ public class CreateUpdatesBusReceiverTask implements IMessageHandler {
         @Qualifier("create-updates-completor") MessageAutoCompletor messageCompletor,
         @Qualifier("update-case-send-helper") ServiceBusSender serviceBusSender,
         TransferToEcmService transferToEcmService,
-        @Value("${threads}") int threads) {
+        @Value("${multithreading.create-updates-bus-receiver.threads}") int threads) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;
         this.serviceBusSender = serviceBusSender;

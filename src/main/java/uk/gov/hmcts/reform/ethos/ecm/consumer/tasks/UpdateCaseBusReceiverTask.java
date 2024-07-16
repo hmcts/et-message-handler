@@ -43,7 +43,7 @@ public class UpdateCaseBusReceiverTask implements IMessageHandler {
     public UpdateCaseBusReceiverTask(ObjectMapper objectMapper,
                                      @Qualifier("update-case-completor") MessageAutoCompletor messageCompletor,
                                      UpdateManagementService updateManagementService,
-                                     @Value("${threads}") int threads) {
+                                     @Value("${multithreading.update-case-bus-receiver.threads}") int threads) {
         this.objectMapper = objectMapper;
         this.messageCompletor = messageCompletor;
         this.updateManagementService = updateManagementService;
