@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.servicebus.Message;
 import com.microsoft.azure.servicebus.MessageBody;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.exceptions.InvalidMessageException;
 import uk.gov.hmcts.ecm.common.model.servicebus.Msg;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
@@ -27,12 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SuppressWarnings("PMD.UnusedPrivateMethod")
-public class UpdateCaseBusReceiverTaskTest {
+@ExtendWith(SpringExtension.class)
+class UpdateCaseBusReceiverTaskTest {
 
-    @InjectMocks
-    private transient UpdateCaseBusReceiverTask updateCaseBusReceiverTask;
     @Mock
     private transient ObjectMapper objectMapper;
     @Mock
@@ -40,18 +37,19 @@ public class UpdateCaseBusReceiverTaskTest {
     @Mock
     private transient UpdateManagementService updateManagementService;
 
+    @InjectMocks
+    private final transient UpdateCaseBusReceiverTask updateCaseBusReceiverTask =
+        new UpdateCaseBusReceiverTask(objectMapper, messageCompletor, updateManagementService, 10);
+
     private transient Message message;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        updateCaseBusReceiverTask = new UpdateCaseBusReceiverTask(objectMapper,
-                                                                  messageCompletor,
-                                                                  updateManagementService);
         message = createMessage();
     }
 
     @Test
-    public void onMessageAsync() throws IOException {
+    void onMessageAsync() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             UpdateCaseMsg.class
@@ -61,7 +59,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void onMessageAsyncFailedToParse() throws IOException {
+    void onMessageAsyncFailedToParse() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             UpdateCaseMsg.class
@@ -70,7 +68,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void onMessageAsyncIOException() throws IOException {
+    void onMessageAsyncIOException() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             UpdateCaseMsg.class
@@ -80,7 +78,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void onMessageAsyncException() throws IOException {
+    void onMessageAsyncException() throws IOException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             UpdateCaseMsg.class
@@ -89,7 +87,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void checkIfFinishWhenError() throws IOException, InterruptedException, NameNotFoundException {
+    void checkIfFinishWhenError() throws IOException, InterruptedException, NameNotFoundException {
         when(objectMapper.readValue(
             MessageBodyRetriever.getBinaryData(message.getMessageBody()),
             UpdateCaseMsg.class
@@ -99,7 +97,7 @@ public class UpdateCaseBusReceiverTaskTest {
     }
 
     @Test
-    public void checkIfFinishWhenErrorException() throws IOException, InterruptedException, NameNotFoundException {
+    void checkIfFinishWhenErrorException() throws IOException, InterruptedException, NameNotFoundException {
         doThrow(new IOException("Update logic failed")).when(updateManagementService).updateLogic(any());
         doThrow(new IOException("Check If finish failed")).when(updateManagementService).checkIfFinish(any());
         updateCaseBusReceiverTask.onMessageAsync(message);

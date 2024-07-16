@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,14 +34,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertThrows;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.ENGLANDWALES_BULK_CASE_TYPE_ID;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.MIGRATION_CASE_SOURCE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.OPEN_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.TRANSFERRED_STATE;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNPROCESSABLE_STATE;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-public class MultipleUpdateServiceTest {
+@ExtendWith(SpringExtension.class)
+class MultipleUpdateServiceTest {
 
     @InjectMocks
     private transient MultipleUpdateService multipleUpdateService;
@@ -59,7 +60,7 @@ public class MultipleUpdateServiceTest {
     private transient UpdateCaseMsg updateCaseMsg;
     private static final String USER_TOKEN = "Token";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         submitMultipleEvent = new SubmitMultipleEvent();
         MultipleData multipleData = new MultipleData();
@@ -72,7 +73,7 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    public void testMultipleTransferSameCountry() throws IOException {
+    void testMultipleTransferSameCountry() throws IOException {
         updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         ((CreationSingleDataModel)updateCaseMsg.getDataModelParent()).setTransferSameCountry(true);
         var caseId = "12345";
@@ -104,8 +105,8 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    @SuppressWarnings({"PMD.NcssCount", "PMD.LawOfDemeter"})
-    public void testMultipleTransferDifferentCountry() throws IOException {
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    void testMultipleTransferDifferentCountry() throws IOException {
         updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         String newManagingOffice = TribunalOffice.MANCHESTER.getOfficeName();
         CreationSingleDataModel dataModel = (CreationSingleDataModel)updateCaseMsg.getDataModelParent();
@@ -154,7 +155,7 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    public void sendUpdateToMultipleLogic() throws IOException {
+    void sendUpdateToMultipleLogic() throws IOException {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(),
                                                                      anyString(),
                                                                      anyString())).thenReturn(submitMultipleEvents);
@@ -167,7 +168,7 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    public void sendUpdateToMultipleLogicEmptyES() throws IOException {
+    void sendUpdateToMultipleLogicEmptyES() throws IOException {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(),
                                                                      anyString(),
                                                                      anyString())).thenReturn(new ArrayList<>());
@@ -180,7 +181,7 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    public void sendUpdateToMultipleLogicNullES() throws IOException {
+    void sendUpdateToMultipleLogicNullES() throws IOException {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(), anyString(),
                                                                      anyString())).thenReturn(null);
 
@@ -192,7 +193,7 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    public void sendUpdateToMultipleLogicWithErrors() throws IOException {
+    void sendUpdateToMultipleLogicWithErrors() throws IOException {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(),
                                                                      anyString(),
                                                                      anyString())).thenReturn(submitMultipleEvents);
@@ -209,7 +210,7 @@ public class MultipleUpdateServiceTest {
     }
 
     @Test
-    public void sendUpdateToMultipleTransferredLogic() throws IOException {
+    void sendUpdateToMultipleTransferredLogic() throws IOException {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(),
                                                                      anyString(),
                                                                      anyString())).thenReturn(submitMultipleEvents);
@@ -233,12 +234,15 @@ public class MultipleUpdateServiceTest {
 
     }
 
-    @Test(expected = Exception.class)
-    public void sendUpdateToMultipleLogicException() throws IOException {
+    @Test
+    void sendUpdateToMultipleLogicException() throws IOException {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(), anyString(),
-                                                                     anyString())).thenThrow(new Exception());
-
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
+                                                                     anyString())).thenThrow(new IOException());
+        assertThrows(
+            "ccdClient throws exception",
+            IOException.class,
+            () -> multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>())
+        );
     }
 
     private void verifyMocks() throws IOException {

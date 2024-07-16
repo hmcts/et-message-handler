@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service.transfertoecm;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.client.CcdClient;
 import uk.gov.hmcts.ecm.common.model.helper.TribunalOffice;
 import uk.gov.hmcts.ecm.common.model.servicebus.CreateUpdatesMsg;
@@ -23,8 +23,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-public class TransferToEcmServiceTest {
+@ExtendWith(SpringExtension.class)
+class TransferToEcmServiceTest {
     @Mock
     private CcdClient ccdClient;
 
@@ -41,8 +41,8 @@ public class TransferToEcmServiceTest {
     private CreateUpdatesMsg createUpdatesMsg;
     private List<SubmitEvent> submitEventList;
 
-    @Before
-    @SuppressWarnings("PMD.LawOfDemeter")
+    @BeforeEach
+    @SuppressWarnings({"PMD.LawOfDemeter"})
     public void setUp() {
         createUpdatesMsg = Helper.transferToEcmMessage();
         var caseData = new CaseData();
@@ -51,11 +51,10 @@ public class TransferToEcmServiceTest {
         var submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
         submitEventList = List.of(submitEvent);
-
     }
 
     @Test
-    public void transferToEcm() throws IOException {
+    void transferToEcm() throws IOException {
         when(userService.getAccessToken())
             .thenReturn(USER_TOKEN);
         when(ccdClient.retrieveCasesElasticSearch(anyString(), anyString(), anyList()))

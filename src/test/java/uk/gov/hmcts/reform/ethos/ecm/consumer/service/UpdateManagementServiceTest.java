@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.ResetStateDataModel;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.MultipleErrors;
@@ -26,8 +26,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNPROCESSABLE_MESSAGE;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-public class UpdateManagementServiceTest {
+@ExtendWith(SpringExtension.class)
+class UpdateManagementServiceTest {
 
     @InjectMocks
     private transient UpdateManagementService updateManagementService;
@@ -44,13 +44,13 @@ public class UpdateManagementServiceTest {
 
     private transient UpdateCaseMsg updateCaseMsg;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         updateCaseMsg = Helper.generateUpdateCaseMsg();
     }
 
     @Test
-    public void updateLogic() throws IOException, InterruptedException, NameNotFoundException {
+    void updateLogic() throws IOException, InterruptedException, NameNotFoundException {
         when(multipleCounterRepository.persistentQGetNextMultipleCountVal(
             updateCaseMsg.getMultipleRef())).thenReturn(1);
         when(multipleErrorsRepository.findByMultipleref(updateCaseMsg.getMultipleRef())).thenReturn(new ArrayList<>());
@@ -72,11 +72,10 @@ public class UpdateManagementServiceTest {
         verify(multipleErrorsRepository).deleteInBatch(new ArrayList<>());
         verifyNoMoreInteractions(multipleErrorsRepository);
         verifyNoMoreInteractions(multipleCounterRepository);
-
     }
 
     @Test
-    public void updateLogicWithErrorsDefaultConstructor() throws IOException, InterruptedException, 
+    void updateLogicWithErrorsDefaultConstructor() throws IOException, InterruptedException,
         NameNotFoundException {
         MultipleErrors multipleErrors = new MultipleErrors();
         when(multipleCounterRepository.persistentQGetNextMultipleCountVal(
@@ -104,11 +103,10 @@ public class UpdateManagementServiceTest {
             .deleteInBatch(new ArrayList<>(Collections.singletonList(new MultipleErrors())));
         verifyNoMoreInteractions(multipleErrorsRepository);
         verifyNoMoreInteractions(multipleCounterRepository);
-
     }
 
     @Test
-    public void addUnrecoverableErrorToDatabase() {
+    void addUnrecoverableErrorToDatabase() {
         updateManagementService.addUnrecoverableErrorToDatabase(updateCaseMsg);
 
         verify(multipleErrorsRepository).persistentQLogMultipleError(
@@ -116,12 +114,10 @@ public class UpdateManagementServiceTest {
             eq(updateCaseMsg.getEthosCaseReference()),
             eq(UNPROCESSABLE_MESSAGE));
         verifyNoMoreInteractions(multipleErrorsRepository);
-
     }
 
     @Test
-    public void updateLogicResetState() throws IOException, InterruptedException, NameNotFoundException {
-
+    void updateLogicResetState() throws IOException, InterruptedException, NameNotFoundException {
         ResetStateDataModel resetStateDataModel = ResetStateDataModel.builder().build();
         updateCaseMsg.setDataModelParent(resetStateDataModel);
         updateManagementService.updateLogic(updateCaseMsg);
@@ -132,7 +128,6 @@ public class UpdateManagementServiceTest {
         verify(multipleErrorsRepository).deleteInBatch(new ArrayList<>());
         verifyNoMoreInteractions(multipleErrorsRepository);
         verifyNoMoreInteractions(multipleCounterRepository);
-
     }
 
 }

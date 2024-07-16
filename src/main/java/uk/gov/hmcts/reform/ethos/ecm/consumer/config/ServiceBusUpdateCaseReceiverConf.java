@@ -4,6 +4,7 @@ import com.microsoft.azure.servicebus.IQueueClient;
 import com.microsoft.azure.servicebus.MessageHandlerOptions;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.tasks.UpdateCaseBusReceiverTask;
@@ -17,6 +18,8 @@ import javax.annotation.PostConstruct;
 @Configuration
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class ServiceBusUpdateCaseReceiverConf {
+    @Value("${multithreading.update-case-bus-receiver.maxConcurrentCalls}")
+    private int maxConcurrentCalls;
 
     private final IQueueClient updateCaseListenClient;
 
@@ -25,14 +28,16 @@ public class ServiceBusUpdateCaseReceiverConf {
     private static final ExecutorService UPDATE_CASE_LISTEN_EXECUTOR =
         Executors.newSingleThreadExecutor(r -> new Thread(r, "update-case-queue-listen"));
 
-    private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
-
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
+        MessageHandlerOptions messageHandlerOptions =
+            new MessageHandlerOptions(maxConcurrentCalls,
+                                      false,
+                                      Duration.ofMinutes(5));
+
         updateCaseListenClient.registerMessageHandler(
             updateCaseBusReceiverTask,
-            MESSAGE_HANDLER_OPTIONS,
+            messageHandlerOptions,
             UPDATE_CASE_LISTEN_EXECUTOR
         );
     }

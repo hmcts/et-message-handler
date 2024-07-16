@@ -4,6 +4,7 @@ import com.microsoft.azure.servicebus.IQueueClient;
 import com.microsoft.azure.servicebus.MessageHandlerOptions;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.tasks.CreateUpdatesBusReceiverTask;
@@ -17,12 +18,12 @@ import javax.annotation.PostConstruct;
 @AutoConfigureAfter(ServiceBusSenderConfiguration.class)
 @Configuration
 public class ServiceBusCreateUpdatesReceiverConf {
+    @Value("${multithreading.create-updates-bus-receiver.maxConcurrentCalls}")
+    private int maxConcurrentCalls;
 
     private final IQueueClient createUpdatesListenClient;
 
     private final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
-    private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(1, false, Duration.ofMinutes(5));
 
     private static final ExecutorService CREATE_UPDATES_LISTEN_EXECUTOR =
         Executors.newSingleThreadExecutor(r -> new Thread(r, "create-updates-queue-listen")
@@ -30,9 +31,14 @@ public class ServiceBusCreateUpdatesReceiverConf {
 
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
+        MessageHandlerOptions messageHandlerOptions =
+            new MessageHandlerOptions(maxConcurrentCalls,
+                                      false,
+                                      Duration.ofMinutes(5));
+
         createUpdatesListenClient.registerMessageHandler(
             createUpdatesBusReceiverTask,
-            MESSAGE_HANDLER_OPTIONS,
+            messageHandlerOptions,
             CREATE_UPDATES_LISTEN_EXECUTOR
         );
     }
