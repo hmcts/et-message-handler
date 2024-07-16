@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class ServiceBusUpdateCaseReceiverConf {
     @Value("${maxConcurrentCalls}")
-    private static int maxConcurrentCalls;
+    private int maxConcurrentCalls;
 
     private final IQueueClient updateCaseListenClient;
 
@@ -28,14 +28,16 @@ public class ServiceBusUpdateCaseReceiverConf {
     private static final ExecutorService UPDATE_CASE_LISTEN_EXECUTOR =
         Executors.newSingleThreadExecutor(r -> new Thread(r, "update-case-queue-listen"));
 
-    private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(maxConcurrentCalls, false, Duration.ofMinutes(5));
-
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
+        MessageHandlerOptions messageHandlerOptions =
+            new MessageHandlerOptions(maxConcurrentCalls,
+                                      false,
+                                      Duration.ofMinutes(5));
+
         updateCaseListenClient.registerMessageHandler(
             updateCaseBusReceiverTask,
-            MESSAGE_HANDLER_OPTIONS,
+            messageHandlerOptions,
             UPDATE_CASE_LISTEN_EXECUTOR
         );
     }

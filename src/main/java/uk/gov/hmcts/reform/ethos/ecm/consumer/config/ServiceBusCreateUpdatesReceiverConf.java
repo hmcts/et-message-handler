@@ -19,14 +19,11 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class ServiceBusCreateUpdatesReceiverConf {
     @Value("${maxConcurrentCalls}")
-    private static int maxConcurrentCalls;
+    private int maxConcurrentCalls;
 
     private final IQueueClient createUpdatesListenClient;
 
     private final CreateUpdatesBusReceiverTask createUpdatesBusReceiverTask;
-
-    private static final MessageHandlerOptions MESSAGE_HANDLER_OPTIONS =
-        new MessageHandlerOptions(maxConcurrentCalls, false, Duration.ofMinutes(5));
 
     private static final ExecutorService CREATE_UPDATES_LISTEN_EXECUTOR =
         Executors.newSingleThreadExecutor(r -> new Thread(r, "create-updates-queue-listen")
@@ -34,9 +31,14 @@ public class ServiceBusCreateUpdatesReceiverConf {
 
     @PostConstruct()
     public void registerMessageHandlers() throws InterruptedException, ServiceBusException {
+        MessageHandlerOptions messageHandlerOptions =
+            new MessageHandlerOptions(maxConcurrentCalls,
+                                      false,
+                                      Duration.ofMinutes(5));
+
         createUpdatesListenClient.registerMessageHandler(
             createUpdatesBusReceiverTask,
-            MESSAGE_HANDLER_OPTIONS,
+            messageHandlerOptions,
             CREATE_UPDATES_LISTEN_EXECUTOR
         );
     }
