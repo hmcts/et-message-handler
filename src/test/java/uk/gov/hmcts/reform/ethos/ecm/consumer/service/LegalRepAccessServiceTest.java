@@ -136,7 +136,6 @@ class LegalRepAccessServiceTest {
         verify(ccdClient, times(1)).submitMultipleEventForCase(eq(ACCESS_TOKEN), any(), any(), any(), any(), any());
     }
 
-
     @Test
     void runWithNoLegalRepCollection() throws NameNotFoundException, IOException {
         SubmitMultipleEvent event = new SubmitMultipleEvent();
