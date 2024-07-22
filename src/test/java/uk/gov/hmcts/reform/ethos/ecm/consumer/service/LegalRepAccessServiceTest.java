@@ -135,4 +135,34 @@ class LegalRepAccessServiceTest {
 
         verify(ccdClient, times(1)).submitMultipleEventForCase(eq(ACCESS_TOKEN), any(), any(), any(), any(), any());
     }
+
+    @Test
+    void runWithNoLegalRepCollection() throws NameNotFoundException, IOException {
+        SubmitMultipleEvent event = new SubmitMultipleEvent();
+        MultipleData caseData = details.getCaseData();
+        event.setCaseData(caseData);
+
+        String singleRef1 = "6000001/2024";
+
+        when(ccdClient.getMultipleByName(ACCESS_TOKEN, details.getCaseTypeId(), caseData.getMultipleName()))
+            .thenReturn(event);
+
+        when(ccdClient.addUserToMultiple(any(), any(), any(), any(), any()))
+            .thenReturn(ResponseEntity.ok(new Object()));
+
+        Map<String, List<String>> legalReps = Maps.newHashMap();
+
+        legalReps.put(singleRef1, List.of(USER_ID_2));
+        legalReps.put("6000002/2024", List.of(USER_ID_2));
+
+        var dataModel = LegalRepDataModel.builder()
+            .caseType(details.getCaseTypeId())
+            .legalRepIdsByCase(legalReps)
+            .multipleName(caseData.getMultipleName())
+            .build();
+
+        legalRepAccessService.run(dataModel);
+
+        verify(ccdClient, times(1)).submitMultipleEventForCase(eq(ACCESS_TOKEN), any(), any(), any(), any(), any());
+    }
 }
