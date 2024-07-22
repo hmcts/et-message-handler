@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.ecm.common.model.servicebus.UpdateCaseMsg;
+import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.LegalRepDataModel;
 import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.ResetStateDataModel;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.MultipleErrors;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.repository.MultipleCounterRepository;
@@ -41,6 +42,8 @@ class UpdateManagementServiceTest {
     private transient SingleReadingService singleReadingService;
     @Mock
     private transient EmailService emailService;
+    @Mock
+    private LegalRepAccessService legalRepAccessService;
 
     private transient UpdateCaseMsg updateCaseMsg;
 
@@ -128,6 +131,14 @@ class UpdateManagementServiceTest {
         verify(multipleErrorsRepository).deleteInBatch(new ArrayList<>());
         verifyNoMoreInteractions(multipleErrorsRepository);
         verifyNoMoreInteractions(multipleCounterRepository);
+    }
+
+    @Test
+    void legalRepAccessModel() throws NameNotFoundException, IOException, InterruptedException {
+        LegalRepDataModel legalRepDataModel = LegalRepDataModel.builder().build();
+        updateCaseMsg.setDataModelParent(legalRepDataModel);
+        updateManagementService.updateLogic(updateCaseMsg);
+        verify(legalRepAccessService).run(any());
     }
 
 }
