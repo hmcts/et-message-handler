@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.CLOSED_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.POSITION_TYPE_CASE_TRANSFERRED_OTHER_COUNTRY;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.SCOTLAND_CASE_TYPE_ID;
@@ -60,8 +62,7 @@ public final class TransferToEcmCaseDataHelper {
         caseData.setTribunalCorrespondenceEmail(oldCaseData.getTribunalCorrespondenceEmail());
         caseData.setClaimantTypeOfClaimant(oldCaseData.getClaimantTypeOfClaimant());
         caseData.setClaimantCompany(oldCaseData.getClaimantCompany());
-        caseData.setClaimantIndType((ClaimantIndType) objectMapper(
-            oldCaseData.getClaimantIndType(), ClaimantIndType.class, mapper));
+        caseData.setClaimantIndType(mapClaimantIndType(oldCaseData, mapper));
         caseData.setClaimantType((ClaimantType) objectMapper(oldCaseData.getClaimantType(),
                                                                         ClaimantType.class, mapper));
         caseData.setClaimantOtherType((ClaimantOtherType) objectMapper(
@@ -121,7 +122,7 @@ public final class TransferToEcmCaseDataHelper {
         }
         caseData.setDocumentCollection(createDocumentCollection(oldCaseData.getDocumentCollection(), mapper));
         caseData.setJurCodesCollection(createJurCodesCollection(oldCaseData.getJurCodesCollection(), mapper));
-        caseData.setAddressLabelCollection(createAddressLabelCollecton(
+        caseData.setAddressLabelCollection(createAddressLabelCollection(
             oldCaseData.getAddressLabelCollection(), mapper));
         if (oldCaseData.getFileLocation() != null) {
             caseData.setFileLocation(oldCaseData.getFileLocation().getSelectedCode());
@@ -136,6 +137,44 @@ public final class TransferToEcmCaseDataHelper {
         caseData.setRespondentCollection(createRespondentCollection(oldCaseData.getRespondentCollection(), mapper));
         caseData.setLinkedCaseCT(generateMarkUp(ccdGatewayBaseUrl, caseId, oldCaseData.getEthosCaseReference()));
         return caseData;
+    }
+
+    private static ClaimantIndType mapClaimantIndType(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData,
+                                                      ObjectMapper mapper) {
+        ClaimantIndType claimantIndType = (ClaimantIndType) objectMapper(oldCaseData.getClaimantIndType(),
+                                                                 ClaimantIndType.class, mapper);
+        if (isEmpty(oldCaseData.getClaimantIndType())) {
+            return claimantIndType;
+        }
+
+        setClaimantGender(oldCaseData, claimantIndType);
+        setClaimantTitle(oldCaseData, claimantIndType);
+        return claimantIndType;
+    }
+
+    private static void setClaimantGender(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData,
+                                  ClaimantIndType claimantIndType) {
+        switch (defaultIfEmpty(oldCaseData.getClaimantIndType().getClaimantSex(), "")) {
+            case "Male" -> claimantIndType.setClaimantGender("Male");
+            case "Female" -> claimantIndType.setClaimantGender("Female");
+            default -> claimantIndType.setClaimantGender(null);
+        }
+    }
+
+    private static void setClaimantTitle(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData,
+                                  ClaimantIndType claimantIndType) {
+        switch (defaultIfEmpty(oldCaseData.getClaimantIndType().getClaimantPreferredTitle(), "")) {
+            case "Mr" -> claimantIndType.setClaimantTitle("Mr");
+            case "Mrs" -> claimantIndType.setClaimantTitle("Mrs");
+            case "Miss" -> claimantIndType.setClaimantTitle("Miss");
+            case "Ms" -> claimantIndType.setClaimantTitle("Ms");
+            case "Mx" -> claimantIndType.setClaimantTitle("Mx");
+            case "Other" -> {
+                claimantIndType.setClaimantTitle("Other");
+                claimantIndType.setClaimantTitleOther(oldCaseData.getClaimantIndType().getClaimantTitleOther());
+            }
+            default -> claimantIndType.setClaimantTitle(null);
+        }
     }
 
     private static void copyScotlandData(uk.gov.hmcts.et.common.model.ccd.CaseData oldCaseData, CaseData caseData) {
@@ -177,7 +216,7 @@ public final class TransferToEcmCaseDataHelper {
         return respondentSumTypeItems;
     }
 
-    private static List<AddressLabelTypeItem> createAddressLabelCollecton(
+    private static List<AddressLabelTypeItem> createAddressLabelCollection(
         List<uk.gov.hmcts.et.common.model.ccd.items.AddressLabelTypeItem> addressLabelCollection,
         ObjectMapper mapper) {
         List<AddressLabelTypeItem> addressLabelTypeItemList = new ArrayList<>();
