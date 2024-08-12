@@ -42,7 +42,8 @@ public class LegalRepAccessService {
         SubmitMultipleEvent submitEvent = ccdClient.getMultipleByName(accessToken, caseType, data.getMultipleName());
         String caseId = String.valueOf(submitEvent.getCaseId());
 
-        MultipleRequest returnedRequest = ccdClient.startBulkAmendEventForMultiple(accessToken, caseType, EMPLOYMENT, caseId);
+        MultipleRequest returnedRequest =
+            ccdClient.startBulkAmendEventForMultiple(accessToken, caseType, EMPLOYMENT, caseId);
 
         MultipleData multipleData = returnedRequest.getCaseDetails().getCaseData();
         var legalRepsByCaseId = data.getLegalRepIdsByCase();

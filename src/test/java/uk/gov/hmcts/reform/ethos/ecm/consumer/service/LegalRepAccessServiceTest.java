@@ -147,8 +147,6 @@ class LegalRepAccessServiceTest {
         MultipleData caseData = details.getCaseData();
         event.setCaseData(caseData);
 
-        String singleRef1 = "6000001/2024";
-
         when(ccdClient.getMultipleByName(ACCESS_TOKEN, details.getCaseTypeId(), caseData.getMultipleName()))
             .thenReturn(event);
 
@@ -159,6 +157,8 @@ class LegalRepAccessServiceTest {
             .thenReturn(ResponseEntity.ok(new Object()));
 
         Map<String, List<String>> legalReps = Maps.newHashMap();
+
+        String singleRef1 = "6000001/2024";
 
         legalReps.put(singleRef1, List.of(USER_ID_2));
         legalReps.put("6000002/2024", List.of(USER_ID_2));
