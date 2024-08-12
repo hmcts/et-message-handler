@@ -15,6 +15,7 @@ import uk.gov.hmcts.et.common.model.ccd.items.ListTypeItem;
 import uk.gov.hmcts.et.common.model.ccd.types.SubCaseLegalRepDetails;
 import uk.gov.hmcts.et.common.model.multiples.MultipleData;
 import uk.gov.hmcts.et.common.model.multiples.MultipleDetails;
+import uk.gov.hmcts.et.common.model.multiples.MultipleRequest;
 import uk.gov.hmcts.et.common.model.multiples.SubmitMultipleEvent;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ class LegalRepAccessServiceTest {
     LegalRepAccessService legalRepAccessService;
 
     private static final String ACCESS_TOKEN = "ey123";
+    private static final String CASE_ID = "171922876900";
     private static final String USER_ID_1 = "d368ec1b-14a0-4e60-9fe1-0ea8263950ea";
     private static final String USER_ID_2 = "7ff82f3f-5e4c-439c-b34c-280086b62377";
     private MultipleDetails details;
@@ -51,7 +53,7 @@ class LegalRepAccessServiceTest {
         details = new MultipleDetails();
         details.setCaseTypeId(ENGLANDWALES_BULK_CASE_TYPE_ID);
         details.setJurisdiction(EMPLOYMENT);
-        details.setCaseId("171922876900");
+        details.setCaseId(CASE_ID);
         details.setCaseData(new MultipleData());
         details.getCaseData().setMultipleName("MultipleName");
     }
@@ -85,7 +87,7 @@ class LegalRepAccessServiceTest {
         Map<String, String> expectedPayload = Maps.newHashMap();
         expectedPayload.put("id", USER_ID_1);
 
-        assertThrows("Call to add legal rep to Multiple Case failed for 171922876900",
+        assertThrows("Call to add legal rep to Multiple Case failed for " + CASE_ID,
                      CaseCreationException.class,
                      () -> legalRepAccessService.addUserToMultiple(token, details.getJurisdiction(),
                         details.getCaseTypeId(), details.getCaseId(), USER_ID_1)
@@ -117,6 +119,9 @@ class LegalRepAccessServiceTest {
         when(ccdClient.getMultipleByName(ACCESS_TOKEN, details.getCaseTypeId(), caseData.getMultipleName()))
             .thenReturn(event);
 
+        when(ccdClient.startBulkAmendEventForMultiple(ACCESS_TOKEN, details.getCaseTypeId(), EMPLOYMENT, "0"))
+            .thenReturn(new MultipleRequest(details));
+
         when(ccdClient.addUserToMultiple(any(), any(), any(), any(), any()))
             .thenReturn(ResponseEntity.ok(new Object()));
 
@@ -146,6 +151,9 @@ class LegalRepAccessServiceTest {
 
         when(ccdClient.getMultipleByName(ACCESS_TOKEN, details.getCaseTypeId(), caseData.getMultipleName()))
             .thenReturn(event);
+
+        when(ccdClient.startBulkAmendEventForMultiple(ACCESS_TOKEN, details.getCaseTypeId(), EMPLOYMENT, "0"))
+            .thenReturn(new MultipleRequest(details));
 
         when(ccdClient.addUserToMultiple(any(), any(), any(), any(), any()))
             .thenReturn(ResponseEntity.ok(new Object()));
