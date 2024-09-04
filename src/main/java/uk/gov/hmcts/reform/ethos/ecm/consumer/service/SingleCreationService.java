@@ -170,7 +170,6 @@ public class SingleCreationService {
         newCaseData.setClaimantOtherType(oldCaseData.getClaimantOtherType());
         newCaseData.setPreAcceptCase(oldCaseData.getPreAcceptCase());
         newCaseData.setReceiptDate(oldCaseData.getReceiptDate());
-        newCaseData.setFeeGroupReference(oldCaseData.getFeeGroupReference());
         newCaseData.setClaimantWorkAddressQuestion(oldCaseData.getClaimantWorkAddressQuestion());
         newCaseData.setClaimantWorkAddressQRespondent(oldCaseData.getClaimantWorkAddressQRespondent());
         newCaseData.setRepresentativeClaimantType(oldCaseData.getRepresentativeClaimantType());
