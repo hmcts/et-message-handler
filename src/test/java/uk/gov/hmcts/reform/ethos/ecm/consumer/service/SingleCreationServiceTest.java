@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.ethos.ecm.consumer.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -36,6 +39,8 @@ class SingleCreationServiceTest {
     private SingleCreationService singleCreationService;
     @Mock
     private CcdClient ccdClient;
+    @Captor
+    ArgumentCaptor<CaseDetails> caseDetailsArgumentCaptor;
     private static final String USER_TOKEN = "accessToken";
 
     @Test
@@ -92,6 +97,7 @@ class SingleCreationServiceTest {
         CaseData caseData = new CaseData();
         caseData.setEthosCaseReference(ethosCaseReference);
         caseData.setManagingOffice(managingOffice);
+        caseData.setFeeGroupReference("1234123412341234");
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setCaseData(caseData);
 
@@ -103,7 +109,8 @@ class SingleCreationServiceTest {
 
         verify(ccdClient).retrieveCasesElasticSearch(USER_TOKEN, ENGLANDWALES_CASE_TYPE_ID,
                                                      List.of(ethosCaseReference));
-        verify(ccdClient).startCaseCreationTransfer(eq(USER_TOKEN), any());
+        verify(ccdClient).startCaseCreationTransfer(eq(USER_TOKEN), caseDetailsArgumentCaptor.capture());
+        assertNull(caseDetailsArgumentCaptor.getValue().getCaseData().getFeeGroupReference());
         var expectedEventSummary = String.format(CREATE_CASE_EVENT_SUMMARY_TEMPLATE, managingOffice);
         verify(ccdClient).submitCaseCreation(eq(USER_TOKEN), any(), any(), eq(expectedEventSummary));
         verify(ccdClient, times(0)).returnCaseCreationTransfer(eq(USER_TOKEN), any(), any(),
