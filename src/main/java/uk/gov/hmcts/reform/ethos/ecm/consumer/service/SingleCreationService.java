@@ -115,7 +115,7 @@ public class SingleCreationService {
                                                    String destinationCaseTypeId) throws IOException {
         List<SubmitEvent> submitEvents = retrieveDestinationCase(accessToken, ethosCaseReference,
                                                                  destinationCaseTypeId);
-        return submitEvents.isEmpty() ? null : submitEvents.get(0);
+        return submitEvents.isEmpty() ? null : submitEvents.getFirst();
     }
 
     private List<SubmitEvent> retrieveDestinationCase(String authToken, String ethosCaseReference,
@@ -204,7 +204,7 @@ public class SingleCreationService {
         }
         newCaseData.setManagingOffice(owningOfficeCT);
         newCaseData.setMultipleReference(oldCaseData.getMultipleReference());
-        log.info("setLeadClaimant is set to " + oldCaseData.getLeadClaimant());
+        log.info("setLeadClaimant is set to {}", oldCaseData.getLeadClaimant());
         newCaseData.setLeadClaimant(oldCaseData.getLeadClaimant());
 
         newCaseData.setReasonForCT(reasonForCT);

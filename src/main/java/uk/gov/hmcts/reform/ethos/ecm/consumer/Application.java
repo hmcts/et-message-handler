@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages =
     {"uk.gov.hmcts.reform.ethos.ecm"
     })
-@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
+@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
 @Slf4j
 public class Application {
 
