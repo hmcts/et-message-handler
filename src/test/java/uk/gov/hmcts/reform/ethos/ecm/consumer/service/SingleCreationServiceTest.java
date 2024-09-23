@@ -57,6 +57,13 @@ class SingleCreationServiceTest {
         SubmitEvent newCaseSubmitEvent = new SubmitEvent();
         newCaseSubmitEvent.setCaseData(newCaseData);
 
+        CaseDetails returnedCaseDetails = new CaseDetails();
+        returnedCaseDetails.setCaseData(newCaseData);
+        CCDRequest returnedCCDRequest = new CCDRequest();
+        returnedCCDRequest.setCaseDetails(returnedCaseDetails);
+        when(ccdClient.startEventForCase(eq(USER_TOKEN), any(), any(), any(), eq("claimantTransferredCaseAccess")))
+            .thenReturn(returnedCCDRequest);
+
         UpdateCaseMsg updateCaseMsg = Helper.generateCreationSingleCaseMsg();
         ((CreationSingleDataModel)updateCaseMsg.getDataModelParent()).setOfficeCT(
             TribunalOffice.GLASGOW.getOfficeName());
@@ -82,7 +89,10 @@ class SingleCreationServiceTest {
         verify(ccdClient, times(1)).submitCaseCreation(eq(USER_TOKEN), any(), any(),
                                                        eq(expectedEventSummary));
         verify(ccdClient, times(1)).startEventForCase(eq(USER_TOKEN), any(), any(), any());
-        verify(ccdClient, times(1)).submitEventForCase(eq(USER_TOKEN), any(), any(), any(),
+        verify(ccdClient, times(1)).startEventForCase(eq(USER_TOKEN), any(), any(), any(), eq(
+            "claimantTransferredCaseAccess"));
+
+        verify(ccdClient, times(2)).submitEventForCase(eq(USER_TOKEN), any(), any(), any(),
                                                        any(), any());
         verify(ccdClient, times(0)).returnCaseCreationTransfer(eq(USER_TOKEN), any(), any(),
                                                                any());
