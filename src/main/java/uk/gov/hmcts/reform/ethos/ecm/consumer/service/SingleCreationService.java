@@ -98,8 +98,8 @@ public class SingleCreationService {
         SubmitEvent newCase = ccdClient.submitCaseCreation(accessToken, newCaseDetailsCT, returnedRequest,
                                                            eventSummary);
         if (newCase != null) {
-            String transferredCaseLink =
-                SingleCreationServiceHelper.getTransferredCaseLink(ccdGatewayBaseUrl,
+            // On the old case, add a link to the new case
+            String transferredCaseLink = SingleCreationServiceHelper.getTransferredCaseLink(ccdGatewayBaseUrl,
                                                                    String.valueOf(newCase.getCaseId()),
                                                                    newCase.getCaseData().getEthosCaseReference());
             CCDRequest updateCCDRequest = ccdClient.startEventForCase(accessToken, sourceCaseTypeId, jurisdiction,
@@ -108,6 +108,14 @@ public class SingleCreationService {
             updateCCDRequest.getCaseDetails().getCaseData().setTransferredCaseLink(transferredCaseLink);
             ccdClient.submitEventForCase(accessToken, updateCCDRequest.getCaseDetails().getCaseData(), sourceCaseTypeId,
                                          jurisdiction, updateCCDRequest, caseId);
+
+            // On the new case, give access to the user who created the old case
+            CCDRequest ccdRequest = ccdClient.startEventForCase(
+                accessToken, caseTypeId, jurisdiction, String.valueOf(newCase.getCaseId()),
+                "claimantTransferredCaseAccess");
+            ccdClient.submitEventForCase(accessToken, ccdRequest.getCaseDetails().getCaseData(),
+                                         caseTypeId, jurisdiction, ccdRequest, String.valueOf(newCase.getCaseId()));
+
         }
     }
 
@@ -209,6 +217,7 @@ public class SingleCreationService {
 
         newCaseData.setReasonForCT(reasonForCT);
         newCaseData.setLinkedCaseCT(generateMarkUp(ccdGatewayBaseUrl, caseId, oldCaseData.getEthosCaseReference()));
+        newCaseData.setTypesOfClaim(oldCaseData.getTypesOfClaim());
         return newCaseData;
     }
 
