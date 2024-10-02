@@ -218,6 +218,7 @@ public class SingleCreationService {
         newCaseData.setReasonForCT(reasonForCT);
         newCaseData.setLinkedCaseCT(generateMarkUp(ccdGatewayBaseUrl, caseId, oldCaseData.getEthosCaseReference()));
         newCaseData.setTypesOfClaim(oldCaseData.getTypesOfClaim());
+        newCaseData.setClaimServedDate(oldCaseData.getClaimServedDate());
         return newCaseData;
     }
 
