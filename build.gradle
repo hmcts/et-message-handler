@@ -156,7 +156,7 @@ ext {
   junitJupiterVersion = '5.10.2'
   feignVersion = '13.5'
   junitPlatform = '1.6.2'
-  log4JVersion = '2.24.2'
+  log4JVersion = '2.24.3'
   logbackVersion = '1.5.9'
   serenity = '4.2.9'
   springBoot = springBoot.class.package.implementationVersion
