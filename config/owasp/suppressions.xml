@@ -58,4 +58,12 @@
         <cve>CVE-2024-43591</cve>
     </suppress>
      <!-- Above to be removed when migrated to com.azure:azure-messaging-servicebus -->
+    <!-- Suppressing due to CVE-2024-38820. Will resolve when we move to Spring Boot 3.2.x -->
+    <suppress>
+      <cve>CVE-2024-38820</cve>
+    </suppress>
+  <!-- Suppress CVE-2024-45772 for all versions of Lucene -->
+  <suppress>
+    <cve>CVE-2024-45772</cve>
+  </suppress>
 </suppressions>
