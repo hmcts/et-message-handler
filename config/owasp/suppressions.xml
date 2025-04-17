@@ -65,10 +65,5 @@
   <!-- Suppress CVE-2024-45772 for all versions of Lucene -->
   <suppress>
     <cve>CVE-2024-45772</cve>
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>*</artifactId> <!-- Asterisk means all Lucene modules -->
-      <version>8.11.1</version>
-    </dependency>
   </suppress>
 </suppressions>
