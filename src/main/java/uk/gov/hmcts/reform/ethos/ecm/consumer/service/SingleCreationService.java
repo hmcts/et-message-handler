@@ -167,6 +167,7 @@ public class SingleCreationService {
                             reasonForCT);
     }
 
+    @SuppressWarnings("PMD.NcssCount")
     private CaseData copyCaseData(CaseData oldCaseData, CaseData newCaseData, String caseId, String ccdGatewayBaseUrl,
                                   String positionTypeCT, String state, String owningOfficeCT, String reasonForCT) {
         newCaseData.setEthosCaseReference(oldCaseData.getEthosCaseReference());
