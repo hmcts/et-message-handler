@@ -206,6 +206,7 @@ public final class TransferToEcmCaseDataHelper {
             for (uk.gov.hmcts.et.common.model.ccd.items.RespondentSumTypeItem respondent : respondentCollection) {
                 RespondentSumType respondentSumType = (RespondentSumType) objectMapper(
                     respondent.getValue(), RespondentSumType.class, mapper);
+                respondentSumType.setResponseRespondentNameQuestion(null);
                 RespondentSumTypeItem respondentSumTypeItem = new RespondentSumTypeItem();
                 respondentSumTypeItem.setId(UUID.randomUUID().toString());
                 respondentSumTypeItem.setValue(respondentSumType);
