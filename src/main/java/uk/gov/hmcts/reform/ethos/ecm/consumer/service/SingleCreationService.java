@@ -219,6 +219,17 @@ public class SingleCreationService {
         newCaseData.setLinkedCaseCT(generateMarkUp(ccdGatewayBaseUrl, caseId, oldCaseData.getEthosCaseReference()));
         newCaseData.setTypesOfClaim(oldCaseData.getTypesOfClaim());
         newCaseData.setClaimServedDate(oldCaseData.getClaimServedDate());
+        newCaseData.setNoticeOfChangeAnswers0(oldCaseData.getNoticeOfChangeAnswers0());
+        newCaseData.setNoticeOfChangeAnswers1(oldCaseData.getNoticeOfChangeAnswers1());
+        newCaseData.setNoticeOfChangeAnswers2(oldCaseData.getNoticeOfChangeAnswers2());
+        newCaseData.setNoticeOfChangeAnswers3(oldCaseData.getNoticeOfChangeAnswers3());
+        newCaseData.setNoticeOfChangeAnswers4(oldCaseData.getNoticeOfChangeAnswers4());
+        newCaseData.setNoticeOfChangeAnswers5(oldCaseData.getNoticeOfChangeAnswers5());
+        newCaseData.setNoticeOfChangeAnswers6(oldCaseData.getNoticeOfChangeAnswers6());
+        newCaseData.setNoticeOfChangeAnswers7(oldCaseData.getNoticeOfChangeAnswers7());
+        newCaseData.setNoticeOfChangeAnswers8(oldCaseData.getNoticeOfChangeAnswers8());
+        newCaseData.setNoticeOfChangeAnswers9(oldCaseData.getNoticeOfChangeAnswers9());
+
         return newCaseData;
     }
 
