@@ -229,6 +229,16 @@ public class SingleCreationService {
         newCaseData.setNoticeOfChangeAnswers7(oldCaseData.getNoticeOfChangeAnswers7());
         newCaseData.setNoticeOfChangeAnswers8(oldCaseData.getNoticeOfChangeAnswers8());
         newCaseData.setNoticeOfChangeAnswers9(oldCaseData.getNoticeOfChangeAnswers9());
+        newCaseData.setRespondentOrganisationPolicy0(oldCaseData.getRespondentOrganisationPolicy0());
+        newCaseData.setRespondentOrganisationPolicy1(oldCaseData.getRespondentOrganisationPolicy1());
+        newCaseData.setRespondentOrganisationPolicy2(oldCaseData.getRespondentOrganisationPolicy2());
+        newCaseData.setRespondentOrganisationPolicy3(oldCaseData.getRespondentOrganisationPolicy3());
+        newCaseData.setRespondentOrganisationPolicy4(oldCaseData.getRespondentOrganisationPolicy4());
+        newCaseData.setRespondentOrganisationPolicy5(oldCaseData.getRespondentOrganisationPolicy5());
+        newCaseData.setRespondentOrganisationPolicy6(oldCaseData.getRespondentOrganisationPolicy6());
+        newCaseData.setRespondentOrganisationPolicy7(oldCaseData.getRespondentOrganisationPolicy7());
+        newCaseData.setRespondentOrganisationPolicy8(oldCaseData.getRespondentOrganisationPolicy8());
+        newCaseData.setRespondentOrganisationPolicy9(oldCaseData.getRespondentOrganisationPolicy9());
 
         return newCaseData;
     }
