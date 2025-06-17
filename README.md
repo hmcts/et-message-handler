@@ -6,7 +6,7 @@ This application is responsible for handling all messages sent from the Employme
 
 ### Prerequisites
 
-- [JDK 11](https://www.oracle.com/java)
+- [JDK 21](https://www.oracle.com/java)
 
 ### Building
 
