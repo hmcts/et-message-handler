@@ -149,7 +149,9 @@ dependencyManagement {
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url "https://jitpack.io" }
+  maven {
+    url 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1'
+  }
 }
 
 ext {
@@ -167,10 +169,10 @@ ext {
 ext["rest-assured.version"] = '5.1.0'
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:2.5.7'
-  implementation 'com.github.hmcts:et-data-model:3.18.34'
-  implementation 'com.github.hmcts:ecm-common:2.0.5'
-  implementation 'com.github.hmcts:ecm-data-model:1.14.2'
+  implementation 'com.github.hmcts:et-common:3.0.0'
+  implementation 'com.github.hmcts:et-data-model:4.2.4'
+  implementation 'com.github.hmcts:ecm-common:3.0.1'
+  implementation 'com.github.hmcts:ecm-data-model:2.0.1'
 
   configurations.configureEach {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
@@ -179,6 +181,8 @@ dependencies {
       }
     }
   }
+  implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
+  implementation group: 'com.github.hmcts', name: 'core-case-data-store-client', version: '4.9.1.1'
 
   implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.4.5'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
@@ -237,7 +241,7 @@ dependencies {
   testImplementation 'org.mockito:mockito-junit-jupiter:5.17.0'
 
   testImplementation group: 'com.auth0', name: 'java-jwt', version: '4.5.0'
-  testImplementation 'com.github.hmcts:fortify-client:1.4.8:all'
+  testImplementation 'com.github.hmcts:fortify-client:1.4.9:all'
   testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
   testImplementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: serenity
