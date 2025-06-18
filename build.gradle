@@ -188,6 +188,7 @@ dependencies {
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+  implementation group: 'ch.qos.logback', name: 'logback-access', version: logbackVersion
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.1.9'
   implementation group: 'com.google.code.gson', name: 'gson', version: '2.13.1'
   implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '10.3'
