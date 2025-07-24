@@ -159,7 +159,7 @@ ext {
   feignVersion = '13.5'
   junitPlatform = '1.6.2'
   log4JVersion = '2.25.1'
-  logbackVersion = '1.5.9'
+  logbackVersion = '1.5.18'
   serenity = '4.2.34'
   springBoot = springBoot.class.package.implementationVersion
   tomcatEmbedVersion = '9.0.107'
@@ -232,8 +232,8 @@ dependencies {
   implementation 'org.springframework.retry:spring-retry'
   implementation group: 'org.testng', name: 'testng', version: '7.11.0'
   implementation group: 'uk.gov.service.notify', name: 'notifications-java-client', version: '5.2.1-RELEASE'
-  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.13'
-  implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.13'
+  implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.18'
+  implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.18'
   implementation 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
 
