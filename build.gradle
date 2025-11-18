@@ -219,7 +219,7 @@ dependencies {
     }
   }
   implementation group: 'com.squareup.okio', name: 'okio', version: '3.15.0'
-  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.3'
+  implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.10.5'
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.7'
   // CVE-2022-25857
   implementation group: 'org.yaml', name: 'snakeyaml', version: '2.4'
