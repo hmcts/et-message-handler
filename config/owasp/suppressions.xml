@@ -15,4 +15,7 @@
   <suppress>
     <cve>CVE-2023-35116</cve>
   </suppress>
+  <suppress>
+    <cve>CVE-2025-15104</cve>
+  </suppress>
 </suppressions>
