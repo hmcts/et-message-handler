@@ -15,7 +15,6 @@ import uk.gov.hmcts.ecm.common.model.servicebus.datamodel.CreationSingleDataMode
 import uk.gov.hmcts.et.common.model.ccd.CCDRequest;
 import uk.gov.hmcts.et.common.model.multiples.MultipleData;
 import uk.gov.hmcts.et.common.model.multiples.SubmitMultipleEvent;
-import uk.gov.hmcts.reform.ethos.ecm.consumer.domain.MultipleErrors;
 import uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Helper;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -39,7 +37,6 @@ import static uk.gov.hmcts.ecm.common.model.helper.Constants.ENGLANDWALES_BULK_C
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.MIGRATION_CASE_SOURCE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.OPEN_STATE;
 import static uk.gov.hmcts.ecm.common.model.helper.Constants.TRANSFERRED_STATE;
-import static uk.gov.hmcts.reform.ethos.ecm.consumer.helpers.Constants.UNPROCESSABLE_STATE;
 
 @ExtendWith(SpringExtension.class)
 class MultipleUpdateServiceTest {
@@ -86,11 +83,7 @@ class MultipleUpdateServiceTest {
         when(ccdClient.startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                   updateCaseMsg.getJurisdiction(), caseId)).thenReturn(ccdRequest);
 
-        var multipleErrorsList = new ArrayList<MultipleErrors>();
-
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, multipleErrorsList);
-
-        assertTrue(multipleErrorsList.isEmpty());
+        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg);
         verify(ccdClient).startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                      updateCaseMsg.getJurisdiction(), caseId);
         verify(ccdClient).submitMultipleEventForCase(eq(USER_TOKEN),
@@ -126,11 +119,7 @@ class MultipleUpdateServiceTest {
         when(ccdClient.startCaseMultipleCreation(USER_TOKEN, ENGLANDWALES_BULK_CASE_TYPE_ID,
                                                  updateCaseMsg.getJurisdiction())).thenReturn(creationCCDRequest);
 
-        var multipleErrorsList = new ArrayList<MultipleErrors>();
-
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, multipleErrorsList);
-
-        assertTrue(multipleErrorsList.isEmpty());
+        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg);
         verify(ccdClient).startBulkAmendEventForCase(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                      updateCaseMsg.getJurisdiction(), caseId);
         verify(ccdClient).submitMultipleEventForCase(eq(USER_TOKEN),
@@ -162,7 +151,7 @@ class MultipleUpdateServiceTest {
 
         when(ccdClient.submitMultipleEventForCase(anyString(), any(), anyString(),
                                                   anyString(), any(), anyString())).thenReturn(submitMultipleEvent);
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
+        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg);
 
         verifyMocks();
     }
@@ -173,7 +162,7 @@ class MultipleUpdateServiceTest {
                                                                      anyString(),
                                                                      anyString())).thenReturn(new ArrayList<>());
 
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
+        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg);
 
         verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
@@ -185,28 +174,11 @@ class MultipleUpdateServiceTest {
         when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(), anyString(),
                                                                      anyString())).thenReturn(null);
 
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
+        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg);
 
         verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
         verifyNoMoreInteractions(ccdClient);
-    }
-
-    @Test
-    void sendUpdateToMultipleLogicWithErrors() throws IOException {
-        when(ccdClient.retrieveMultipleCasesElasticSearchWithRetries(anyString(),
-                                                                     anyString(),
-                                                                     anyString())).thenReturn(submitMultipleEvents);
-
-        when(ccdClient.submitMultipleEventForCase(anyString(), any(),
-                                                  anyString(), anyString(), any(),
-                                                  anyString())).thenReturn(submitMultipleEvent);
-        MultipleErrors multipleErrors = new MultipleErrors();
-        multipleErrors.setDescription(UNPROCESSABLE_STATE);
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>(Collections.singletonList(
-            multipleErrors)));
-
-        verifyMocks();
     }
 
     @Test
@@ -217,7 +189,7 @@ class MultipleUpdateServiceTest {
 
         updateCaseMsg = Helper.generateCreationSingleCaseMsg();
 
-        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>());
+        multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg);
 
         verify(ccdClient).retrieveMultipleCasesElasticSearchWithRetries(USER_TOKEN, updateCaseMsg.getCaseTypeId(),
                                                                         updateCaseMsg.getMultipleRef());
@@ -241,7 +213,7 @@ class MultipleUpdateServiceTest {
         assertThrows(
             "ccdClient throws exception",
             IOException.class,
-            () -> multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg, new ArrayList<>())
+            () -> multipleUpdateService.sendUpdateToMultipleLogic(updateCaseMsg)
         );
     }
 

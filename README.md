@@ -34,20 +34,9 @@ Two options are available:
 
 ### CFTLIB
 
-#### Environment Variables
-The following environment variables are required for a development connection to Azure Service Bus queues.
-
-- CREATE_UPDATES_QUEUE_NAME
-- UPDATE_CASE_QUEUE_NAME
-- CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING
-- CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING
-- UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING
-- UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING
-
 ```bash
 ./gradlew bootRun --args='--spring.profiles.active=cftlib'
 ```
-There is also a dependency on Azure Service Bus.
 
 The application will start locally on `http://localhost:8085`
 
@@ -58,26 +47,9 @@ See [here](https://github.com/hmcts/ecm-ccd-docker)
 
 #### Environment Variables
 Required:
-- DB_URL
-- ET_MSG_HANDLER_POSTGRES_PASSWORD
 - ET_MSG_HANDLER_CASEWORKER_PASSWORD
-- CREATE_UPDATES_QUEUE_NAME
-- UPDATE_CASE_QUEUE_NAME
-- CREATE_UPDATES_QUEUE_SEND_CONNECTION_STRING
-- CREATE_UPDATES_QUEUE_LISTEN_CONNECTION_STRING
-- UPDATE_CASE_QUEUE_SEND_CONNECTION_STRING
-- UPDATE_CASE_QUEUE_LISTEN_CONNECTION_STRING
 
 #### Setup
-There is a dependency on a postgres database to be running locally.
-
-To install the database schema required for et-ccd-callbacks execute the following command:
-```bash
-./bin/init-db.sh
-```
-
-There is also a dependency on Azure Service Bus.
-
 To run the project locally you should use the dev profile.
 You can run the application by executing following command:
 
@@ -97,9 +69,6 @@ http://localhost:8085/swagger-ui.html
 ```
 
 ## Developing
-
-### Database
-All database updates are applied using [flyway](https://flywaydb.org/). See src/main/resources/db
 
 ### Unit tests
 
