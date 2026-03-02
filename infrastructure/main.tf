@@ -35,12 +35,6 @@ data "azurerm_user_assigned_identity" "et-identity" {
   resource_group_name = "managed-identities-${var.env}-rg"
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name         = "${var.component}-POSTGRES-PORT"
-  value        = "5432"
-  key_vault_id = module.key-vault.key_vault_id
-}
-
 data "azurerm_key_vault" "s2s_vault" {
   name                = "s2s-${var.env}"
   resource_group_name = "rpe-service-auth-provider-${var.env}"

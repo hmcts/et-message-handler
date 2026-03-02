@@ -44,8 +44,6 @@ jacocoTestReport {
 
 def sonarExclusions = ['**/uk/gov/hmcts/reform/ethos/ecm/consumer/config/**',
                        '**/uk/gov/hmcts/reform/ethos/ecm/consumer/model/**',
-                       '**/uk/gov/hmcts/reform/ethos/ecm/consumer/domain/**',
-                       '**/uk/gov/hmcts/reform/ethos/ecm/consumer/tasks/**',
                        '**/uk/gov/hmcts/reform/ethos/ecm/consumer/Application'
 ]
 
@@ -104,7 +102,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
   maxHeapSize = '1G'
 }
 
-task fortifyScan(type: JavaExec)  {
+tasks.register('fortifyScan', JavaExec) {
   main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
   classpath += sourceSets.test.runtimeClasspath
   jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
@@ -154,6 +152,22 @@ repositories {
   }
 }
 
+configurations.configureEach {
+  resolutionStrategy.eachDependency { details ->
+    // CVE-2020-29582 - Force Kotlin to 2.1.0+
+    if (details.requested.group == "org.jetbrains.kotlin"
+            && details.requested.name.startsWith("kotlin-stdlib")) {
+      details.useVersion("2.1.0")
+    }
+  }
+  resolutionStrategy.force(
+          // CVE-2020-29582 - Fixed in Kotlin 2.1.0+
+          'org.jetbrains.kotlin:kotlin-stdlib:2.1.0',
+          'org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0',
+          'org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0'
+  )
+}
+
 ext {
   junitJupiterVersion = '5.10.2'
   feignVersion = '13.5'
@@ -169,10 +183,7 @@ ext {
 ext["rest-assured.version"] = '5.1.0'
 
 dependencies {
-  implementation 'com.github.hmcts:et-common:3.0.2'
-  implementation 'com.github.hmcts:et-data-model:4.2.7'
-  implementation 'com.github.hmcts:ecm-common:3.0.1'
-  implementation 'com.github.hmcts:ecm-data-model:2.0.2'
+  implementation group: 'com.github.hmcts', name: 'et-shared', version: '1.0.1'
 
   configurations.configureEach {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
@@ -219,8 +230,6 @@ dependencies {
     }
   }
   implementation group: 'com.squareup.okio', name: 'okio', version: '3.15.0'
-  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.3'
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.7'
   // CVE-2022-25857
   implementation group: 'org.yaml', name: 'snakeyaml', version: '2.4'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
@@ -229,7 +238,6 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'org.springframework.boot:spring-boot-configuration-processor'
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.9'
   implementation 'org.springframework.retry:spring-retry'
   implementation group: 'org.testng', name: 'testng', version: '7.11.0'
@@ -241,6 +249,7 @@ dependencies {
 
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
   testImplementation 'org.mockito:mockito-junit-jupiter:5.18.0'
 
   testImplementation group: 'com.auth0', name: 'java-jwt', version: '4.5.0'
