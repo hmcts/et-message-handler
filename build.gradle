@@ -177,13 +177,13 @@ ext {
   serenity = '4.2.34'
   springBoot = springBoot.class.package.implementationVersion
   tomcatEmbedVersion = '10.1.52'
-  nettyVersion = '4.2.112.Final'
+  nettyVersion = '4.2.12.Final'
 }
 
 ext["rest-assured.version"] = '5.1.0'
 
 dependencies {
-  implementation group: 'com.github.hmcts', name: 'et-shared', version: '1.0.1'
+  implementation group: 'com.github.hmcts', name: 'et-shared', version: '1.0.81'
 
   configurations.configureEach {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
