@@ -25,6 +25,7 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
+  count    = var.env == "aat" ? 0 : 1
   name     = "${var.product}-${var.component}-${var.env}"
   location = var.location
   tags     = local.tags

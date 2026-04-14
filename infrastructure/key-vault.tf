@@ -1,5 +1,5 @@
 module "key-vault" {
-  count                       = var.env == "aat" ? 1 : 0
+  count                       = var.env == "aat" ? 0 : 1
   source                      = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
   name                        = "${var.product}-${var.component}-${var.env}"
   product                     = var.product
